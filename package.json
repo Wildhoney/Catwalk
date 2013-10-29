@@ -1,5 +1,5 @@
 {
-  "name": "WebSQL",
+  "name": "websql",
   "version": "0.0.1",
   "description": "Intuitive CRUD interface for WebSQL.",
   "main": "index.js",
