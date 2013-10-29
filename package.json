@@ -1,0 +1,29 @@
+{
+  "name": "WebSQL",
+  "version": "0.0.1",
+  "description": "Intuitive CRUD interface for WebSQL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wildhoney/WebSQL.git"
+  },
+  "keywords": [
+    "websql",
+    "crud",
+    "databases",
+    "sql",
+    "sqlite",
+    "web",
+    "sql",
+    "web",
+    "mysql"
+  ],
+  "author": "Adam Timberlake",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/Wildhoney/WebSQL/issues"
+  }
+}
