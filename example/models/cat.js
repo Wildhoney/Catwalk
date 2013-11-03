@@ -1,6 +1,6 @@
 (function($catwalk) {
 
-    $catwalk.model.Cat = {
+    $catwalk.Model.Cat = {
 
         /**
          * @property _primaryKey

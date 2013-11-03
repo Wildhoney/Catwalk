@@ -10,7 +10,7 @@
      * @property model
      * @type {Object}
      */
-    $window.catwalk.model = {
+    $window.catwalk.Model = {
 
         /**
          * @method save
