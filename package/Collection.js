@@ -9,6 +9,7 @@
     var CatWalkCollection = function CatWalkCollection(name, properties) {
         this._name          = name;
         this._properties    = properties;
+        this._crossfilter   = crossfilter([]);
     };
 
     /**
@@ -30,6 +31,13 @@
          * @private
          */
         _properties: {},
+
+        /**
+         * @property crossfilter
+         * @type {Object}
+         * @private
+         */
+        _crossfilter: {},
 
         /**
          * @property models
