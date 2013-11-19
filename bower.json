@@ -1,0 +1,21 @@
+{
+  "name": "Catwalk.js",
+  "version": "0.0.2",
+  "homepage": "https://github.com/Wildhoney/Catwalk.js",
+  "authors": [
+    "Adam Timberlake <adam.timberlake@gmail.com>"
+  ],
+  "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects.",
+  "keywords": [
+    "crud",
+    "relationships"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
