@@ -1,5 +1,32 @@
 (function($window) {
 
+    /**
+     * @method toString
+     */
+    var toString = function toString(value) {
+        return String(value);
+    };
+
+    /**
+     * @method toInteger
+     */
+    var toInteger = function toInteger(value) {
+        return Number(value);
+    };
+
+    /**
+     * @method toFloat
+     */
+    var toFloat = function toFloat(value) {
+        return Number(value);
+    };
+
+    /**
+     * @method toBoolean
+     */
+    var toBoolean = function toBoolean(value) {
+        return Boolean(value);
+    };
 
     /**
      * @module Catwalk
@@ -9,10 +36,10 @@
      */
     $window.catwalk.attribute = {
 
-        string  : 'string',
-        integer : 'integer',
-        float   : 'float',
-        boolean : 'boolean'
+        string  : toString,
+        integer : toInteger,
+        float   : toFloat,
+        boolean : toBoolean
 
     };
 

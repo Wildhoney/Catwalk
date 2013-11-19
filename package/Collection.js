@@ -32,11 +32,30 @@
         _properties: {},
 
         /**
+         * @property models
+         * @type {Array}
+         * @private
+         */
+        _models: [],
+
+        /**
          * @method add
          * @param properties {Object}
          * @return {void}
          */
         add: function add(properties) {
+
+            var propertyMap = this._properties,
+                model       = {};
+
+            _.forEach(properties, function(value, key) {
+
+                // Typecast the property based on what's defined in the collection.
+                model[key] = propertyMap[key](value);
+
+            });
+
+            this._models.push(model);
 
         },
 
