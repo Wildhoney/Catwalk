@@ -1,29 +1,21 @@
 {
-  "name": "websql",
-  "version": "0.0.1",
-  "description": "Intuitive CRUD interface for WebSQL.",
+  "name": "catwalk",
+  "version": "0.0.2",
+  "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects.",
   "main": "index.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Wildhoney/WebSQL.git"
+    "url": "https://github.com/Wildhoney/Catwalk.js.git"
   },
   "keywords": [
-    "websql",
-    "crud",
-    "databases",
-    "sql",
-    "sqlite",
-    "web",
-    "sql",
-    "web",
-    "mysql"
+    "crud", "relationships"
   ],
   "author": "Adam Timberlake",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/Wildhoney/WebSQL/issues"
+    "url": "https://github.com/Wildhoney/Catwalk.js/issues"
   }
 }
