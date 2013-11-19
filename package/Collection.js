@@ -40,30 +40,40 @@
         _crossfilter: {},
 
         /**
-         * @property models
-         * @type {Array}
-         * @private
-         */
-        _models: [],
-
-        /**
-         * @method add
-         * @param properties {Object}
+         * @method addModel
+         * @param model {Object}
          * @return {void}
          */
-        add: function add(properties) {
+        addModel: function addModel(model) {
+            this.addModels([model]);
+        },
 
-            var propertyMap = this._properties,
-                model       = {};
+        /**
+         * @property addModels
+         * @param models {Array}
+         * @return {void}
+         */
+        addModels: function addModels(models) {
 
-            _.forEach(properties, function(value, key) {
+            var _models     = [],
+                propertyMap = this._properties;
 
-                // Typecast the property based on what's defined in the collection.
-                model[key] = propertyMap[key](value);
+            models.forEach(function(model) {
+
+                // Iterate over the properties to typecast them.
+                _.forEach(model, function(value, key) {
+
+                    // Typecast the property based on what's defined in the collection.
+                    model[key] = propertyMap[key](value);
+
+                });
+
+                _models.push(model);
 
             });
 
-            this._models.push(model);
+            this._crossfilter.add(_models);
+            console.log(this._crossfilter.size());
 
         },
 
