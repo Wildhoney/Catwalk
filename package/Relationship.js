@@ -9,10 +9,10 @@
      */
     $window.catwalk.relationship = {
 
-        hasOne              : {},
-        hasMany             : {},
-        belongsTo           : {},
-        hasAndBelongsToMany : {}
+        hasOne              : function() {},
+        hasMany             : function() {},
+        belongsTo           : function() {},
+        hasAndBelongsToMany : function() {}
 
     };
 

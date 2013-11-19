@@ -1,6 +1,6 @@
-(function($catwalk) {
+(function($window, $catwalk) {
 
-    $catwalk.collection('Cats', {
+    $window.cats = $catwalk.collection('cats', {
 
         /**
          * @property _primaryKey
@@ -21,20 +21,20 @@
          * @property id
          * @type {Number}
          */
-        id: $catwalk.attr.integer,
+        id: $catwalk.attribute.integer,
 
         /**
          * @property name
          * @type {String}
          */
-        name: $catwalk.attr.string,
+        name: $catwalk.attribute.string,
 
         /**
          * @property age
          * @type {Number}
          */
-        age : $catwalk.attr.integer
+        age : $catwalk.attribute.integer
 
     });
 
-})(window.catwalk);
+})(window, window.catwalk);
