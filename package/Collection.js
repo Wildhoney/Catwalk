@@ -82,17 +82,16 @@
         /**
          * @method addModel
          * @param model {Object}
-         * @return {void}
+         * @return {Object}
          */
         addModel: function addModel(model) {
-            this.addModels([model]);
-            return model;
+            return this.addModels([model])[0];
         },
 
         /**
          * @property addModels
          * @param models {Array}
-         * @return {void}
+         * @return {Array}
          */
         addModels: function addModels(models) {
 
@@ -131,7 +130,20 @@
 
             });
 
+            // Add the models to our Crossfilter!
             this._crossfilter.add(_models);
+
+            // Obtain the primary key to return our added models.
+            var primaryKey  = this._properties._primaryKey,
+                keys        = _.pluck(models, 'id');
+
+            // Find all of the items we've just added.
+            var items = this._dimensions[primaryKey].filterAll().filterFunction(function(d) {
+                return !!_.contains(keys, d);
+            });
+
+            // Voila!
+            return items.top(Infinity);
 
         },
 

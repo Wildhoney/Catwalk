@@ -6,12 +6,12 @@
 
             var collection  = $catwalk.collection(name),
                 dimension   = collection._dimensions[descriptor.foreignKey],
-                models      = dimension.filterFunction(function(d) {
+                models      = dimension.filterAll().filterFunction(function(d) {
                     return !!_.contains(foreignIds, d);
                 });
 
             return models.top(Infinity);
-            
+
         };
 
     };
