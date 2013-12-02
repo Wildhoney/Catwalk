@@ -11,11 +11,15 @@
     "url": "https://github.com/Wildhoney/Catwalk.js.git"
   },
   "keywords": [
-    "crud", "relationships"
+    "crud",
+    "relationships"
   ],
   "author": "Adam Timberlake",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/Wildhoney/Catwalk.js/issues"
+  },
+  "directories": {
+    "example": "example"
   }
 }
