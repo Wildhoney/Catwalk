@@ -14,9 +14,17 @@
      */
     var CatWalkCollection = function CatWalkCollection(name, properties) {
 
+        // Reset the variables because of JavaScript!
+        this._crossfilter   = {};
+        this._dimensions    = {};
+
+        // Gather the name and the properties for the models.
         this._name          = name;
         this._properties    = properties;
-        var crossfilter     = this._crossfilter = crossfilter([]);
+
+        // Initiate the Crossfilter and its related dimensions.
+        var _crossfilter     = this._crossfilter = crossfilter([]),
+            _dimensions      = this._dimensions;
 
         // Create the dimensions for our model properties.
         var keys = _.keys(properties);
@@ -27,6 +35,11 @@
                 // We don't wish to include private/protected members.
                 return;
             }
+
+            // Create a dimension for each and every model property!
+            _dimensions[key] = _crossfilter.dimension(function(d) {
+                return d[key];
+            });
 
         });
 
@@ -86,7 +99,7 @@
             var _models             = [],
                 propertyMap         = this._properties,
                 relationships       = this._properties._relationships || {},
-                createRelationship  = this._createRelationship;
+                createRelationship  = _.bind(this._createRelationship, this);
 
             models.forEach(function(model) {
 
@@ -124,13 +137,12 @@
 
         _createRelationship: function _createRelationship(model, key, ids) {
 
+            var _relationships = this._properties._relationships || {};
+
             Object.defineProperty(model, key, {
 
                 get: function() {
-
-                    console.log(_collections[key]._crossfilter);
-
-                    return ids;
+                    return _relationships[key](key, ids);
                 }
 
             });
@@ -157,7 +169,15 @@
     };
 
     $catwalk.collection = function(name, properties) {
-        return _collections[name] = new CatWalkCollection(name, properties);
+
+        if (properties) {
+            // Instantiate a new collection because we've passed properties.
+            return _collections[name] = new CatWalkCollection(name, properties);
+        }
+
+        // Otherwise we'll attempt to find an existing collection by its name.
+        return _collections[name];
+
     };
 
 })(window.catwalk);

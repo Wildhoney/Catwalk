@@ -44,7 +44,7 @@
              * @type {Object}
              */
             colours: $catwalk.relationship.hasMany({
-                foreignKey: 'colour_id'
+                foreignKey: 'id'
             })
 
         },

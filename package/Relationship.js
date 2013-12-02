@@ -1,7 +1,19 @@
-(function($window) {
+(function($window, $catwalk) {
 
-    var hasMany = function hasMany() {
-        return function() {};
+    var hasMany = function hasMany(descriptor) {
+
+        return function(name, foreignIds) {
+
+            var collection  = $catwalk.collection(name),
+                dimension   = collection._dimensions[descriptor.foreignKey],
+                models      = dimension.filterFunction(function(d) {
+                    return !!_.contains(foreignIds, d);
+                });
+
+            return models.top(Infinity);
+            
+        };
+
     };
 
     /**
@@ -19,4 +31,4 @@
 
     };
 
-})(window);
+})(window, window.catwalk);
