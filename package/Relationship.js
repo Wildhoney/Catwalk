@@ -21,7 +21,19 @@
             // models. Perhaps we need an AJAX request to get more?
             if (foreignIds.length !== models.length) {
 
+                var defer       = Q.defer(),
+                    requiredIds = _.difference(foreignIds, _.pluck(items, 'id'));
 
+                // Prompt the developer for the missing IDs with the required IDs and the
+                // promise to resolve or reject.
+                collection._events.read(requiredIds, defer);
+
+                // Once the promise has been resolved.
+                defer.promise.then(function(models) {
+                    items = items.concat(models);
+                    collection.addModels(models);
+                    console.log(items);
+                });
 
             }
 

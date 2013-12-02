@@ -7,11 +7,10 @@
 
     var model = $cats.addModel({ id: 5, name: 'Kipper', age: 14, colours: [1, 2, 3, 5, 6, 7] });
 
-    $colours.on('read', function(defer) {
-
+    $colours.defineEvent('read', function(ids, defer) {
+        defer.resolve([{ id: 5, colour: 'Red' }, { id: 6, colour: 'Blue' }]);
     });
 
-//    console.log(model);
     console.log(model.colours);
 
 })(window.catwalk, window.cats, window.colours);

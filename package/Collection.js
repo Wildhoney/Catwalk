@@ -59,6 +59,12 @@
         _name: '',
 
         /**
+         * @property events
+         * @type {Object}
+         */
+        _events: {},
+
+        /**
          * @property _properties
          * @type {Object}
          * @private
@@ -145,6 +151,16 @@
             // Voila!
             return items.top(Infinity);
 
+        },
+
+        /**
+         * @property defineEvent
+         * @param type {String}
+         * @param callback {Function}
+         * @return {void}
+         */
+        defineEvent: function defineEvent(type, callback) {
+            this._events[type] = callback;
         },
 
         _createRelationship: function _createRelationship(model, key, ids) {
