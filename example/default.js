@@ -5,7 +5,11 @@
     $colours.addModel({ id: 3, colour: 'Ginger' });
     $colours.addModel({ id: 4, colour: 'Grey' });
 
-    var model = $cats.addModel({ id: 5, name: 'Kipper', age: 14, colours: [1, 2, 3] });
+    var model = $cats.addModel({ id: 5, name: 'Kipper', age: 14, colours: [1, 2, 3, 5, 6, 7] });
+
+    $colours.on('read', function(defer) {
+
+    });
 
 //    console.log(model);
     console.log(model.colours);
