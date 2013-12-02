@@ -1,5 +1,28 @@
 (function($window, $catwalk) {
 
+    $window.colours = $catwalk.collection('colours', {
+
+        /**
+         * @property _primaryKey
+         * @type {String}
+         * @protected
+         */
+        _primaryKey: 'id',
+
+        /**
+         * @property id
+         * @type {Number}
+         */
+        id: $catwalk.attribute.integer,
+
+        /**
+         * @property colour
+         * @type {String}
+         */
+        colour: $catwalk.attribute.string
+
+    });
+
     $window.cats = $catwalk.collection('cats', {
 
         /**
@@ -10,12 +33,21 @@
         _primaryKey: 'id',
 
         /**
-         * @property colours
+         * @property _relationships
          * @type {Object}
+         * @protected
          */
-        colours: $catwalk.relationship.hasMany({
-            foreignKey: 'colour_id'
-        }),
+        _relationships: {
+
+            /**
+             * @property colours
+             * @type {Object}
+             */
+            colours: $catwalk.relationship.hasMany({
+                foreignKey: 'colour_id'
+            })
+
+        },
 
         /**
          * @property id

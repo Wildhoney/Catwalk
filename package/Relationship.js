@@ -1,5 +1,8 @@
 (function($window) {
 
+    var hasMany = function hasMany() {
+        return function() {};
+    };
 
     /**
      * @module Catwalk
@@ -10,7 +13,7 @@
     $window.catwalk.relationship = {
 
         hasOne              : function() {},
-        hasMany             : function() {},
+        hasMany             : hasMany,
         belongsTo           : function() {},
         hasAndBelongsToMany : function() {}
 
