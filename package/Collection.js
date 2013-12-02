@@ -124,6 +124,8 @@
 
                     } catch (e) {
 
+                        console.log(e.message);
+
                         // Otherwise we'll throw the exception to notify the developer that the
                         // key was missed from the collection.
                         throw 'You forgot to define the `' + key + '` property on the collection blueprint.';
@@ -163,20 +165,6 @@
             this._events[type] = callback;
         },
 
-        _createRelationship: function _createRelationship(model, key, ids) {
-
-            var _relationships = this._properties._relationships || {};
-
-            Object.defineProperty(model, key, {
-
-                get: function() {
-                    return _relationships[key](key, ids);
-                }
-
-            });
-
-        },
-
         /**
          * @method removeModel
          * @param id {Number}
@@ -192,6 +180,27 @@
          */
         size: function size() {
             return this._crossfilter.size();
+        },
+
+        /**
+         * @method _createRelationship
+         * @param model {Object}
+         * @param key {String}
+         * @param ids {Array|Number|String}
+         * @private
+         */
+        _createRelationship: function _createRelationship(model, key, ids) {
+
+            var _relationships = this._properties._relationships || {};
+
+            Object.defineProperty(model, key, {
+
+                get: function() {
+                    return _relationships[key](ids);
+                }
+
+            });
+
         }
 
     };

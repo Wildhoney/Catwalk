@@ -1,5 +1,11 @@
 (function($window, $catwalk) {
 
+    var hasOne = function hasOne(description) {
+
+        return function() {};
+
+    };
+
     /**
      * @method hasMany
      * @param descriptor {Object}
@@ -7,9 +13,9 @@
      */
     var hasMany = function hasMany(descriptor) {
 
-        return function(name, foreignIds) {
+        return function(foreignIds) {
 
-            var collection  = $catwalk.collection(name),
+            var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey],
                 models      = dimension.filterAll().filterFunction(function(d) {
                     return !!_.contains(foreignIds, d);
@@ -51,7 +57,7 @@
      */
     $window.catwalk.relationship = {
 
-        hasOne              : function() {},
+        hasOne              : hasOne,
         hasMany             : hasMany,
         belongsTo           : function() {},
         hasAndBelongsToMany : function() {}
