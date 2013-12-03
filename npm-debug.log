@@ -1,0 +1,145 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@1.3.11
+3 info using node@v0.10.18
+4 verbose publish [ '.' ]
+5 verbose cache add [ '.', null ]
+6 verbose cache add name=undefined spec="." args=[".",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '.',
+7 verbose parsed url   path: '.',
+7 verbose parsed url   href: '.' }
+8 silly lockFile 3a52ce78- .
+9 verbose lock . /Users/Wildhoney/.npm/3a52ce78-.lock
+10 verbose tar pack [ '/var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz',
+10 verbose tar pack   '.' ]
+11 verbose tarball /var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+12 verbose folder .
+13 info prepublish catwalk.js@0.0.2
+14 silly lockFile 1f1177db-tar tar://.
+15 verbose lock tar://. /Users/Wildhoney/.npm/1f1177db-tar.lock
+16 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+17 verbose lock tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz /Users/Wildhoney/.npm/43fae75b-1340-0-09869703627191484-tmp-tgz.lock
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+21 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+22 verbose tar unpack /var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+23 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+24 verbose lock tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package /Users/Wildhoney/.npm/62e21cc3-1340-0-09869703627191484-package.lock
+25 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+26 verbose lock tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz /Users/Wildhoney/.npm/43fae75b-1340-0-09869703627191484-tmp-tgz.lock
+27 silly gunzTarPerm modes [ '755', '644' ]
+28 silly gunzTarPerm extractEntry package.json
+29 silly gunzTarPerm extractEntry .npmignore
+30 silly gunzTarPerm extractEntry README.md
+31 silly gunzTarPerm extractEntry bower.json
+32 silly gunzTarPerm extractEntry example/default.js
+33 silly gunzTarPerm extractEntry example/collections/Cats.js
+34 silly gunzTarPerm extractEntry example/index.html
+35 silly gunzTarPerm extractEntry example/models/cat.js
+36 silly gunzTarPerm extractEntry example/models/colour.js
+37 silly gunzTarPerm extractEntry package/Attribute.js
+38 silly gunzTarPerm extractEntry package/Catwalk.js
+39 silly gunzTarPerm extractEntry package/Collection.js
+40 silly gunzTarPerm extractEntry package/Relationship.js
+41 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+42 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+43 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+44 silly lockFile 43fae75b-1340-0-09869703627191484-tmp-tgz tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/tmp.tgz
+45 verbose tar pack [ '/Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz',
+45 verbose tar pack   '/var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package' ]
+46 verbose tarball /Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+47 verbose folder /var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+48 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+49 verbose lock tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package /Users/Wildhoney/.npm/62e21cc3-1340-0-09869703627191484-package.lock
+50 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+51 verbose lock tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz /Users/Wildhoney/.npm/c9af248f-npm-catwalk-js-0-0-2-package-tgz.lock
+52 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+53 silly lockFile 62e21cc3-1340-0-09869703627191484-package tar:///var/folders/x1/1qs6hn2n0_1_3f6rdcp0854h0000gn/T/npm-80865-_n-Bbxav/1386031771340-0.09869703627191484/package
+54 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+55 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+56 silly lockFile bbd5db9f-ney-npm-catwalk-js-0-0-2-package /Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+57 verbose lock /Users/Wildhoney/.npm/catwalk.js/0.0.2/package /Users/Wildhoney/.npm/bbd5db9f-ney-npm-catwalk-js-0-0-2-package.lock
+58 silly lockFile bbd5db9f-ney-npm-catwalk-js-0-0-2-package /Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+59 silly lockFile bbd5db9f-ney-npm-catwalk-js-0-0-2-package /Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+60 verbose tar unpack /Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+61 silly lockFile a8e72872-ney-npm-catwalk-js-0-0-2-package tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+62 verbose lock tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package /Users/Wildhoney/.npm/a8e72872-ney-npm-catwalk-js-0-0-2-package.lock
+63 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+64 verbose lock tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz /Users/Wildhoney/.npm/c9af248f-npm-catwalk-js-0-0-2-package-tgz.lock
+65 silly gunzTarPerm modes [ '755', '644' ]
+66 silly gunzTarPerm extractEntry package.json
+67 silly gunzTarPerm extractEntry .npmignore
+68 silly gunzTarPerm extractEntry README.md
+69 silly gunzTarPerm extractEntry bower.json
+70 silly gunzTarPerm extractEntry example/default.js
+71 silly gunzTarPerm extractEntry example/collections/Cats.js
+72 silly gunzTarPerm extractEntry example/index.html
+73 silly gunzTarPerm extractEntry example/models/cat.js
+74 silly gunzTarPerm extractEntry example/models/colour.js
+75 silly gunzTarPerm extractEntry package/Attribute.js
+76 silly gunzTarPerm extractEntry package/Catwalk.js
+77 silly gunzTarPerm extractEntry package/Collection.js
+78 silly gunzTarPerm extractEntry package/Relationship.js
+79 silly lockFile a8e72872-ney-npm-catwalk-js-0-0-2-package tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+80 silly lockFile a8e72872-ney-npm-catwalk-js-0-0-2-package tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package
+81 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+82 silly lockFile c9af248f-npm-catwalk-js-0-0-2-package-tgz tar:///Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz
+83 verbose chmod /Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz 644
+84 verbose chown /Users/Wildhoney/.npm/catwalk.js/0.0.2/package.tgz [ 501, 20 ]
+85 silly lockFile 3a52ce78- .
+86 silly lockFile 3a52ce78- .
+87 silly publish { name: 'catwalk.js',
+87 silly publish   version: '0.0.2',
+87 silly publish   description: 'Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects.',
+87 silly publish   main: 'index.js',
+87 silly publish   scripts: { test: 'grunt test' },
+87 silly publish   repository:
+87 silly publish    { type: 'git',
+87 silly publish      url: 'https://github.com/Wildhoney/Catwalk.js.git' },
+87 silly publish   keywords: [ 'crud', 'relationships' ],
+87 silly publish   author: { name: 'Adam Timberlake' },
+87 silly publish   license: 'BSD-2-Clause',
+87 silly publish   bugs: { url: 'https://github.com/Wildhoney/Catwalk.js/issues' },
+87 silly publish   directories: { example: 'example' },
+87 silly publish   readme: 'Catwalk.js\n======\n\nWhy Catwalk? Because it\'s jam-packed full of models! Catwalk has engendered from the observations on the plight of <a href="https://github.com/emberjs/data" target="_blank">Ember Data</a>, and instead doesn\'t even *try* to predict everything &ndash; instead Catwalk.js is more focused on satisfying the <a href="http://en.wikipedia.org/wiki/KISS_principle" target="_blank">KISS principle</a>.\n\n**Friends:** Uses <a href="https://github.com/square/crossfilter" target="_blank">Crossfilter</a>, <a href="http://underscorejs.org/" target="_blank">Underscore</a>, and <a href="https://github.com/kriskowal/q" target="_blank">Q</a> extensively.\n\n<img src="http://fc06.deviantart.net/fs37/i/2008/265/2/8/Cat_silhouette_by_valsgalore.png" />',
+87 silly publish   readmeFilename: 'README.md',
+87 silly publish   _id: 'catwalk.js@0.0.2',
+87 silly publish   dist: { shasum: 'f12baf611222e72f61324b6f1b5bdf56abc2b9e9' },
+87 silly publish   _from: '.' }
+88 verbose url raw catwalk.js
+89 verbose url resolving [ 'https://registry.npmjs.org/', './catwalk.js' ]
+90 verbose url resolved https://registry.npmjs.org/catwalk.js
+91 info trying registry request attempt 1 at 00:49:33
+92 http PUT https://registry.npmjs.org/catwalk.js
+93 http 409 https://registry.npmjs.org/catwalk.js
+94 verbose url raw catwalk.js
+95 verbose url resolving [ 'https://registry.npmjs.org/', './catwalk.js' ]
+96 verbose url resolved https://registry.npmjs.org/catwalk.js
+97 info trying registry request attempt 1 at 00:49:34
+98 http GET https://registry.npmjs.org/catwalk.js
+99 http 200 https://registry.npmjs.org/catwalk.js
+100 error publish fail Cannot publish over existing version.
+100 error publish fail Update the 'version' field in package.json and try again.
+100 error publish fail
+100 error publish fail If the previous version was published in error, see:
+100 error publish fail     npm help unpublish
+100 error publish fail
+100 error publish fail To automatically increment version numbers, see:
+100 error publish fail     npm help version
+101 error System Darwin 12.4.0
+102 error command "node" "/usr/local/bin/npm" "publish"
+103 error cwd /Users/Wildhoney/Webroot/Catwalk.js
+104 error node -v v0.10.18
+105 error npm -v 1.3.11
+106 error code EPUBLISHCONFLICT
+107 verbose exit [ 1, true ]

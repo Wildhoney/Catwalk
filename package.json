@@ -1,6 +1,6 @@
 {
   "name": "catwalk.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects.",
   "main": "index.js",
   "scripts": {
