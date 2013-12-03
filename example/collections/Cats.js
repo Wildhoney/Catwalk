@@ -40,10 +40,10 @@
         _relationships: {
 
             /**
-             * @property colours
+             * @property colour
              * @type {Object}
              */
-            colours: $catwalk.relationship.hasMany({
+            colour: $catwalk.relationship.hasOne({
                 collection: 'colours',
                 foreignKey: 'id'
             })
