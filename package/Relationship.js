@@ -1,5 +1,10 @@
 (function($window, $catwalk) {
 
+    /**
+     * @method hasOne
+     * @param descriptor {Object}
+     * @return {Function}
+     */
     var hasOne = function hasOne(descriptor) {
 
         return function(foreignId) {
@@ -22,6 +27,7 @@
 
                 // Once the promise has been resolved.
                 defer.promise.then(function(model) {
+                    model = collection.addModel(model);
                     models.push(model);
                     console.log(models);
                 });
@@ -62,8 +68,8 @@
 
                 // Once the promise has been resolved.
                 defer.promise.then(function(models) {
-                    models = models.concat(models);
-                    collection.addModels(models);
+                    var addedModels = collection.addModels(models);
+                    models = models.concat(addedModels);
                     console.log(models);
                 });
 

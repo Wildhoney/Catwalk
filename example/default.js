@@ -15,4 +15,6 @@
 
     console.log(model.colour);
 
+//    $colours.updateModel();
+
 })(window.catwalk, window.cats, window.colours);

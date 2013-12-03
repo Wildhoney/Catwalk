@@ -62,7 +62,36 @@
          * @property events
          * @type {Object}
          */
-        _events: {},
+        _events: {
+
+            /**
+             * @method create
+             * @param models {Array}
+             * @return {void}
+             */
+            create: function (models) {
+                console.info('Created ' + models.length + ' model(s): ' + _.pluck(models, 'id'));
+            },
+
+            /**
+             * @method read
+             * @param foreignIds {Array|Number}
+             * @param defer {Q.defer}
+             * @return {void}
+             */
+            read: function(foreignIds, defer) {},
+
+            /**
+             * @event update
+             */
+            update: function() {},
+
+            /**
+             * @event delete
+             */
+            delete: function() {}
+
+        },
 
         /**
          * @property _properties
@@ -149,6 +178,9 @@
             var items = this._dimensions[primaryKey].filterAll().filterFunction(function(d) {
                 return !!_.contains(keys, d);
             });
+
+            // Invoke the create callback.
+            this._events.create(models);
 
             // Voila!
             return items.top(Infinity);
