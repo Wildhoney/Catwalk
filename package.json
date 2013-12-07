@@ -1,5 +1,6 @@
 {
   "name": "catwalk.js",
+  "buildName": "catwalk",
   "version": "0.0.3",
   "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects.",
   "main": "index.js",
@@ -21,5 +22,10 @@
   },
   "directories": {
     "example": "example"
+  },
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-uglify": "~0.2.7"
   }
 }

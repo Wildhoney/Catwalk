@@ -1,5 +1,7 @@
 (function($window, $catwalk) {
 
+    "use strict";
+
     /**
      * @method hasOne
      * @param descriptor {Object}

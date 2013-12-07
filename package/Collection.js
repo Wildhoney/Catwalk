@@ -1,5 +1,7 @@
 (function($catwalk) {
 
+    "use strict";
+
     /**
      * @property _collections
      * @type {Object}
@@ -79,7 +81,7 @@
              * @param defer {Q.defer}
              * @return {void}
              */
-            read: function(foreignIds, defer) {},
+            read: function() {},
 
             /**
              * @event update
@@ -203,7 +205,7 @@
          * @return {void}
          */
         removeModel: function removeModel(id) {
-
+            return id;
         },
 
         /**
@@ -249,7 +251,8 @@
 
         if (properties) {
             // Instantiate a new collection because we've passed properties.
-            return _collections[name] = new CatWalkCollection(name, properties);
+            _collections[name] = new CatWalkCollection(name, properties);
+            return _collections[name];
         }
 
         // Otherwise we'll attempt to find an existing collection by its name.
