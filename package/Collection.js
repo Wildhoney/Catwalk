@@ -188,12 +188,12 @@
         },
 
         /**
-         * @property defineEvent
+         * @property when
          * @param type {String}
          * @param callback {Function}
          * @return {void}
          */
-        defineEvent: function defineEvent(type, callback) {
+        when: function when(type, callback) {
             this._events[type] = callback;
         },
 

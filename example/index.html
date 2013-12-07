@@ -24,5 +24,14 @@
 
     <h1>Cats ({{cats.length}})</h1>
 
+    <ul>
+        <li ng-repeat="cat in cats">
+            <h2>{{cat.name}}</h2>
+            <ul>
+                <li ng-repeat="colour in cat.colours">{{colour.colour}}</li>
+            </ul>
+        </li>
+    </ul>
+
 </body>
 </html>
