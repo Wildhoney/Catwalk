@@ -207,6 +207,14 @@
         },
 
         /**
+         * @method all
+         * @return {Array}
+         */
+        all: function all() {
+            return this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
+        },
+
+        /**
          * @method size
          * @return {Number}
          */

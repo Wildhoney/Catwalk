@@ -2,6 +2,9 @@
 <html>
 <head>
 
+    <title>Catwalk.js Example</title>
+
+    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="../bower_components/crossfilter/crossfilter.js"></script>
     <script type="text/javascript" src="../bower_components/underscore/underscore.js"></script>
     <script type="text/javascript" src="../bower_components/q/q.js"></script>
@@ -11,11 +14,15 @@
     <script type="text/javascript" src="../package/Collection.js"></script>
     <script type="text/javascript" src="../package/Relationship.js"></script>
 
-    <script type="text/javascript" src="collections/Cats.js"></script>
-    <script type="text/javascript" src="default.js"></script>
+    <script type="text/javascript" src="app/Default.js"></script>
+    <script type="text/javascript" src="app/collections/CatsCollection.js"></script>
+    <script type="text/javascript" src="app/collections/ColoursCollection.js"></script>
+    <script type="text/javascript" src="app/controllers/CatsController.js"></script>
 
 </head>
-<body>
+<body ng-app="exampleApp" ng-controller="CatsController">
+
+    <h1>Cats ({{cats.length}})</h1>
 
 </body>
 </html>
