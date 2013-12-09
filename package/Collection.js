@@ -45,6 +45,11 @@
 
         });
 
+        // Create the dimension for the internal _catwalkId!
+        _dimensions['catwalkId'] = _crossfilter.dimension(function(d) {
+            return d['catwalkId'];
+        });
+
     };
 
     /**
@@ -137,10 +142,20 @@
                 relationships       = this._properties._relationships || {},
                 createRelationship  = _.bind(this._createRelationship, this);
 
+            // Apply an internal Catwalk ID to each model.
+            _.forEach(models, function(model) {
+                model._catwalkId = _.uniqueId('catwalk_');
+            });
+
             models.forEach(function(model) {
 
                 // Iterate over the properties to typecast them.
                 _.forEach(model, function(value, key) {
+
+                    if (key === '_catwalkId') {
+                        // We can't do much with the internal Catwalk ID.
+                        return;
+                    }
 
                     // Determine if this property is part of a relationship.
                     if (typeof relationships[key] === 'function') {
@@ -154,8 +169,6 @@
                         model[key] = propertyMap[key](value);
 
                     } catch (e) {
-
-                        console.log(e.message);
 
                         // Otherwise we'll throw the exception to notify the developer that the
                         // key was missed from the collection.
@@ -204,8 +217,13 @@
          * @param id {Number}
          * @return {void}
          */
-        removeModel: function removeModel(id) {
-            return id;
+        removeModel: function removeModel(model) {
+
+            if (!('_catwalkId' in model)) {
+                throw 'You are attempting to remove a non-Catwalk model.';
+            }
+
+//            var catwalkId =
         },
 
         /**
