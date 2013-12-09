@@ -49,3 +49,41 @@ Each `_relationships` descriptor is comprised of a property which maps to anothe
 The properties inside of the relationship descriptor are both the `collection` it maps to, and on which property we'll create the relationship with the `foreignKey` property.
 
 In the example above, each model that adds itself to the collection would define a `colours` property with an array of colour IDs. When you access `model.colours` on the model, the actual colours will be brought back from the `Colours` collection.
+
+Adding Models
+-----
+
+Once you've created your collection, models can easily be adding to it via with the `addModel`/`addModels` methods.
+
+```javascript
+$colours.addModel({ id: 1, colour: 'Black' });
+$colours.addModel({ id: 2, colour: 'White' });
+$colours.addModel({ id: 3, colour: 'Ginger' });
+$colours.addModel({ id: 4, colour: 'Grey' });
+```
+
+Upon adding the models to your collection, the `create` method will be invoked, passing through the models that were created.
+
+```javascript
+$cats.when('create', function(models) {
+    $scope.cats = $cats.all();
+});
+```
+
+Deleting Models
+-----
+
+Deleting models from the collection is just as easy as adding them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
+
+```javascript
+var blackModel = $colours.addModel({ id: 1, colour: 'Black' });
+$colours.removeModel(blackModel);
+```
+
+As with the invoking of the `create` method when adding models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
+
+```javascript
+$cats.when('delete', function(models) {
+    $scope.cats = $cats.all();
+});
+```

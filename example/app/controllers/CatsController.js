@@ -2,11 +2,11 @@
 
     $app.controller('CatsController', function CatsController($scope) {
 
-        $cats.when('create', function() {
+        $cats.when('create', function(models) {
             $scope.cats = $cats.all();
         });
 
-        $cats.when('delete', function() {
+        $cats.when('delete', function(models) {
             $scope.cats = $cats.all();
         });
 
