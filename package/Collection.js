@@ -258,7 +258,11 @@
          * @return {Array}
          */
         all: function all() {
-            return this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
+
+            var models = this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
+            this._events.read(models);
+            return models;
+
         },
 
         /**
