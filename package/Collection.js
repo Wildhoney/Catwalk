@@ -47,7 +47,7 @@
 
         // Create the dimension for the internal _catwalkId!
         _dimensions['catwalkId'] = _crossfilter.dimension(function(d) {
-            return d['catwalkId'];
+            return d['_catwalkId'];
         });
 
     };
@@ -214,7 +214,7 @@
 
         /**
          * @method removeModel
-         * @param id {Number}
+         * @param model {Object}
          * @return {void}
          */
         removeModel: function removeModel(model) {
@@ -223,7 +223,14 @@
                 throw 'You are attempting to remove a non-Catwalk model.';
             }
 
-//            var catwalkId =
+            // Remove the model by its internal Catwalk ID.
+            this._dimensions.catwalkId.filterFunction(function(d) {
+                return (d !== model._catwalkId);
+            });
+
+            // Invoke the delete method.
+            this._events.delete(model);
+
         },
 
         /**

@@ -6,11 +6,17 @@
             $scope.cats = $cats.all();
         });
 
+        $cats.when('delete', function() {
+            $scope.cats = $cats.all();
+        });
+
         /**
          * @method removeCat
          * @type {Function}
          */
-        $scope.removeCat = $cats.removeModel;
+        $scope.removeCat = function removeCat(model) {
+            $cats.removeModel(model);
+        };
 
         // Add all of the colours.
         $colours.addModel({ id: 1, colour: 'Black' });
