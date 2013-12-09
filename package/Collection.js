@@ -218,18 +218,38 @@
          * @return {void}
          */
         removeModel: function removeModel(model) {
+            this.removeModels([model]);
+        },
 
-            if (!('_catwalkId' in model)) {
-                throw 'You are attempting to remove a non-Catwalk model.';
-            }
+        /**
+         * @method removeModels
+         * @param models {Array}
+         * @return {void}
+         */
+        removeModels: function removeModels(models) {
 
-            // Remove the model by its internal Catwalk ID.
-            this._dimensions.catwalkId.filterFunction(function(d) {
-                return (d !== model._catwalkId);
+            var _models          = [],
+                defaultDimension = this._dimensions.catwalkId;
+
+            _.forEach(models, function(model) {
+
+                if (!('_catwalkId' in model)) {
+                    throw 'You are attempting to remove a non-Catwalk model.';
+                }
+
+                // Remove the model by its internal Catwalk ID.
+                defaultDimension.filterFunction(function(d) {
+                    return (d !== model._catwalkId);
+                });
+
+                // Model has been deleted so update the array to invoke the method
+                // later on.
+                _models.push(model);
+
             });
 
             // Invoke the delete method.
-            this._events.delete(model);
+            this._events.delete(models);
 
         },
 
