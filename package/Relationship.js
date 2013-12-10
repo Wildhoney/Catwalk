@@ -1,4 +1,4 @@
-(function($window, $catwalk) {
+(function($window, $catwalk, $q) {
 
     "use strict";
 
@@ -21,7 +21,7 @@
             // to the developer, so that they can resolve it.
             if (models.length === 0) {
 
-                var defer = Q.defer();
+                var defer = $q.defer();
 
                 // Present the developer with the foreign ID to load, and the promise to resolve
                 // or reject.
@@ -61,7 +61,7 @@
             // models. Perhaps we need an AJAX request to get more?
             if (foreignIds.length !== models.length) {
 
-                var defer       = Q.defer(),
+                var defer       = $q.defer(),
                     requiredIds = _.difference(foreignIds, _.pluck(models, 'id'));
 
                 // Prompt the developer for the missing IDs with the required IDs and the
@@ -98,4 +98,4 @@
 
     };
 
-})(window, window.catwalk);
+})(window, window.catwalk, window.Q);

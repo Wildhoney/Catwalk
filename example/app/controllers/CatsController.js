@@ -15,7 +15,7 @@
          * @type {Function}
          */
         $scope.removeCat = function removeCat(model) {
-            $cats.removeModel(model);
+            $cats.deleteModel(model);
         };
 
         // Add all of the colours.

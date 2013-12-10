@@ -82,8 +82,6 @@
 
             /**
              * @method read
-             * @param foreignIds {Array|Number}
-             * @param defer {Q.defer}
              * @return {void}
              */
             read: function() {},
@@ -120,6 +118,12 @@
          * @private
          */
         _dimensions: {},
+
+        /**
+         * @property _deletedIds
+         * @type {Array}
+         */
+        _deletedIds: [],
 
         /**
          * @method addModel
@@ -213,23 +217,27 @@
         },
 
         /**
-         * @method removeModel
+         * @method deleteModel
          * @param model {Object}
          * @return {void}
          */
-        removeModel: function removeModel(model) {
-            this.removeModels([model]);
+        deleteModel: function deleteModel(model) {
+            this.deleteModels([model]);
         },
 
         /**
-         * @method removeModels
+         * @method deleteModels
          * @param models {Array}
          * @return {void}
          */
-        removeModels: function removeModels(models) {
+        deleteModels: function deleteModels(models) {
+
+            // Append the deleted IDs to the array.
+            this._deletedIds = this._deletedIds.concat(_.pluck(models, '_catwalkId'));
 
             var _models          = [],
-                defaultDimension = this._dimensions.catwalkId;
+                defaultDimension = this._dimensions.catwalkId,
+                _deletedIds      = this._deletedIds;
 
             _.forEach(models, function(model) {
 
@@ -239,7 +247,7 @@
 
                 // Remove the model by its internal Catwalk ID.
                 defaultDimension.filterFunction(function(d) {
-                    return (d !== model._catwalkId);
+                    return !(_.contains(_deletedIds, d));
                 });
 
                 // Model has been deleted so update the array to invoke the method
