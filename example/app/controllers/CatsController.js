@@ -10,6 +10,10 @@
             $scope.cats = $cats.all();
         });
 
+        $cats.when('update', function(model) {
+            $scope.cats = $cats.all();
+        });
+
         /**
          * @method removeCat
          * @type {Function}

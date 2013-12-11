@@ -135,11 +135,22 @@
         },
 
         /**
-         * @property addModels
+         * @method addModels
          * @param models {Array}
          * @return {Array}
          */
         addModels: function addModels(models) {
+            return this._addModels(models, true);
+        },
+
+        /**
+         * @property addModels
+         * @param models {Array}
+         * @param emitCreateEvent {Boolean}
+         * @return {Array}
+         * @private
+         */
+        _addModels: function _addModels(models, emitCreateEvent) {
 
             var _models             = [],
                 propertyMap         = this._properties,
@@ -198,8 +209,12 @@
                 return !!_.contains(keys, d);
             });
 
-            // Invoke the create callback.
-            this._events.create(models);
+            if (emitCreateEvent) {
+
+                // Invoke the create callback.
+                this._events.create(models);
+
+            }
 
             // Voila!
             return items.top(Infinity);
@@ -228,9 +243,17 @@
                 throw 'You are attempting to remove a non-Catwalk model.';
             }
 
-            var catwalkId = model._catwalkId;
+            this._deleteModels([model], false);
 
-            alert(catwalkId);
+            var updatedModel = _.extend(model, properties);
+
+            this.addModels([updatedModel], false);
+
+            this._events.update(updatedModel);
+
+//            var catwalkId = model._catwalkId;
+//
+//            alert(catwalkId);
 
 //            var catwalkId = model.
 
