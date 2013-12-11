@@ -217,6 +217,16 @@
         },
 
         /**
+         * @method updateModel
+         * @param model {Object}
+         * @param properties {Object}
+         * @return {Object}
+         */
+        updateModel: function updateModel(model, properties) {
+            
+        },
+
+        /**
          * @method deleteModel
          * @param model {Object}
          * @return {void}
