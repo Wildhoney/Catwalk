@@ -243,19 +243,32 @@
                 throw 'You are attempting to remove a non-Catwalk model.';
             }
 
+            // Delete the model from the Crossfilter.
             this._deleteModels([model], false);
 
+            // Create the new model with the properties from the old model, overwritten with
+            // the properties we're updating the model with.
             var updatedModel = _.extend(model, properties);
 
+            // Copy across the relationships as well.
+            _.forEach(this._properties._relationships, function(relationship, property) {
+
+                // Gather the raw relational data from the relationship meta data.
+                delete updatedModel[property];
+                updatedModel[property] = properties[property] ? properties[property]
+                                                              : model._relationshipMeta[property];
+
+            });
+
+            // Remove the meta data for the relationships because it will be created again with
+            // the `addModels` method.
+            delete updatedModel._relationshipMeta;
+
+            // Create the new model and add it to the Crossfilter.
             this.addModels([updatedModel], false);
 
+            // Emit the update event to notify of the updated model.
             this._events.update(updatedModel);
-
-//            var catwalkId = model._catwalkId;
-//
-//            alert(catwalkId);
-
-//            var catwalkId = model.
 
         },
 
@@ -356,6 +369,13 @@
                 }
 
             });
+
+            // Create the relationship meta data for the actual relational IDs.
+            if (!('_relationshipMeta' in model)) {
+                model._relationshipMeta = {};
+            }
+
+            model._relationshipMeta[key] = ids;
 
         }
 
