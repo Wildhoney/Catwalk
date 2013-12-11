@@ -70,24 +70,6 @@ $cats.when('create', function(models) {
 });
 ```
 
-Deleting Models
------
-
-Deleting models from the collection is just as easy as adding them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
-
-```javascript
-var blackModel = $colours.addModel({ id: 1, colour: 'Black' });
-$colours.removeModel(blackModel);
-```
-
-As with the invoking of the `create` method when adding models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
-
-```javascript
-$cats.when('delete', function(models) {
-    $scope.cats = $cats.all();
-});
-```
-
 Updating Models
 -----
 
@@ -115,6 +97,24 @@ Upon updating a model, the `update` event is invoked, passing through the model 
 
 ```javascript
 $cats.when('update', function(model) {
+    $scope.cats = $cats.all();
+});
+```
+
+Deleting Models
+-----
+
+Deleting models from the collection is just as easy as adding them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
+
+```javascript
+var blackModel = $colours.addModel({ id: 1, colour: 'Black' });
+$colours.removeModel(blackModel);
+```
+
+As with the invoking of the `create` method when adding models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
+
+```javascript
+$cats.when('delete', function(models) {
     $scope.cats = $cats.all();
 });
 ```
