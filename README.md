@@ -110,3 +110,11 @@ $cats.updateModel(missKittens, {
 ```
 
 It's perhaps worth noting that you **only** need to update the properties that you want changing, otherwise they are copied from the previous model.
+
+Upon updating a model, the `update` event is invoked, passing through the model that was updated.
+
+```javascript
+$cats.when('update', function(model) {
+    $scope.cats = $cats.all();
+});
+```
