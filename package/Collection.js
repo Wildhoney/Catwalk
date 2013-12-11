@@ -223,7 +223,17 @@
          * @return {Object}
          */
         updateModel: function updateModel(model, properties) {
-            
+
+            if (!('_catwalkId' in model)) {
+                throw 'You are attempting to remove a non-Catwalk model.';
+            }
+
+            var catwalkId = model._catwalkId;
+
+            alert(catwalkId);
+
+//            var catwalkId = model.
+
         },
 
         /**
@@ -241,6 +251,16 @@
          * @return {void}
          */
         deleteModels: function deleteModels(models) {
+            this._deleteModels(models, true);
+        },
+
+        /**
+         * @method _deleteModels
+         * @param models {Object}
+         * @param emitDeleteEvent {Boolean}
+         * @private
+         */
+        _deleteModels: function _deleteModels(models, emitDeleteEvent) {
 
             // Append the deleted IDs to the array.
             this._deletedIds = this._deletedIds.concat(_.pluck(models, '_catwalkId'));
@@ -266,8 +286,12 @@
 
             });
 
-            // Invoke the delete method.
-            this._events.delete(models);
+            if (emitDeleteEvent) {
+
+                // Invoke the delete method.
+                this._events.delete(models);
+
+            }
 
         },
 

@@ -25,9 +25,13 @@
         $colours.addModel({ id: 4, colour: 'Grey' });
 
         // ...And add all of the cats, too.
-        $cats.addModel({ id: 1, name: 'Kipper', age: 14, colours: [1, 2] });
-        $cats.addModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
-        $cats.addModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
+        var kipper      = $cats.addModel({ id: 1, name: 'Kipper', age: 14, colours: [1, 2] });
+        var busters     = $cats.addModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
+        var missKittens = $cats.addModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
+
+        $cats.updateModel(missKittens, {
+            name: 'Lucifer'
+        });
 
     });
 
