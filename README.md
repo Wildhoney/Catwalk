@@ -87,3 +87,26 @@ $cats.when('delete', function(models) {
     $scope.cats = $cats.all();
 });
 ```
+
+Updating Models
+-----
+
+Updating of models is **very** simple &ndash; but behind the scenes, Catwalk deletes the model and then re-adds it to the Crossfilter. Because of this, any models you have from the `addModel`/`addModels` method(s) will become invalid &ndash; you should instead replace them with the model returned from `updateModel`.
+
+```javascript
+var missKittens = $cats.addModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
+
+$cats.updateModel(missKittens, {
+    name: 'Lucifer'
+});
+```
+
+In the above example we have just updated the name of `missKittens` by changing her name to **Lucifer** &ndash; very aptly named. We can also update relationships in exactly the same way.
+
+```javascript
+$cats.updateModel(missKittens, {
+    colours: [1, 2]
+});
+```
+
+It's perhaps worth noting that you **only** need to update the properties that you want changing, otherwise they are copied from the previous model.
