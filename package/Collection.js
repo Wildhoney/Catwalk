@@ -156,13 +156,13 @@
         },
 
         /**
-         * @method _createRollback
+         * @method _createReject
          * @param model {Object}
          * @return {void}
          * @private
          */
-        _createRollback: function _createRollback(model) {
-            this._deleteModels([model], false);
+        _createReject: function _createReject(model) {
+            this.deleteModel(model);
         },
 
         /**
@@ -178,7 +178,7 @@
             }
 
             // Delete the model from the Crossfilter.
-            this._deleteModels([model], false);
+            this.deleteModel(model);
 
             // Create the new model with the properties from the old model, overwritten with
             // the properties we're updating the model with.
@@ -204,20 +204,15 @@
         },
 
         /**
-         * @method _updateRollback
+         * @method _updateReject
          * @param model {Object}
          * @param previousModel {Object}
          * @return {void}
          * @private
          */
-        _updateRollback: function _updateRollback(model, previousModel) {
-
-            // Since the developer has rejected this update, we'll delete it.
-            this._deleteModels([model], false);
-
-            // We'll then reanimate our previous model that was deleted.
+        _updateReject: function _updateReject(model, previousModel) {
+            this.deleteModel(model);
             this._reanimateModel(previousModel);
-
         },
 
         /**
@@ -273,8 +268,8 @@
             // Delete the model as it was rejected.
             deferred.promise.fail(_.bind(function() {
 
-                // Find the related rollback method and invoke it.
-                var methodName = '_' + eventName + 'Rollback';
+                // Find the related Reject method and invoke it.
+                var methodName = '_' + eventName + 'Reject';
                 this[methodName](model, previousModel);
 
                 // Voila!
@@ -344,12 +339,12 @@
         },
 
         /**
-         * @method _deleteRollback
+         * @method _deleteReject
          * @param model {Object}
          * @return {void}
          * @private
          */
-        _deleteRollback: function _deleteRollback(model) {
+        _deleteReject: function _deleteReject(model) {
 
             // Since the developer has rejected this update, we'll reanimate it.
             this._reanimateModel(model);
