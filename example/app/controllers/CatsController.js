@@ -1,17 +1,33 @@
 (function($app, $cats, $colours) {
 
-    $app.controller('CatsController', function CatsController($scope) {
+    $app.controller('CatsController', function CatsController($scope, $timeout) {
 
-        $cats.when('create', function(models) {
+        var update = function update() {
+
             $scope.cats = $cats.all();
+
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+
+        };
+
+        $cats.when('create', function(model) {
+            update();
         });
 
         $cats.when('delete', function(models) {
-            $scope.cats = $cats.all();
+            update();
         });
 
-        $cats.when('update', function(model) {
-            $scope.cats = $cats.all();
+        $cats.when('update', function(promise, model) {
+
+            $timeout(function() {
+                // Simulate AJAX request with rejection.
+                promise.reject();
+            }, 2000);
+
+            update();
         });
 
         /**

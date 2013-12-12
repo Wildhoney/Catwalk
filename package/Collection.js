@@ -1,4 +1,4 @@
-(function($catwalk) {
+(function($catwalk, $q) {
 
     "use strict";
 
@@ -268,10 +268,17 @@
             delete updatedModel._relationshipMeta;
 
             // Create the new model and add it to the Crossfilter.
-            this.addModels([updatedModel], false);
+            model = this._addModels([updatedModel], false)[0];
 
             // Emit the update event to notify of the updated model.
-            this._events.update(updatedModel);
+            var deferred = $q.defer();
+            this._events.update(deferred, model);
+
+            deferred.promise.fail(_.bind(function() {
+                // Since the developer has rejected this update, we'll rollback.
+                this._deleteModels([model], false);
+                this._events.update();
+            }, this));
 
             // Find the item we've just updated.
             return this._dimensions.catwalkId.filterExact(updatedModel._catwalkId).top(Infinity)[0];
@@ -336,11 +343,9 @@
          * @return {Array}
          */
         all: function all() {
-
             var models = this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
             this._events.read(models);
             return models;
-
         },
 
         /**
@@ -394,4 +399,4 @@
 
     };
 
-})(window.catwalk);
+})(window.catwalk, window.Q);

@@ -38,7 +38,9 @@
 
     <ul>
         <li ng-repeat="cat in cats | orderBy: 'name'">
-            <h2><a title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a> {{cat.name}}</h2>
+            <h2>
+                <a title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
+                {{cat.name}} ({{cat._catwalkId}})</h2>
             <ul>
                 <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.colour}}</li>
             </ul>
