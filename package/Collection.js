@@ -19,6 +19,13 @@
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
+        this._events        = {
+            create:     function() {},
+            read:       function() {},
+            update:     function() {},
+            delete:     function() {},
+            content:    function() {}
+        };
 
         // Gather the name and the properties for the models.
         this._name          = name;
@@ -69,40 +76,7 @@
          * @property events
          * @type {Object}
          */
-        _events: {
-
-            /**
-             * @method create
-             * @param models {Array}
-             * @return {void}
-             */
-            create: function (models) {
-                console.info('Created ' + models.length + ' model(s): ' + _.pluck(models, 'id'));
-            },
-
-            /**
-             * @method read
-             * @return {void}
-             */
-            read: function() {},
-
-            /**
-             * @event update
-             */
-            update: function() {},
-
-            /**
-             * @event delete
-             */
-            delete: function() {},
-
-            /**
-             * Invoked whenever the collection has been updated.
-             * @event content
-             */
-            content: function() {}
-
-        },
+        _events: {},
 
         /**
          * @property _properties
@@ -137,7 +111,104 @@
          * @return {Object}
          */
         addModel: function addModel(model) {
-            return this.addModels([model])[0];
+
+            var propertyMap         = this._properties,
+                createRelationship  = _.bind(this._createRelationship, this),
+                relationships       = this._properties._relationships || {},
+                defaultDimension    = this._dimensions.catwalkId;
+
+            // Apply an internal Catwalk ID to the model.
+            model._catwalkId = _.uniqueId('catwalk_');
+
+            // Iterate over the properties to typecast them.
+            _.forEach(model, function(value, key) {
+
+                if (key === '_catwalkId') {
+                    // We can't do much with the internal Catwalk ID.
+                    return;
+                }
+
+                // Determine if this property is part of a relationship.
+                if (typeof relationships[key] === 'function') {
+                    createRelationship(model, key, value);
+                    return;
+                }
+
+                try {
+
+                    // Typecast the property based on what's defined in the collection.
+                    model[key] = propertyMap[key](value);
+
+                } catch (e) {
+
+                    // Otherwise we'll throw the exception to notify the developer that the
+                    // key was missed from the collection.
+                    throw 'You forgot to define the `' + key + '` property on the collection blueprint.';
+
+                }
+
+            });
+
+            // Add the model to our Crossfilter, and then finalise the creation!
+            this._crossfilter.add([model]);
+            model = defaultDimension.top(Infinity)[0];
+            return this._finalise('create', model);
+
+        },
+
+        /**
+         * @method finalise
+         * @param eventName {String}
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _finalise: function _finalise(eventName, model) {
+
+            // Create the deferred that the developer must resolve or reject.
+            var deferred = $q.defer();
+
+            /**
+             * @method contentUpdated
+             * @return {void}
+             */
+            var contentUpdated  = _.bind(function contentUpdated() {
+
+                // Content has been updated!
+                this._events.content(this.all());
+
+            }, this);
+
+            // Invoke the related CRUD function.
+            this._events[eventName](deferred, model);
+
+            // Delete the model as it was rejected.
+            deferred.promise.fail(_.bind(function() {
+
+                // Find the related rollback method and invoke it.
+                var methodName = '_' + eventName + 'Rollback';
+                this[methodName](model);
+
+                // Voila!
+                contentUpdated();
+
+            }, this));
+
+            // Voila!
+            contentUpdated();
+
+            return model;
+
+        },
+
+        /**
+         * @method _rollbackCreate
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _createRollback: function _rollbackCreate(model) {
+            this._deleteModels([model], false);
         },
 
         /**
@@ -147,106 +218,6 @@
          */
         addModels: function addModels(models) {
             return this._addModels(models, true);
-        },
-
-        /**
-         * @property addModels
-         * @param models {Array}
-         * @param emitCreateEvent {Boolean}
-         * @return {Array}
-         * @private
-         */
-        _addModels: function _addModels(models, emitCreateEvent) {
-
-            var _models             = [],
-                _deleteModels       = _.bind(this._deleteModels, this),
-                _events             = this._events,
-                collection          = _.bind(this.all, this),
-                propertyMap         = this._properties,
-                relationships       = this._properties._relationships || {},
-                createRelationship  = _.bind(this._createRelationship, this),
-                event               = _.bind(this._events.create, this);
-
-            // Apply an internal Catwalk ID to each model.
-            _.forEach(models, function(model) {
-                model._catwalkId = _.uniqueId('catwalk_');
-            });
-
-            models.forEach(function(model) {
-
-                // Iterate over the properties to typecast them.
-                _.forEach(model, function(value, key) {
-
-                    if (key === '_catwalkId') {
-                        // We can't do much with the internal Catwalk ID.
-                        return;
-                    }
-
-                    // Determine if this property is part of a relationship.
-                    if (typeof relationships[key] === 'function') {
-                        createRelationship(model, key, value);
-                        return;
-                    }
-
-                    try {
-
-                        // Typecast the property based on what's defined in the collection.
-                        model[key] = propertyMap[key](value);
-
-                    } catch (e) {
-
-                        // Otherwise we'll throw the exception to notify the developer that the
-                        // key was missed from the collection.
-                        throw 'You forgot to define the `' + key + '` property on the collection blueprint.';
-
-                    }
-
-                });
-
-                _models.push(model);
-
-            });
-
-            // Add the models to our Crossfilter!
-            this._crossfilter.add(_models);
-
-            // Obtain the primary key to return our added models.
-            var primaryKey  = this._properties._primaryKey,
-                keys        = _.pluck(models, 'id');
-
-            // Find all of the items we've just added.
-            var items = this._dimensions[primaryKey].filterAll().filterFunction(function(d) {
-                return !!_.contains(keys, d);
-            });
-
-            if (emitCreateEvent) {
-
-                // Invoke the create callback.
-                _.forEach(models, function(model) {
-
-                    var deferred    = $q.defer();
-                    event(deferred, model);
-
-                    // Delete the model as it was rejected.
-                    deferred.promise.fail(function() {
-
-                        _deleteModels([model], false);
-
-                        // Content has been updated!
-                        _events.content(collection());
-
-                    });
-
-                });
-
-                // Content has been updated!
-                this._events.content(this.all());
-
-            }
-
-            // Voila!
-            return items.top(Infinity);
-
         },
 
         /**
@@ -263,7 +234,7 @@
          * @method watch
          * @param type {String}
          * @param callback {Function}
-         * @return {Array}
+         * @return {void}
          */
         watch: function watch(type, callback) {
             this._events[type] = callback;
