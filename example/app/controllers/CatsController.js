@@ -12,15 +12,15 @@
 
         };
 
-        $cats.when('create', function(model) {
+        $cats.on('create', function(model) {
             update();
         });
 
-        $cats.when('delete', function(models) {
+        $cats.on('delete', function(models) {
             update();
         });
 
-        $cats.when('update', function(promise, model) {
+        $cats.on('update', function(promise, model) {
 
             $timeout(function() {
                 // Simulate AJAX request with rejection.

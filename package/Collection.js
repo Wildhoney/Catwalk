@@ -225,12 +225,12 @@
         },
 
         /**
-         * @property when
+         * @property on
          * @param type {String}
          * @param callback {Function}
          * @return {void}
          */
-        when: function when(type, callback) {
+        on: function on(type, callback) {
             this._events[type] = callback;
         },
 
