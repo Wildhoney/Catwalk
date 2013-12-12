@@ -2,22 +2,22 @@
 
     $app.controller('CatsController', function CatsController($scope, $timeout) {
 
-        var update = function update() {
+        $cats.watch('content', function(collection) {
 
-            $scope.cats = $cats.all();
+            $scope.cats = collection;
 
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
 
-        };
+        });
 
         $cats.on('create', function(model) {
-            update();
+
         });
 
         $cats.on('delete', function(models) {
-            update();
+
         });
 
         $cats.on('update', function(promise, model) {
@@ -27,7 +27,6 @@
                 promise.reject();
             }, 2000);
 
-            update();
         });
 
         /**

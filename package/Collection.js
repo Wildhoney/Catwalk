@@ -94,7 +94,13 @@
             /**
              * @event delete
              */
-            delete: function() {}
+            delete: function() {},
+
+            /**
+             * Invoked whenever the collection has been updated.
+             * @event content
+             */
+            content: function() {}
 
         },
 
@@ -217,6 +223,9 @@
                     event(model);
                 });
 
+                // Content has been updated!
+                this._events.content(this.all());
+
             }
 
             // Voila!
@@ -225,12 +234,22 @@
         },
 
         /**
-         * @property on
+         * @method on
          * @param type {String}
          * @param callback {Function}
          * @return {void}
          */
         on: function on(type, callback) {
+            this._events[type] = callback;
+        },
+
+        /**
+         * @method watch
+         * @param type {String}
+         * @param callback {Function}
+         * @return {Array}
+         */
+        watch: function watch(type, callback) {
             this._events[type] = callback;
         },
 
@@ -275,10 +294,17 @@
             this._events.update(deferred, model);
 
             deferred.promise.fail(_.bind(function() {
+
                 // Since the developer has rejected this update, we'll rollback.
                 this._deleteModels([model], false);
-                this._events.update();
+
+                // Content has been updated!
+                this._events.content(this.all());
+
             }, this));
+
+            // Content has been updated!
+            this._events.content(this.all());
 
             // Find the item we've just updated.
             return this._dimensions.catwalkId.filterExact(updatedModel._catwalkId).top(Infinity)[0];
@@ -335,6 +361,9 @@
                 }
 
             });
+
+            // Content has been updated!
+            this._events.content(this.all());
 
         },
 
