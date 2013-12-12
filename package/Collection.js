@@ -159,6 +159,9 @@
         _addModels: function _addModels(models, emitCreateEvent) {
 
             var _models             = [],
+                _deleteModels       = _.bind(this._deleteModels, this),
+                _events             = this._events,
+                collection          = _.bind(this.all, this),
                 propertyMap         = this._properties,
                 relationships       = this._properties._relationships || {},
                 createRelationship  = _.bind(this._createRelationship, this),
@@ -220,7 +223,20 @@
 
                 // Invoke the create callback.
                 _.forEach(models, function(model) {
-                    event(model);
+
+                    var deferred    = $q.defer();
+                    event(deferred, model);
+
+                    // Delete the model as it was rejected.
+                    deferred.promise.fail(function() {
+
+                        _deleteModels([model], false);
+
+                        // Content has been updated!
+                        _events.content(collection());
+
+                    });
+
                 });
 
                 // Content has been updated!
@@ -342,8 +358,7 @@
 
             var defaultDimension = this._dimensions.catwalkId,
                 _deletedIds      = this._deletedIds,
-                $scope           = this,
-                _addModels       = _.bind(this._addModels, this),
+                scope            = this,
                 _events          = this._events,
                 event            = _.bind(_events.delete, this),
                 collection       = _.bind(this.all, this);
@@ -368,12 +383,12 @@
                     deferred.promise.fail(_.bind(function() {
 
                         // Since the developer has rejected this update, we'll un-delete it.
-                        var index = _.indexOf($scope._deletedIds, this._catwalkId);
-                        $scope._deletedIds.splice(index, 1);
+                        var index = _.indexOf(scope._deletedIds, model._catwalkId);
+                        scope._deletedIds.splice(index, 1);
 
                         // Bring it back to life!
                         defaultDimension.filterFunction(function(d) {
-                            return !(_.contains($scope._deletedIds, d));
+                            return !(_.contains(scope._deletedIds, d));
                         });
 
                         // Content has been updated!

@@ -12,7 +12,7 @@
 
         });
 
-        $cats.on('create', function(model) {
+        $cats.on('create', function(promise, model) {
 
         });
 
@@ -26,11 +26,6 @@
         });
 
         $cats.on('update', function(promise, model) {
-
-//            $timeout(function() {
-//                // Simulate AJAX request with rejection.
-//                promise.reject();
-//            }, 2000);
 
         });
 
