@@ -65,7 +65,7 @@ $colours.createModel({ id: 4, colour: 'Grey' });
 Upon creating the models to your collection, the `create` method will be invoked, passing through the models that were created.
 
 ```javascript
-$cats.when('create', function(models) {
+$cats.watch('create', function(models) {
     $scope.cats = $cats.all();
 });
 ```
@@ -96,7 +96,7 @@ It's perhaps worth noting that you **only** need to update the properties that y
 Upon updating a model, the `update` event is invoked, passing through the model that was updated.
 
 ```javascript
-$cats.when('update', function(model) {
+$cats.watch('update', function(model) {
     $scope.cats = $cats.all();
 });
 ```
@@ -114,7 +114,7 @@ $colours.removeModel(blackModel);
 As with the invoking of the `create` method when creating models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
 
 ```javascript
-$cats.when('delete', function(models) {
+$cats.watch('delete', function(models) {
     $scope.cats = $cats.all();
 });
 ```

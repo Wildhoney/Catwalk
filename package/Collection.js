@@ -190,7 +190,7 @@
                 // Gather the raw relational data from the relationship meta data.
                 delete updatedModel[property];
                 updatedModel[property] = properties[property] ? properties[property]
-                    : model._relationshipMeta[property];
+                                                              : model._relationshipMeta[property];
 
             });
 
@@ -213,104 +213,6 @@
         _updateReject: function _updateReject(model, previousModel) {
             this.deleteModel(model);
             this._reanimateModel(previousModel);
-        },
-
-        /**
-         * Bring a model back to life after being removed.
-         *
-         * @method _reanimateModel
-         * @param model {Object}
-         * @return {void}
-         * @private
-         */
-        _reanimateModel: function _reanimateModel(model) {
-
-            var catwalkId   = model._catwalkId,
-                index       = _.indexOf(this._deletedIds, catwalkId);
-
-            // Remove the deleted ID from the array.
-            this._deletedIds.splice(index, 1);
-
-            // Reanimate our model!
-            this._dimensions.catwalkId.filterFunction(_.bind(function(d) {
-                return !(_.contains(this._deletedIds, d));
-            }, this));
-
-        },
-
-        /**
-         * @method finalise
-         * @param eventName {String}
-         * @param model {Object}
-         * @param [previousModel = {}] {Object}
-         * @return {void}
-         * @private
-         */
-        _finalise: function _finalise(eventName, model, previousModel) {
-
-            // Create the deferred that the developer must resolve or reject.
-            var deferred = $q.defer();
-
-            /**
-             * @method contentUpdated
-             * @return {void}
-             */
-            var contentUpdated  = _.bind(function contentUpdated() {
-
-                // Content has been updated!
-                this._events.content(this.all());
-
-            }, this);
-
-            // Invoke the related CRUD function.
-            this._events[eventName](deferred, model);
-
-            // Delete the model as it was rejected.
-            deferred.promise.fail(_.bind(function() {
-
-                // Find the related Reject method and invoke it.
-                var methodName = '_' + eventName + 'Reject';
-                this[methodName](model, previousModel);
-
-                // Voila!
-                contentUpdated();
-
-            }, this));
-
-            // Voila!
-            contentUpdated();
-
-            return model;
-
-        },
-
-        /**
-         * @method createModels
-         * @param models {Array}
-         * @return {Array}
-         */
-        createModels: function createModels(models) {
-            return this._createModels(models, true);
-        },
-
-        /**
-         * @method on
-         * @param type {String}
-         * @param callback {Function}
-         * @return {void}
-         */
-        on: function on(type, callback) {
-            this._events[type] = callback;
-        },
-
-        /**
-         * @method watch
-         * @param type {String}
-         * @param callback {Function}
-         * @return {void}
-         */
-        watch: function watch(type, callback) {
-            this._events[type] = callback;
         },
 
         /**
@@ -352,21 +254,26 @@
         },
 
         /**
-         * @method all
-         * @return {Array}
+         * Bring a model back to life after being removed.
+         *
+         * @method _reanimateModel
+         * @param model {Object}
+         * @return {void}
+         * @private
          */
-        all: function all() {
-            var models = this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
-            this._events.read(models);
-            return models;
-        },
+        _reanimateModel: function _reanimateModel(model) {
 
-        /**
-         * @method size
-         * @return {Number}
-         */
-        size: function size() {
-            return this._crossfilter.size();
+            var catwalkId   = model._catwalkId,
+                index       = _.indexOf(this._deletedIds, catwalkId);
+
+            // Remove the deleted ID from the array.
+            this._deletedIds.splice(index, 1);
+
+            // Reanimate our model!
+            this._dimensions.catwalkId.filterFunction(_.bind(function(d) {
+                return !(_.contains(this._deletedIds, d));
+            }, this));
+
         },
 
         /**
@@ -395,6 +302,92 @@
 
             model._relationshipMeta[key] = ids;
 
+        },
+
+        /**
+         * @method finalise
+         * @param eventName {String}
+         * @param model {Object}
+         * @param [previousModel = {}] {Object}
+         * @return {Object}
+         * @private
+         */
+        _finalise: function _finalise(eventName, model, previousModel) {
+
+            // Create the deferred that the developer must resolve or reject.
+            var deferred = $q.defer();
+
+            /**
+             * @method contentUpdated
+             * @return {void}
+             */
+            var contentUpdated = _.bind(function contentUpdated() {
+
+                // Content has been updated!
+                this._events.content(this.all());
+
+            }, this);
+
+            /**
+             * @method invokeCallback
+             * @return {void}
+             */
+            var invokeCallback = function(state) {
+
+                // Find the related Reject method and invoke it.
+                var methodName = '_' + eventName + state;
+                this[methodName](model, previousModel);
+
+            };
+
+            // Invoke the related CRUD function.
+            this._events[eventName](deferred, model);
+
+            // When the defer has been resolved.
+            deferred.promise.then(function() {
+                invokeCallback('Resolve');
+                contentUpdated();
+            });
+
+            // When the defer has been rejected.
+            deferred.promise.fail(_.bind(function() {
+                invokeCallback('Reject');
+                contentUpdated();
+            }, this));
+
+            // Voila!
+            contentUpdated();
+
+            return model;
+
+        },
+
+        /**
+         * @method watch
+         * @param type {String}
+         * @param callback {Function}
+         * @return {void}
+         */
+        watch: function watch(type, callback) {
+            this._events[type] = callback;
+        },
+
+        /**
+         * @method all
+         * @return {Array}
+         */
+        all: function all() {
+            var models = this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
+            this._events.read(models);
+            return models;
+        },
+
+        /**
+         * @method size
+         * @return {Number}
+         */
+        size: function size() {
+            return this._crossfilter.size();
         }
 
     };

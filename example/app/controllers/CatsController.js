@@ -12,15 +12,15 @@
 
         });
 
-        $cats.on('create', function(promise, model) {
+        $cats.watch('create', function(promise, model) {
 
         });
 
-        $cats.on('delete', function(promise, model) {
+        $cats.watch('delete', function(promise, model) {
 
         });
 
-        $cats.on('update', function(promise, model) {
+        $cats.watch('update', function(promise, model) {
 
         });
 
