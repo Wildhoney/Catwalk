@@ -155,7 +155,8 @@
             var _models             = [],
                 propertyMap         = this._properties,
                 relationships       = this._properties._relationships || {},
-                createRelationship  = _.bind(this._createRelationship, this);
+                createRelationship  = _.bind(this._createRelationship, this),
+                event               = _.bind(this._events.create, this);
 
             // Apply an internal Catwalk ID to each model.
             _.forEach(models, function(model) {
@@ -212,7 +213,9 @@
             if (emitCreateEvent) {
 
                 // Invoke the create callback.
-                this._events.create(models);
+                _.forEach(models, function(model) {
+                    event(model);
+                });
 
             }
 
@@ -304,9 +307,9 @@
             // Append the deleted IDs to the array.
             this._deletedIds = this._deletedIds.concat(_.pluck(models, '_catwalkId'));
 
-            var _models          = [],
-                defaultDimension = this._dimensions.catwalkId,
-                _deletedIds      = this._deletedIds;
+            var defaultDimension = this._dimensions.catwalkId,
+                _deletedIds      = this._deletedIds,
+                event            = _.bind(this._events.delete, this);
 
             _.forEach(models, function(model) {
 
@@ -319,18 +322,12 @@
                     return !(_.contains(_deletedIds, d));
                 });
 
-                // Model has been deleted so update the array to invoke the method
-                // later on.
-                _models.push(model);
+                if (emitDeleteEvent) {
+                    // Invoke the delete callback.
+                    event(model);
+                }
 
             });
-
-            if (emitDeleteEvent) {
-
-                // Invoke the delete method.
-                this._events.delete(models);
-
-            }
 
         },
 
