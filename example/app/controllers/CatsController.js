@@ -18,11 +18,6 @@
 
         $cats.on('delete', function(promise, model) {
 
-            $timeout(function() {
-                // Simulate AJAX request with rejection.
-                promise.reject();
-            }, 2000);
-
         });
 
         $cats.on('update', function(promise, model) {
@@ -48,11 +43,11 @@
         var busters     = $cats.createModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
         var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 2, colours: [1, 2, 3, 4] });
 
-        $timeout(function() {
-
-            $cats.deleteModel(missKittens);
-
-        }, 500);
+//        $timeout(function() {
+//
+//            $cats.deleteModel(missKittens);
+//
+//        }, 500);
 
     });
 
