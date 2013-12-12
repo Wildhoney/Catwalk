@@ -18,14 +18,14 @@
 
         $cats.on('delete', function(promise, model) {
 
-        });
-
-        $cats.on('update', function(promise, model) {
-
             $timeout(function() {
                 // Simulate AJAX request with rejection.
                 promise.reject();
             }, 2000);
+
+        });
+
+        $cats.on('update', function(promise, model) {
 
         });
 
@@ -50,9 +50,7 @@
 
         $timeout(function() {
 
-            $cats.updateModel(missKittens, {
-                name: 'Lucifer'
-            });
+            $cats.deleteModel(missKittens);
 
         }, 500);
 

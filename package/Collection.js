@@ -324,75 +324,35 @@
          * @return {void}
          */
         deleteModel: function deleteModel(model) {
-            this.deleteModels([model]);
-        },
 
-        /**
-         * @method deleteModels
-         * @param models {Array}
-         * @return {void}
-         */
-        deleteModels: function deleteModels(models) {
-            this._deleteModels(models, true);
-        },
+            var deletedIds = this._deletedIds;
 
-        /**
-         * @method _deleteModels
-         * @param models {Object}
-         * @param emitDeleteEvent {Boolean}
-         * @private
-         */
-        _deleteModels: function _deleteModels(models, emitDeleteEvent) {
+            if (!('_catwalkId' in model)) {
+                throw 'You are attempting to remove a non-Catwalk model.';
+            }
 
-            // Append the deleted IDs to the array.
-            this._deletedIds = this._deletedIds.concat(_.pluck(models, '_catwalkId'));
+            // Add the model to the deleted array.
+            deletedIds.push(model._catwalkId);
 
-            var defaultDimension = this._dimensions.catwalkId,
-                _deletedIds      = this._deletedIds,
-                scope            = this,
-                _events          = this._events,
-                event            = _.bind(_events.delete, this),
-                collection       = _.bind(this.all, this);
-
-            _.forEach(models, function(model) {
-
-                if (!('_catwalkId' in model)) {
-                    throw 'You are attempting to remove a non-Catwalk model.';
-                }
-
-                // Remove the model by its internal Catwalk ID.
-                defaultDimension.filterFunction(function(d) {
-                    return !(_.contains(_deletedIds, d));
-                });
-
-                if (emitDeleteEvent) {
-
-                    // Invoke the delete callback.
-                    var deferred = $q.defer();
-                    event(deferred, model);
-
-                    deferred.promise.fail(_.bind(function() {
-
-                        // Since the developer has rejected this update, we'll un-delete it.
-                        var index = _.indexOf(scope._deletedIds, model._catwalkId);
-                        scope._deletedIds.splice(index, 1);
-
-                        // Bring it back to life!
-                        defaultDimension.filterFunction(function(d) {
-                            return !(_.contains(scope._deletedIds, d));
-                        });
-
-                        // Content has been updated!
-                        _events.content(collection());
-
-                    }, model));
-
-                }
-
+            // Remove the model by its internal Catwalk ID.
+            this._dimensions.catwalkId.filterFunction(function(d) {
+                return !(_.contains(deletedIds, d));
             });
 
-            // Content has been updated!
-            this._events.content(this.all());
+            return this._finalise('delete', model);
+
+        },
+
+        /**
+         * @method _deleteRollback
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _deleteRollback: function _deleteRollback(model) {
+
+            // Since the developer has rejected this update, we'll reanimate it.
+            this._reanimateModel(model);
 
         },
 
