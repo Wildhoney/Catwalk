@@ -40,7 +40,7 @@
 
         _.forEach(keys, function(key) {
 
-            if (key.charAt(0) === '_') {
+            if (key.charAt(0) === '_' || key.charAt(0) === '$') {
                 // We don't wish to include private/protected members.
                 return;
             }
@@ -106,11 +106,11 @@
         _deletedIds: [],
 
         /**
-         * @method addModel
+         * @method createModel
          * @param model {Object}
          * @return {Object}
          */
-        addModel: function addModel(model) {
+        createModel: function createModel(model) {
 
             var propertyMap         = this._properties,
                 createRelationship  = _.bind(this._createRelationship, this),
@@ -123,7 +123,7 @@
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
 
-                if (key === '_catwalkId') {
+                if (key === '_catwalkId' || key.charAt(0) === '$') {
                     // We can't do much with the internal Catwalk ID.
                     return;
                 }
@@ -151,8 +151,95 @@
 
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
-            model = defaultDimension.top(Infinity)[0];
-            return this._finalise('create', model);
+            return this._finalise('create', defaultDimension.top(Infinity)[0]);
+
+        },
+
+        /**
+         * @method _createRollback
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _createRollback: function _createRollback(model) {
+            this._deleteModels([model], false);
+        },
+
+        /**
+         * @method updateModel
+         * @param model {Object}
+         * @param properties {Object}
+         * @return {Object}
+         */
+        updateModel: function updateModel(model, properties) {
+
+            if (!('_catwalkId' in model)) {
+                throw 'You are attempting to remove a non-Catwalk model.';
+            }
+
+            // Delete the model from the Crossfilter.
+            this._deleteModels([model], false);
+
+            // Create the new model with the properties from the old model, overwritten with
+            // the properties we're updating the model with.
+            var updatedModel = _.extend(_.clone(model), properties);
+
+            // Copy across the relationships as well.
+            _.forEach(this._properties._relationships, function(relationship, property) {
+
+                // Gather the raw relational data from the relationship meta data.
+                delete updatedModel[property];
+                updatedModel[property] = properties[property] ? properties[property]
+                    : model._relationshipMeta[property];
+
+            });
+
+            // Remove the meta data for the relationships because it will be created again with
+            // the `createModels` method.
+            delete updatedModel._relationshipMeta;
+
+            // Create the new model and add it to the Crossfilter.
+            return this._finalise('update', this.createModel(updatedModel), model);
+
+        },
+
+        /**
+         * @method _updateRollback
+         * @param model {Object}
+         * @param previousModel {Object}
+         * @return {void}
+         * @private
+         */
+        _updateRollback: function _updateRollback(model, previousModel) {
+
+            // Since the developer has rejected this update, we'll delete it.
+            this._deleteModels([model], false);
+
+            // We'll then reanimate our previous model that was deleted.
+            this._reanimateModel(previousModel);
+
+        },
+
+        /**
+         * Bring a model back to life after being removed.
+         *
+         * @method _reanimateModel
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _reanimateModel: function _reanimateModel(model) {
+
+            var catwalkId   = model._catwalkId,
+                index       = _.indexOf(this._deletedIds, catwalkId);
+
+            // Remove the deleted ID from the array.
+            this._deletedIds.splice(index, 1);
+
+            // Reanimate our model!
+            this._dimensions.catwalkId.filterFunction(_.bind(function(d) {
+                return !(_.contains(this._deletedIds, d));
+            }, this));
 
         },
 
@@ -160,10 +247,11 @@
          * @method finalise
          * @param eventName {String}
          * @param model {Object}
+         * @param [previousModel = {}] {Object}
          * @return {void}
          * @private
          */
-        _finalise: function _finalise(eventName, model) {
+        _finalise: function _finalise(eventName, model, previousModel) {
 
             // Create the deferred that the developer must resolve or reject.
             var deferred = $q.defer();
@@ -187,7 +275,7 @@
 
                 // Find the related rollback method and invoke it.
                 var methodName = '_' + eventName + 'Rollback';
-                this[methodName](model);
+                this[methodName](model, previousModel);
 
                 // Voila!
                 contentUpdated();
@@ -202,22 +290,12 @@
         },
 
         /**
-         * @method _rollbackCreate
-         * @param model {Object}
-         * @return {void}
-         * @private
-         */
-        _createRollback: function _rollbackCreate(model) {
-            this._deleteModels([model], false);
-        },
-
-        /**
-         * @method addModels
+         * @method createModels
          * @param models {Array}
          * @return {Array}
          */
-        addModels: function addModels(models) {
-            return this._addModels(models, true);
+        createModels: function createModels(models) {
+            return this._createModels(models, true);
         },
 
         /**
@@ -238,64 +316,6 @@
          */
         watch: function watch(type, callback) {
             this._events[type] = callback;
-        },
-
-        /**
-         * @method updateModel
-         * @param model {Object}
-         * @param properties {Object}
-         * @return {Object}
-         */
-        updateModel: function updateModel(model, properties) {
-
-            if (!('_catwalkId' in model)) {
-                throw 'You are attempting to remove a non-Catwalk model.';
-            }
-
-            // Delete the model from the Crossfilter.
-            this._deleteModels([model], false);
-
-            // Create the new model with the properties from the old model, overwritten with
-            // the properties we're updating the model with.
-            var updatedModel = _.extend(model, properties);
-
-            // Copy across the relationships as well.
-            _.forEach(this._properties._relationships, function(relationship, property) {
-
-                // Gather the raw relational data from the relationship meta data.
-                delete updatedModel[property];
-                updatedModel[property] = properties[property] ? properties[property]
-                                                              : model._relationshipMeta[property];
-
-            });
-
-            // Remove the meta data for the relationships because it will be created again with
-            // the `addModels` method.
-            delete updatedModel._relationshipMeta;
-
-            // Create the new model and add it to the Crossfilter.
-            model = this._addModels([updatedModel], false)[0];
-
-            // Emit the update event to notify of the updated model.
-            var deferred = $q.defer();
-            this._events.update(deferred, model);
-
-            deferred.promise.fail(_.bind(function() {
-
-                // Since the developer has rejected this update, we'll delete it.
-                this._deleteModels([model], false);
-
-                // Content has been updated!
-                this._events.content(this.all());
-
-            }, this));
-
-            // Content has been updated!
-            this._events.content(this.all());
-
-            // Find the item we've just updated.
-            return this._dimensions.catwalkId.filterExact(updatedModel._catwalkId).top(Infinity)[0];
-
         },
 
         /**

@@ -50,19 +50,19 @@ The properties inside of the relationship descriptor are both the `collection` i
 
 In the example above, each model that adds itself to the collection would define a `colours` property with an array of colour IDs. When you access `model.colours` on the model, the actual colours will be brought back from the `Colours` collection.
 
-Adding Models
+Creating Models
 -----
 
-Once you've created your collection, models can easily be adding to it via with the `addModel`/`addModels` methods.
+Once you've created your collection, models can easily be creating to it via with the `createModel`/`createModels` methods.
 
 ```javascript
-$colours.addModel({ id: 1, colour: 'Black' });
-$colours.addModel({ id: 2, colour: 'White' });
-$colours.addModel({ id: 3, colour: 'Ginger' });
-$colours.addModel({ id: 4, colour: 'Grey' });
+$colours.createModel({ id: 1, colour: 'Black' });
+$colours.createModel({ id: 2, colour: 'White' });
+$colours.createModel({ id: 3, colour: 'Ginger' });
+$colours.createModel({ id: 4, colour: 'Grey' });
 ```
 
-Upon adding the models to your collection, the `create` method will be invoked, passing through the models that were created.
+Upon creating the models to your collection, the `create` method will be invoked, passing through the models that were created.
 
 ```javascript
 $cats.when('create', function(models) {
@@ -73,10 +73,10 @@ $cats.when('create', function(models) {
 Updating Models
 -----
 
-Updating of models is **very** simple &ndash; but behind the scenes, Catwalk deletes the model and then re-adds it to the Crossfilter. Because of this, any models you have from the `addModel`/`addModels` method(s) will become invalid &ndash; you should instead replace them with the model returned from `updateModel`.
+Updating of models is **very** simple &ndash; but behind the scenes, Catwalk deletes the model and then re-adds it to the Crossfilter. Because of this, any models you have from the `createModel`/`createModels` method(s) will become invalid &ndash; you should instead replace them with the model returned from `updateModel`.
 
 ```javascript
-var missKittens = $cats.addModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
+var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
 
 $cats.updateModel(missKittens, {
     name: 'Lucifer'
@@ -104,14 +104,14 @@ $cats.when('update', function(model) {
 Deleting Models
 -----
 
-Deleting models from the collection is just as easy as adding them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
+Deleting models from the collection is just as easy as creating them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
 
 ```javascript
-var blackModel = $colours.addModel({ id: 1, colour: 'Black' });
+var blackModel = $colours.createModel({ id: 1, colour: 'Black' });
 $colours.removeModel(blackModel);
 ```
 
-As with the invoking of the `create` method when adding models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
+As with the invoking of the `create` method when creating models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
 
 ```javascript
 $cats.when('delete', function(models) {

@@ -14,11 +14,6 @@
 
         $cats.on('create', function(promise, model) {
 
-            $timeout(function() {
-                // Simulate AJAX request with rejection.
-                promise.reject();
-            }, 2000);
-
         });
 
         $cats.on('delete', function(promise, model) {
@@ -26,6 +21,11 @@
         });
 
         $cats.on('update', function(promise, model) {
+
+            $timeout(function() {
+                // Simulate AJAX request with rejection.
+                promise.reject();
+            }, 2000);
 
         });
 
@@ -38,19 +38,23 @@
         };
 
         // Add all of the colours.
-        $colours.addModel({ id: 1, colour: 'Black' });
-        $colours.addModel({ id: 2, colour: 'White' });
-        $colours.addModel({ id: 3, colour: 'Ginger' });
-        $colours.addModel({ id: 4, colour: 'Grey' });
+        $colours.createModel({ id: 1, colour: 'Black' });
+        $colours.createModel({ id: 2, colour: 'White' });
+        $colours.createModel({ id: 3, colour: 'Ginger' });
+        $colours.createModel({ id: 4, colour: 'Grey' });
 
         // ...And add all of the cats, too.
-        var kipper      = $cats.addModel({ id: 1, name: 'Kipper', age: 14, colours: [1, 2] });
-        var busters     = $cats.addModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
-        var missKittens = $cats.addModel({ id: 3, name: 'Miss Kittens', age: 2, colours: [1, 2, 3, 4] });
+        var kipper      = $cats.createModel({ id: 1, name: 'Kipper', age: 14, colours: [1, 2] });
+        var busters     = $cats.createModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
+        var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 2, colours: [1, 2, 3, 4] });
 
-//        $cats.updateModel(missKittens, {
-//            name: 'Lucifer'
-//        });
+        $timeout(function() {
+
+            $cats.updateModel(missKittens, {
+                name: 'Lucifer'
+            });
+
+        }, 500);
 
     });
 
