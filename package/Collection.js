@@ -270,6 +270,9 @@
             // Emit the update event to notify of the updated model.
             this._events.update(updatedModel);
 
+            // Find the item we've just updated.
+            return this._dimensions.catwalkId.filterExact(updatedModel._catwalkId).top(Infinity)[0];
+
         },
 
         /**

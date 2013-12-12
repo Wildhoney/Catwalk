@@ -37,6 +37,10 @@
             name: 'Lucifer'
         });
 
+        $cats.updateModel(busters, {
+            colours: [1, 4]
+        });
+
     });
 
 })(window.exampleApp, window.cats, window.colours);
