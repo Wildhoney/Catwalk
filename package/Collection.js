@@ -28,6 +28,7 @@
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
+        this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
             create:     resolve,
@@ -168,6 +169,7 @@
 
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
+
             return this._finalise('create', defaultDimension.top(Infinity)[0], {}, emitEvent);
 
         },
@@ -353,6 +355,10 @@
              * @return {Object}
              */
             var simplifyModel = function simplifyModel(model) {
+
+                if (typeof model === 'undefined') {
+                    return {};
+                }
 
                 model = _.clone(model);
 

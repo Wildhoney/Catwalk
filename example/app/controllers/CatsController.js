@@ -12,10 +12,9 @@
 
         });
 
-$cats.watch('create', function(deferred, model) {
-    myApi.save(JSON.stringify(model));
-    deferred.resolve();
-});
+        $cats.watch('create', function(deferred, model) {
+            deferred.resolve();
+        });
 
         $cats.watch('delete', function(deferred, model) {
             deferred.reject();
@@ -27,10 +26,10 @@ $cats.watch('create', function(deferred, model) {
 
         $colours.watch('read', function(deferred, id) {
 
-            deferred.resolve({
-                id: id,
-                colour: 'Blue'
-            });
+//            deferred.resolve({
+//                id: id,
+//                colour: 'Blue'
+//            });
 
         });
 
@@ -62,7 +61,7 @@ $cats.watch('create', function(deferred, model) {
             name: 'Busters',
             age: 4,
             colours: [3],
-            owner: 1
+            owner: 2
         });
 
         var missKittens = $cats.createModel({
@@ -70,14 +69,16 @@ $cats.watch('create', function(deferred, model) {
             name: 'Miss Kittens',
             age: 2,
             colours: [1, 2, 3, 4],
-            owner: 1
+            owner: 2
         });
 
-        // ...And the possible owners.
-        $people.createModel({ id: 1, name: 'Adam', country: 10 });
-
         // ...And their countries.
-        $countries.createModel({ id: 10, name: 'United Kingdom' });
+        $countries.createModel({ id: 1, name: 'United Kingdom' });
+        $countries.createModel({ id: 2, name: 'Russian Federation' });
+
+        // ...And the possible owners.
+        $people.createModel({ id: 1, name: 'Adam', country: 1 });
+        $people.createModel({ id: 2, name: 'Masha', country: 2 });
 
 //        $timeout(function() {
 //

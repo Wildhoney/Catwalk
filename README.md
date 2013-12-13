@@ -42,7 +42,7 @@ In the above example we have defined a `$cats` collection, which has three prope
 
 Catwalk has the following *typecastable* functions:
 
- * `catwalk.attribute.string`,
+ * `catwalk.attribute.string`
  * `catwalk.attribute.integer`
  * `catwalk.attribute.float`
  * `catwalk.attribute.boolean`
