@@ -1,4 +1,4 @@
-(function($app, $cats, $colours) {
+(function($app, $cats, $colours, $people, $countries) {
 
     $app.controller('CatsController', function CatsController($scope, $timeout) {
 
@@ -13,7 +13,6 @@
         });
 
         $cats.watch('create', function(deferred, model) {
-            console.log(model);
             deferred.resolve();
         });
 
@@ -49,9 +48,35 @@
         $colours.createModel({ id: 4, colour: 'Grey' });
 
         // ...And add all of the cats, too.
-        var kipper      = $cats.createModel({ id: 1, name: 'Kipper', age: 14, colours: [1, 2] });
-        var busters     = $cats.createModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
-        var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 2, colours: [1, 2, 3, 4] });
+        var kipper = $cats.createModel({
+            id: 1,
+            name: 'Kipper',
+            age: 14,
+            colours: [1, 2],
+            owner: 1
+        });
+
+        var busters = $cats.createModel({
+            id: 2,
+            name: 'Busters',
+            age: 4,
+            colours: [3],
+            owner: 1
+        });
+
+        var missKittens = $cats.createModel({
+            id: 3,
+            name: 'Miss Kittens',
+            age: 2,
+            colours: [1, 2, 3, 4],
+            owner: 1
+        });
+
+        // ...And the possible owners.
+        $people.createModel({ id: 1, name: 'Adam', country: 10 });
+
+        // ...And their countries.
+        $countries.createModel({ id: 10, name: 'United Kingdom' });
 
 //        $timeout(function() {
 //
@@ -64,4 +89,4 @@
 
     });
 
-})(window.exampleApp, window.cats, window.colours);
+})(window.exampleApp, window.cats, window.colours, window.people, window.countries);

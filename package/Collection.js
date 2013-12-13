@@ -355,8 +355,8 @@
                 // Delete the unnecessary properties.
                 delete model._catwalkId;
                 delete model._relationshipMeta;
-
                 return model;
+
             };
 
             /**

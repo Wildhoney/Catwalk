@@ -1,6 +1,6 @@
 (function($window, $catwalk) {
 
-    $window.cats = $catwalk.collection('cats', {
+    $window.people = $catwalk.collection('people', {
 
         /**
          * @property _primaryKey
@@ -17,20 +17,11 @@
         _relationships: {
 
             /**
-             * @property colours
+             * @property country
              * @type {Object}
              */
-            colours: $catwalk.relationship.hasMany({
-                collection: 'colours',
-                foreignKey: 'id'
-            }),
-
-            /**
-             * @property owner
-             * @type {Object}
-             */
-            owner: $catwalk.relationship.hasOne({
-                collection: 'people',
+            country: $catwalk.relationship.hasOne({
+                collection: 'countries',
                 foreignKey: 'id'
             })
 
@@ -46,13 +37,7 @@
          * @property name
          * @type {String}
          */
-        name: $catwalk.attribute.string,
-
-        /**
-         * @property age
-         * @type {Number}
-         */
-        age : $catwalk.attribute.integer
+        name: $catwalk.attribute.string
 
     });
 

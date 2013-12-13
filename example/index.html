@@ -17,6 +17,8 @@
     <script type="text/javascript" src="app/Default.js"></script>
     <script type="text/javascript" src="app/collections/CatsCollection.js"></script>
     <script type="text/javascript" src="app/collections/ColoursCollection.js"></script>
+    <script type="text/javascript" src="app/collections/PeopleCollection.js"></script>
+    <script type="text/javascript" src="app/collections/CountriesCollection.js"></script>
     <script type="text/javascript" src="app/controllers/CatsController.js"></script>
 
     <style type="text/css">
@@ -40,7 +42,8 @@
         <li ng-repeat="cat in cats | orderBy: 'name'">
             <h2>
                 <a title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
-                {{cat.name}} ({{cat._catwalkId}})</h2>
+                {{cat.owner.name}} loves {{cat.name}}</h2>
+            <h5>Lives in {{cat.owner.country.name}}</h5>
             <ul>
                 <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.colour}}</li>
             </ul>
