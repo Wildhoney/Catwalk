@@ -56,7 +56,7 @@
 
             $cats.updateModel(missKittens, {
                 name: 'Lucifer',
-                colours: [1, 2, 5]
+                colours: [1, 2, 12]
             });
 
         }, 500);

@@ -322,6 +322,8 @@
          */
         _finalise: function _finalise(eventName, model, previousModel, emitEvent) {
 
+            emitEvent = !!((typeof emitEvent === 'undefined' || emitEvent));
+
             // Create the deferred that the developer must resolve or reject.
             var deferred = $q.defer();
 

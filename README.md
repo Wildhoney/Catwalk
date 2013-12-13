@@ -108,7 +108,7 @@ Deleting models from the collection is just as easy as creating them. Catwalk us
 
 ```javascript
 var blackModel = $colours.createModel({ id: 1, colour: 'Black' });
-$colours.removeModel(blackModel);
+$colours.deleteModel(blackModel);
 ```
 
 As with the invoking of the `create` method when creating models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
