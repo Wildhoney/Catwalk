@@ -19,6 +19,7 @@
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
+        this._resolvedIds   = [];
         this._events        = {
             create:     function() {},
             read:       function() {},
@@ -77,6 +78,12 @@
          * @type {Object}
          */
         _events: {},
+
+        /**
+         * @property resolvedIds
+         * @type {Array}
+         */
+        _resolvedIds: [],
 
         /**
          * @property _properties
@@ -330,15 +337,22 @@
 
             /**
              * @method invokeCallback
+             * @param state {String}
              * @return {void}
              */
-            var invokeCallback = function(state) {
+            var invokeCallback = _.bind(function(state) {
 
                 // Find the related Reject method and invoke it.
-                var methodName = '_' + eventName + state;
-                this[methodName](model, previousModel);
+                var methodName  = '_' + eventName + state,
+                    callback    = this[methodName];
 
-            };
+                if (typeof callback !== 'function') {
+                    return;
+                }
+
+                callback.apply(this, [model, previousModel]);
+
+            }, this);
 
             // Invoke the related CRUD function.
             this._events[eventName](deferred, model);
@@ -377,9 +391,7 @@
          * @return {Array}
          */
         all: function all() {
-            var models = this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
-            this._events.read(models);
-            return models;
+            return this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
         },
 
         /**

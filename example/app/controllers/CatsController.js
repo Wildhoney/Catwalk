@@ -12,15 +12,24 @@
 
         });
 
-        $cats.watch('create', function(promise, model) {
-
+        $cats.watch('create', function(deferred, model) {
+            deferred.resolve();
         });
 
-        $cats.watch('delete', function(promise, model) {
-
+        $cats.watch('delete', function(deferred, model) {
+            deferred.resolve();
         });
 
-        $cats.watch('update', function(promise, model) {
+        $cats.watch('update', function(deferred, model) {
+            deferred.resolve();
+        });
+
+        $colours.watch('read', function(deferred, id) {
+
+            deferred.resolve({
+                id: id,
+                colour: 'Blue'
+            });
 
         });
 
@@ -45,7 +54,10 @@
 
 //        $timeout(function() {
 //
-//            $cats.deleteModel(missKittens);
+//            $cats.updateModel(missKittens, {
+//                name: 'Lucifer',
+//                colours: [1, 2, 5]
+//            });
 //
 //        }, 500);
 

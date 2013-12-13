@@ -61,18 +61,32 @@
             // models. Perhaps we need an AJAX request to get more?
             if (foreignIds.length !== models.length) {
 
-                var defer       = $q.defer(),
+                var deferred    = $q.defer(),
                     requiredIds = _.difference(foreignIds, _.pluck(models, 'id'));
 
-                // Prompt the developer for the missing IDs with the required IDs and the
-                // promise to resolve or reject.
-                collection._events.read(requiredIds, defer);
+                _.forEach(requiredIds, function(id) {
+
+                    if (_.indexOf(collection._resolvedIds, id) !== -1) {
+                        // Don't resolve the ID again if we've already attempted it.
+                        // You only get one chance to load it!
+                        return;
+                    }
+
+                    // Prompt the developer for the missing IDs with the required IDs and the
+                    // promise to resolve or reject.
+                    collection._events.read(deferred, id);
+                    collection._resolvedIds.push(id);
+
+                });
 
                 // Once the promise has been resolved.
-                defer.promise.then(function(models) {
-                    var addedModels = collection.addModels(models);
-                    models = models.concat(addedModels);
-                    console.log(models);
+                deferred.promise.then(function(model) {
+
+                    collection.createModel(model);
+
+//                    var addedModels = collection.addModels(models);
+//                    models = models.concat(addedModels);
+//                    console.log(models);
                 });
 
             }
