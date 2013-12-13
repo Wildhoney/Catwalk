@@ -16,15 +16,24 @@
      */
     var CatWalkCollection = function CatWalkCollection(name, properties) {
 
+        /**
+         * @method resolve
+         * @param deferred {Object}
+         * @return {void}
+         */
+        var resolve = function resolve(deferred) {
+            deferred.resolve();
+        };
+
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
         this._resolvedIds   = [];
         this._events        = {
-            create:     function() {},
-            read:       function() {},
-            update:     function() {},
-            delete:     function() {},
+            create:     resolve,
+            read:       resolve,
+            update:     resolve,
+            delete:     resolve,
             content:    function() {}
         };
 
