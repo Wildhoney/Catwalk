@@ -115,9 +115,10 @@
         /**
          * @method createModel
          * @param model {Object}
+         * @param [emitEvent = true] {Boolean}
          * @return {Object}
          */
-        createModel: function createModel(model) {
+        createModel: function createModel(model, emitEvent) {
 
             var propertyMap         = this._properties,
                 createRelationship  = _.bind(this._createRelationship, this),
@@ -158,7 +159,7 @@
 
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
-            return this._finalise('create', defaultDimension.top(Infinity)[0]);
+            return this._finalise('create', defaultDimension.top(Infinity)[0], {}, emitEvent);
 
         },
 
@@ -169,23 +170,24 @@
          * @private
          */
         _createReject: function _createReject(model) {
-            this.deleteModel(model);
+            this.deleteModel(model, false);
         },
 
         /**
          * @method updateModel
          * @param model {Object}
          * @param properties {Object}
+         * @param [emitEvent = true] {Boolean}
          * @return {Object}
          */
-        updateModel: function updateModel(model, properties) {
+        updateModel: function updateModel(model, properties, emitEvent) {
 
             if (!('_catwalkId' in model)) {
                 throw 'You are attempting to remove a non-Catwalk model.';
             }
 
             // Delete the model from the Crossfilter.
-            this.deleteModel(model);
+            this.deleteModel(model, false);
 
             // Create the new model with the properties from the old model, overwritten with
             // the properties we're updating the model with.
@@ -206,7 +208,7 @@
             delete updatedModel._relationshipMeta;
 
             // Create the new model and add it to the Crossfilter.
-            return this._finalise('update', this.createModel(updatedModel), model);
+            return this._finalise('update', this.createModel(updatedModel), model, emitEvent);
 
         },
 
@@ -218,16 +220,17 @@
          * @private
          */
         _updateReject: function _updateReject(model, previousModel) {
-            this.deleteModel(model);
+            this.deleteModel(model, false);
             this._reanimateModel(previousModel);
         },
 
         /**
          * @method deleteModel
          * @param model {Object}
+         * @param [emitEvent = true] {Boolean}
          * @return {void}
          */
-        deleteModel: function deleteModel(model) {
+        deleteModel: function deleteModel(model, emitEvent) {
 
             var deletedIds = this._deletedIds;
 
@@ -243,7 +246,7 @@
                 return !(_.contains(deletedIds, d));
             });
 
-            return this._finalise('delete', model);
+            return this._finalise('delete', model, {}, emitEvent);
 
         },
 
@@ -313,10 +316,11 @@
          * @param eventName {String}
          * @param model {Object}
          * @param [previousModel = {}] {Object}
+         * @param [emitEvent = true] {Boolean}
          * @return {Object}
          * @private
          */
-        _finalise: function _finalise(eventName, model, previousModel) {
+        _finalise: function _finalise(eventName, model, previousModel, emitEvent) {
 
             // Create the deferred that the developer must resolve or reject.
             var deferred = $q.defer();
@@ -351,20 +355,24 @@
 
             }, this);
 
-            // Invoke the related CRUD function.
-            this._events[eventName](deferred, model);
+            if (emitEvent) {
 
-            // When the defer has been resolved.
-            deferred.promise.then(function() {
-                invokeCallback('Resolve');
-                contentUpdated();
-            });
+                // Invoke the related CRUD function.
+                this._events[eventName](deferred, model);
 
-            // When the defer has been rejected.
-            deferred.promise.fail(_.bind(function() {
-                invokeCallback('Reject');
-                contentUpdated();
-            }, this));
+                // When the defer has been resolved.
+                deferred.promise.then(function() {
+                    invokeCallback('Resolve');
+                    contentUpdated();
+                });
+
+                // When the defer has been rejected.
+                deferred.promise.fail(_.bind(function() {
+                    invokeCallback('Reject');
+                    contentUpdated();
+                }, this));
+
+            }
 
             // Voila!
             contentUpdated();

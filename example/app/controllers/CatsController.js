@@ -17,7 +17,7 @@
         });
 
         $cats.watch('delete', function(deferred, model) {
-            deferred.resolve();
+            deferred.reject();
         });
 
         $cats.watch('update', function(deferred, model) {
@@ -52,14 +52,14 @@
         var busters     = $cats.createModel({ id: 2, name: 'Busters', age: 4, colours: [3] });
         var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 2, colours: [1, 2, 3, 4] });
 
-//        $timeout(function() {
-//
-//            $cats.updateModel(missKittens, {
-//                name: 'Lucifer',
-//                colours: [1, 2, 5]
-//            });
-//
-//        }, 500);
+        $timeout(function() {
+
+            $cats.updateModel(missKittens, {
+                name: 'Lucifer',
+                colours: [1, 2, 5]
+            });
+
+        }, 500);
 
     });
 
