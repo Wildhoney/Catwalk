@@ -339,6 +339,27 @@
             }, this);
 
             /**
+             * @method simplifyModel
+             * @param model {Object}
+             * @return {Object}
+             */
+            var simplifyModel = function simplifyModel(model) {
+
+                model = _.clone(model);
+
+                // Map each relationship to its simple list of IDs.
+                _.forEach(model._relationshipMeta, function(relationship, property) {
+                    model[property] = relationship;
+                });
+
+                // Delete the unnecessary properties.
+                delete model._catwalkId;
+                delete model._relationshipMeta;
+
+                return model;
+            };
+
+            /**
              * @method invokeCallback
              * @param state {String}
              * @return {void}
@@ -360,7 +381,7 @@
             if (emitEvent) {
 
                 // Invoke the related CRUD function.
-                this._events[eventName](deferred, model);
+                this._events[eventName](deferred, simplifyModel(model));
 
                 // When the defer has been resolved.
                 deferred.promise.then(function() {
