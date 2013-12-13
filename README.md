@@ -7,114 +7,95 @@ Why Catwalk? Because it's jam-packed full of models! Catwalk has engendered from
 
 <img src="http://fc06.deviantart.net/fs37/i/2008/265/2/8/Cat_silhouette_by_valsgalore.png" />
 
+Catwalk is entirely API agnostic. It doesn't matter whether you're serving your data through JSON, CSV, or your very own custom data format. Catwalk is **only** concerned with creating, reading, updating, and deleting (CRUD).
+
 Creating a Collection
 -----
 
-Collections are mostly made up of the properties &ndash; each property is a value, or a function which will allow Catwalk to determine how to typecast each property.
+Before you can begin creating models you will need to create collections &ndash; these serve as blueprints for your models.
 
 ```javascript
-/**
- * @property name
- * @type {String}
- */
-name: $catwalk.attribute.string
-```
-
-In the above case, the `name` property will be typecasted to a `string`.
-
-Aside from the properties for a collection, a collection can define its primary key via the protected `_primaryKey` property, and can also define relationships using the `_relationships` object.
-
-```javascript
-/**
- * @property _relationships
- * @type {Object}
- * @protected
- */
-_relationships: {
-
-    /**
-     * @property colours
-     * @type {Object}
-     */
-    colours: $catwalk.relationship.hasMany({
-        collection: 'colours',
-        foreignKey: 'id'
-    })
-
-}
-```
-
-Each `_relationships` descriptor is comprised of a property which maps to another collection &ndash; currently `hasOne` and `hasMany` are supported.
-
-The properties inside of the relationship descriptor are both the `collection` it maps to, and on which property we'll create the relationship with the `foreignKey` property.
-
-In the example above, each model that adds itself to the collection would define a `colours` property with an array of colour IDs. When you access `model.colours` on the model, the actual colours will be brought back from the `Colours` collection.
-
-Creating Models
------
-
-Once you've created your collection, models can easily be creating to it via with the `createModel`/`createModels` methods.
-
-```javascript
-$colours.createModel({ id: 1, colour: 'Black' });
-$colours.createModel({ id: 2, colour: 'White' });
-$colours.createModel({ id: 3, colour: 'Ginger' });
-$colours.createModel({ id: 4, colour: 'Grey' });
-```
-
-Upon creating the models to your collection, the `create` method will be invoked, passing through the models that were created.
-
-```javascript
-$cats.watch('create', function(models) {
-    $scope.cats = $cats.all();
+var Cats = $catwalk.collection('cats', {
+    id: $catwalk.attribute.integer,
+    name: $catwalk.attribute.string,
+    age : $catwalk.attribute.integer
 });
 ```
 
-Updating Models
------
+In the above example we have defined a `$cats` collection, which has three properties: `id`, `name`, and `age`. Each property can be assigned to a value, or a Catwalk function which will typecast the property for you.
 
-Updating of models is **very** simple &ndash; but behind the scenes, Catwalk deletes the model and then re-adds it to the Crossfilter. Because of this, any models you have from the `createModel`/`createModels` method(s) will become invalid &ndash; you should instead replace them with the model returned from `updateModel`.
+Catwalk has the following *typecastable* functions:
+
+ * `catwalk.attribute.string`,
+ * `catwalk.attribute.integer`
+ * `catwalk.attribute.float`
+ * `catwalk.attribute.boolean`
+
+Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.
 
 ```javascript
-var missKittens = $cats.createModel({ id: 3, name: 'Miss Kittens', age: 4, colours: [1, 2, 3, 4] });
-
-$cats.updateModel(missKittens, {
-    name: 'Lucifer'
+var Cats = $catwalk.collection('cats', {
+    _primaryKey: 'id',
+    id: $catwalk.attribute.integer,
+    name: $catwalk.attribute.string,
+    age : $catwalk.attribute.integer
 });
 ```
 
-In the above example we have just updated the name of `missKittens` by changing her name to **Lucifer** &ndash; very aptly named. We can also update relationships in exactly the same way.
+Last but not least, each collection can define its relationships to other collections with the protected `_relationships` object.
+
+```javascript
+var Cats = $catwalk.collection('cats', {
+    id: $catwalk.attribute.integer,
+    _relationships: {
+        colours: $catwalk.relationship.hasMany({
+            collection: 'colours',
+            foreignKey: 'id'
+        })
+    },
+    name: $catwalk.attribute.string,
+    age : $catwalk.attribute.integer
+});
+```
+
+In the relationship above we have defined a one-to-many relationship (`hasMany`), but we could also define a one-to-one relationship with `hasOne`. When you access the `colours` property on a model, the actual related colour models will be returned.
+
+Manipulating
+-----
+
+<h3>Creating Models</h3>
+
+After you have created a collection, you can begin adding models to your collections. All models can be added with the `createModel` method &ndash; passing in the values of the properties we defined on the collection.
+
+```javascript
+var missKittens = $cats.createModel({
+    id: 2,
+    name: 'Miss Kittens',
+    age: 4,
+    colours: [1, 2, 3]
+});
+```
+
+In order for Catwalk to begin mapping the relationship, our model defines the `colours` property with an array of IDs.
+
+<h3>Updating Models</h3>
+
+You can modify any property of a model by using the `updateModel` method. Each and every can be updated, including the relationships.
 
 ```javascript
 $cats.updateModel(missKittens, {
+    name: 'Lucifer',
     colours: [1, 2]
 });
 ```
 
-It's perhaps worth noting that you **only** need to update the properties that you want changing, otherwise they are copied from the previous model.
+In the above example we have changed Miss Kittens to Lucifer &ndash; a **very** apt name! We have also updated the relationship to only two colours instead of three.
 
-Upon updating a model, the `update` event is invoked, passing through the model that was updated.
+<h3>Deleting Models</h3>
 
-```javascript
-$cats.watch('update', function(model) {
-    $scope.cats = $cats.all();
-});
-```
-
-Deleting Models
------
-
-Deleting models from the collection is just as easy as creating them. Catwalk uses an internal ID on each model to remove them, therefore you just need to pass through the Catwalk model you wish to delete.
+We can delete models using the `deleteModel` method which accepts one parameter of the model you wish to delete.
 
 ```javascript
-var blackModel = $colours.createModel({ id: 1, colour: 'Black' });
-$colours.deleteModel(blackModel);
+$cats.deleteModel(missKittens);
 ```
 
-As with the invoking of the `create` method when creating models, the `delete` method is invoked when deleting models &ndash; passing through the models that were deleted.
-
-```javascript
-$cats.watch('delete', function(models) {
-    $scope.cats = $cats.all();
-});
-```
