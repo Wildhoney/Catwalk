@@ -35,10 +35,32 @@ Each collection also needs to know what its primary key is &ndash; this can be d
 
 ```javascript
 var Cats = $catwalk.collection('cats', {
+
+    /**
+     * @property _primaryKey
+     * @type {String}
+     * @protected
+     */
     _primaryKey: 'id',
+
+    /**
+     * @property id
+     * @type {Number}
+     */
     id: $catwalk.attribute.integer,
+
+    /**
+     * @property name
+     * @type {String}
+     */
     name: $catwalk.attribute.string,
+
+    /**
+     * @property age
+     * @type {Number}
+     */
     age : $catwalk.attribute.integer
+
 });
 ```
 
@@ -46,15 +68,49 @@ Last but not least, each collection can define its relationships to other collec
 
 ```javascript
 var Cats = $catwalk.collection('cats', {
-    id: $catwalk.attribute.integer,
+
+    /**
+     * @property colours
+     * @type {Object}
+     */
     _relationships: {
+
+        /**
+         * @property colours
+         * @type {Object}
+         */
         colours: $catwalk.relationship.hasMany({
             collection: 'colours',
             foreignKey: 'id'
         })
+
     },
+
+    /**
+     * @property _primaryKey
+     * @type {String}
+     * @protected
+     */
+    _primaryKey: 'id',
+
+    /**
+     * @property id
+     * @type {Number}
+     */
+    id: $catwalk.attribute.integer,
+
+    /**
+     * @property name
+     * @type {String}
+     */
     name: $catwalk.attribute.string,
+
+    /**
+     * @property age
+     * @type {Number}
+     */
     age : $catwalk.attribute.integer
+
 });
 ```
 
@@ -99,3 +155,54 @@ We can delete models using the `deleteModel` method which accepts one parameter 
 $cats.deleteModel(missKittens);
 ```
 
+Updates
+-----
+
+Whenever a collection has been updated, the `content` event is invoked. You can watch the `content` event with the `watch` method &ndash; which is the same method you use for listening to CRUD events.
+
+For instance, in Angular you could use the `watch` method and update the collection:
+
+```javascript
+$cats.watch('content', function(collection) {
+
+    $scope.cats = collection;
+
+    if (!$scope.$$phase) {
+        $scope.$apply();
+    }
+
+});
+```
+
+Promises
+-----
+
+With each create, read, update, and delete, Catwalk invokes a callback which allows you to communicate with your API. For every callback a <a href="http://martinfowler.com/bliki/JavascriptPromise.html">promise</a> is created which **must** be resolved or rejected.
+
+For example, if you used the `createModel` method, then the `create` callback will be invoked &ndash; passing through the promise, and the model that was created. Once you have saved the model via your API, you can resolve the promise. If for some reason the save fails then you can reject the promise &ndash; Catwalk will rollback the creation of the model.
+
+```javascript
+$cats.watch('create', function(deferred, model) {
+    myApi.save(JSON.stringify(model));
+    deferred.resolve();
+});
+```
+
+Other callbacks are exactly the same and provide the same rollback functionality when rejected: `create`, `read`, `update`, `delete`.
+
+However, `read` is the exception because a model does not yet exist. With the `read` callback we are asking your API to return the model because Catwalk does not have it &ndash; with this we merely pass through the ID of the model. You are only given **one** opportunity to return a desired model.
+
+```javascript
+$cats.watch('read', function(deferred, id) {
+
+    myApi('http://www.example.org/cat/' + id, function(model) {
+
+        deferred.resolve({
+            id: id,
+            colour: 'Blue'
+        });
+
+    });
+
+});
+```

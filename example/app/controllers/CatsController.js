@@ -12,9 +12,10 @@
 
         });
 
-        $cats.watch('create', function(deferred, model) {
-            deferred.resolve();
-        });
+$cats.watch('create', function(deferred, model) {
+    myApi.save(JSON.stringify(model));
+    deferred.resolve();
+});
 
         $cats.watch('delete', function(deferred, model) {
             deferred.reject();
