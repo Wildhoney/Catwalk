@@ -254,10 +254,7 @@
          * @private
          */
         _deleteReject: function _deleteReject(model) {
-
-            // Since the developer has rejected this update, we'll reanimate it.
             this._reanimateModel(model);
-
         },
 
         /**

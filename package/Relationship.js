@@ -13,30 +13,28 @@
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey],
-                models      = dimension.filterAll().filterFunction(function(d) {
+                model       = dimension.filterAll().filterFunction(function(d) {
                     return foreignId === d;
-                }).top(Infinity) || [];
+                }).top(Infinity)[0] || {};
 
             // If we cannot find the model then we need to present the question of where is it
             // to the developer, so that they can resolve it.
-            if (models.length === 0) {
+            if (!model) {
 
-                var defer = $q.defer();
+                var deferred = $q.defer();
 
                 // Present the developer with the foreign ID to load, and the promise to resolve
                 // or reject.
-                collection._events.read(foreignId, defer);
+                collection._events.read(deferred, foreignId);
 
                 // Once the promise has been resolved.
-                defer.promise.then(function(model) {
-                    model = collection.addModel(model);
-                    models.push(model);
-                    console.log(models);
+                deferred.promise.then(function(model) {
+                    collection.createModel(model);
                 });
 
             }
 
-            return models[0];
+            return model;
 
         };
 
@@ -81,12 +79,7 @@
 
                 // Once the promise has been resolved.
                 deferred.promise.then(function(model) {
-
                     collection.createModel(model);
-
-//                    var addedModels = collection.addModels(models);
-//                    models = models.concat(addedModels);
-//                    console.log(models);
                 });
 
             }
