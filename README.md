@@ -15,10 +15,26 @@ Creating a Collection
 Before you can begin creating models you will need to create collections &ndash; these serve as blueprints for your models.
 
 ```javascript
-var Cats = $catwalk.collection('cats', {
+var $cats = $catwalk.collection('cats', {
+
+    /**
+     * @property id
+     * @type {Number}
+     */
     id: $catwalk.attribute.integer,
+
+    /**
+     * @property name
+     * @type {String}
+     */
     name: $catwalk.attribute.string,
+
+    /**
+     * @property age
+     * @type {Number}
+     */
     age : $catwalk.attribute.integer
+
 });
 ```
 
@@ -34,7 +50,7 @@ Catwalk has the following *typecastable* functions:
 Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.
 
 ```javascript
-var Cats = $catwalk.collection('cats', {
+var $cats = $catwalk.collection('cats', {
 
     /**
      * @property _primaryKey
@@ -67,7 +83,7 @@ var Cats = $catwalk.collection('cats', {
 Last but not least, each collection can define its relationships to other collections with the protected `_relationships` object.
 
 ```javascript
-var Cats = $catwalk.collection('cats', {
+var $cats = $catwalk.collection('cats', {
 
     /**
      * @property colours
@@ -206,3 +222,8 @@ $cats.watch('read', function(deferred, id) {
 
 });
 ```
+
+Contributions
+-----
+
+If you have any valuable contributions to offer Catwalk, they will be happily merged in to master!
