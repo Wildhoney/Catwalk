@@ -24,10 +24,10 @@
             deferred.resolve();
         });
 
-        $colours.watch('read', function(deferred, id) {
+        $colours.watch('read', function(deferred, property, value) {
 
             deferred.resolve({
-                id: id,
+                id: value,
                 colour: 'Blue'
             });
 
@@ -70,7 +70,7 @@
             id: 3,
             name: 'Miss Kittens',
             age: 2,
-            colours: [1, 2, 3, 4],
+            colours: [1, 2, 3, 4, 12],
             born: 2,
             owner: 2
         });

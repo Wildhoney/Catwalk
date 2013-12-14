@@ -204,14 +204,14 @@ $cats.watch('create', function(deferred, model) {
 });
 ```
 
-Other callbacks are exactly the same and provide the same rollback functionality when rejected: `create`, `read`, `update`, `delete`.
+Other callbacks are exactly the same and provide the same rollback functionality when rejected: `create`, `update`, `delete`.
 
 However, `read` is the exception because a model does not yet exist. With the `read` callback we are asking your API to return the model because Catwalk does not have it &ndash; with this we merely pass through the ID of the model. You are only given **one** opportunity to return a desired model.
 
 ```javascript
-$cats.watch('read', function(deferred, id) {
+$cats.watch('read', function(deferred, property, value) {
 
-    myApi('http://www.example.org/cat/' + id, function(model) {
+    myApi('http://www.example.org/cat/' + property + '/' + value, function(model) {
 
         deferred.resolve({
             id: id,

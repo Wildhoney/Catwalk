@@ -34,7 +34,7 @@
 
                 // Present the developer with the foreign ID to load, and the promise to resolve
                 // or reject.
-                collection._events.read(deferred, foreignId);
+                collection._events.read(deferred, descriptor.foreignKey, foreignId);
                 collection._resolvedIds.push(foreignId);
 
                 // Once the promise has been resolved.
@@ -85,7 +85,7 @@
 
                     // Prompt the developer for the missing IDs with the required IDs and the
                     // promise to resolve or reject.
-                    collection._events.read(deferred, id);
+                    collection._events.read(deferred, descriptor.foreignKey, id);
                     collection._resolvedIds.push(id);
 
                 });
