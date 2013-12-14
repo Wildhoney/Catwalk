@@ -1,4 +1,4 @@
-(function($window) {
+(function($global) {
 
     "use strict";
 
@@ -6,6 +6,6 @@
      * @module Catwalk
      * @type {Object}
      */
-    $window.catwalk = {};
+    $global.catwalk = {};
 
-})(window);
+})(typeof window !== 'undefined' ? window : module);

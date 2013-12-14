@@ -24,17 +24,16 @@
         var resolve = function resolve(deferred) {
             deferred.resolve();
         };
-
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
-            create:     resolve,
-            read:       resolve,
-            update:     resolve,
-            delete:     resolve,
+            create:     function() {},
+            read:       function() {},
+            update:     function() {},
+            delete:     function() {},
             content:    function() {}
         };
 

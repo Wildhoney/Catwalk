@@ -32,6 +32,15 @@
             owner: $catwalk.relationship.hasOne({
                 collection: 'people',
                 foreignKey: 'id'
+            }),
+
+            /**
+             * @property born
+             * @type {Object}
+             */
+            born: $catwalk.relationship.hasOne({
+                collection: 'countries',
+                foreignKey: 'id'
             })
 
         },

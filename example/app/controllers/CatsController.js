@@ -17,7 +17,7 @@
         });
 
         $cats.watch('delete', function(deferred, model) {
-            deferred.reject();
+            deferred.resolve();
         });
 
         $cats.watch('update', function(deferred, model) {
@@ -26,10 +26,10 @@
 
         $colours.watch('read', function(deferred, id) {
 
-//            deferred.resolve({
-//                id: id,
-//                colour: 'Blue'
-//            });
+            deferred.resolve({
+                id: id,
+                colour: 'Blue'
+            });
 
         });
 
@@ -53,6 +53,7 @@
             name: 'Kipper',
             age: 14,
             colours: [1, 2],
+            born: 2,
             owner: 1
         });
 
@@ -61,6 +62,7 @@
             name: 'Busters',
             age: 4,
             colours: [3],
+            born: 2,
             owner: 2
         });
 
@@ -69,6 +71,7 @@
             name: 'Miss Kittens',
             age: 2,
             colours: [1, 2, 3, 4],
+            born: 2,
             owner: 2
         });
 
@@ -80,14 +83,14 @@
         $people.createModel({ id: 1, name: 'Adam', country: 1 });
         $people.createModel({ id: 2, name: 'Masha', country: 2 });
 
-//        $timeout(function() {
-//
-//            $cats.updateModel(missKittens, {
-//                name: 'Lucifer',
-//                colours: [1, 2, 12]
-//            });
-//
-//        }, 500);
+        $timeout(function() {
+
+            $cats.updateModel(missKittens, {
+                born: 1,
+                colours: [1, 2, 12]
+            });
+
+        }, 500);
 
     });
 
