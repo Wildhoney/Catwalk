@@ -19,7 +19,13 @@
          * @property name
          * @type {String}
          */
-        name: $catwalk.attribute.string
+        name: $catwalk.attribute.string,
+
+        /**
+         * @property code
+         * @type {String}
+         */
+        code: $catwalk.attribute.string
 
     });
 

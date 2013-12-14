@@ -13,9 +13,12 @@
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey],
-                model       = dimension.filterAll().filterFunction(function(d) {
+                model       = dimension.filterFunction(function(d) {
                     return foreignId === d;
                 }).top(Infinity)[0];
+
+            // Reset the dimension we just filtered on.
+            dimension.filterAll();
 
             // If we cannot find the model then we need to present the question of where is it
             // to the developer, so that they can resolve it.
@@ -61,6 +64,9 @@
                 models      = dimension.filterAll().filterFunction(function(d) {
                     return !!_.contains(foreignIds, d);
                 }).top(Infinity);
+
+            // Reset the dimension we just filtered on.
+            dimension.filterAll();
 
             // If there is a mismatch in this check then we're missing some of our
             // models. Perhaps we need an AJAX request to get more?

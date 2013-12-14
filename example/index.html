@@ -43,7 +43,7 @@
             <h2>
                 <a title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
                 {{cat.owner.name}} looks after {{cat.name}}</h2>
-            <h5>Lives in {{cat.owner.country.name}}, and born in {{cat.born.name}}.</h5>
+            <h5>Lives in {{cat.owner.country.name}} and born in {{cat.born.name}}</h5>
             <ul>
                 <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.colour}}</li>
             </ul>

@@ -22,7 +22,7 @@
              */
             country: $catwalk.relationship.hasOne({
                 collection: 'countries',
-                foreignKey: 'id'
+                foreignKey: 'code'
             })
 
         },

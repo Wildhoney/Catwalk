@@ -53,7 +53,7 @@
             name: 'Kipper',
             age: 14,
             colours: [1, 2],
-            born: 2,
+            born: 1,
             owner: 1
         });
 
@@ -76,25 +76,12 @@
         });
 
         // ...And their countries.
-        $countries.createModel({ id: 1, name: 'United Kingdom' });
-        $countries.createModel({ id: 2, name: 'Russian Federation' });
+        $countries.createModel({ id: 1, name: 'United Kingdom', code: 'UK' });
+        $countries.createModel({ id: 2, name: 'Russian Federation', code: 'RU' });
 
         // ...And the possible owners.
-        $people.createModel({ id: 1, name: 'Adam', country: 1 });
-        $people.createModel({ id: 2, name: 'Masha', country: 2 });
-
-        $timeout(function() {
-
-            $cats.updateModel(missKittens, {
-                born: 1,
-                colours: [1, 2, 12]
-            });
-
-        }, 500);
-
-        setTimeout(function() {
-            console.log($cats.all().length);
-        }, 5000);
+        $people.createModel({ id: 1, name: 'Adam', country: 'UK' });
+        $people.createModel({ id: 2, name: 'Masha', country: 'RU' });
 
     });
 
