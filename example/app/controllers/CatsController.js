@@ -92,6 +92,10 @@
 
         }, 500);
 
+        setTimeout(function() {
+            console.log($cats.all().length);
+        }, 5000);
+
     });
 
 })(window.exampleApp, window.cats, window.colours, window.people, window.countries);

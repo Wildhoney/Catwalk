@@ -24,16 +24,17 @@
         var resolve = function resolve(deferred) {
             deferred.resolve();
         };
+
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
-            create:     function() {},
-            read:       function() {},
-            update:     function() {},
-            delete:     function() {},
+            create:     resolve,
+            read:       resolve,
+            update:     resolve,
+            delete:     resolve,
             content:    function() {}
         };
 
@@ -238,7 +239,7 @@
          * @method deleteModel
          * @param model {Object}
          * @param [emitEvent = true] {Boolean}
-         * @return {void}
+         * @return {Object}
          */
         deleteModel: function deleteModel(model, emitEvent) {
 
