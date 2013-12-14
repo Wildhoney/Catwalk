@@ -17,13 +17,10 @@
     var CatWalkCollection = function CatWalkCollection(name, properties) {
 
         /**
-         * @method resolve
-         * @param deferred {Object}
+         * @method noop
          * @return {void}
          */
-        var resolve = function resolve(deferred) {
-            deferred.resolve();
-        };
+        var noop = function noop() {};
 
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
@@ -31,11 +28,11 @@
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
-            create:     resolve,
-            read:       resolve,
-            update:     resolve,
-            delete:     resolve,
-            content:    function() {}
+            create:     noop,
+            read:       noop,
+            update:     noop,
+            delete:     noop,
+            content:    noop
         };
 
         // Gather the name and the properties for the models.
