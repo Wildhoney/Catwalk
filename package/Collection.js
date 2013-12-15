@@ -132,9 +132,8 @@
                 relationships       = this._properties._relationships || {},
                 defaultDimension    = this._dimensions.catwalkId;
 
-            // Apply an internal Catwalk ID to the model, and the `_isDirty` property.
-            model._catwalkId    = _.uniqueId('catwalk_');
-            model._isDirty      = true;
+            // Apply an internal Catwalk ID to the model.
+            model._catwalkId = _.uniqueId('catwalk_');
 
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
@@ -173,16 +172,6 @@
         },
 
         /**
-         * @method _createResolve
-         * @param model {Object}
-         * @return {void}
-         * @private
-         */
-        _createResolve: function _createResolve(model) {
-            model._isDirty = false;
-        },
-
-        /**
          * @method _createReject
          * @param model {Object}
          * @return {void}
@@ -210,8 +199,7 @@
 
             // Create the new model with the properties from the old model, overwritten with
             // the properties we're updating the model with.
-            var updatedModel        = _.extend(_.clone(model), properties);
-            updatedModel._isDirty   = true;
+            var updatedModel = _.extend(_.clone(model), properties);
 
             // Copy across the relationships as well.
             _.forEach(this._properties._relationships, function(relationship, property) {
@@ -230,16 +218,6 @@
             // Create the new model and add it to the Crossfilter.
             return this._finalise('update', this.createModel(updatedModel), model, emitEvent);
 
-        },
-
-        /**
-         * @method _updateResolve
-         * @param model {Object}
-         * @return {void}
-         * @private
-         */
-        _updateResolve: function _updateResolve(model) {
-            model._isDirty = false;
         },
 
         /**
@@ -270,7 +248,6 @@
 
             // Add the model to the deleted array.
             deletedIds.push(model._catwalkId);
-            model._isDirty = true;
 
             // Remove the model by its internal Catwalk ID.
             this._dimensions.catwalkId.filterFunction(function(d) {
@@ -279,16 +256,6 @@
 
             return this._finalise('delete', model, {}, emitEvent);
 
-        },
-
-        /**
-         * @method _deleteResolve
-         * @param model {Object}
-         * @return {void}
-         * @private
-         */
-        _deleteResolve: function _deleteResolve(model) {
-            model._isDirty = false;
         },
 
         /**

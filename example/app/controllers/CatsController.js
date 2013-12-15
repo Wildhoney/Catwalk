@@ -83,6 +83,12 @@
         $people.createModel({ id: 1, name: 'Adam', country: 'UK' });
         $people.createModel({ id: 2, name: 'Masha', country: 'RU' });
 
+        setTimeout(function() {
+            $cats.updateModel(missKittens, {
+                name: 'Lucifer'
+            });
+        }, 2500);
+
     });
 
 })(window.exampleApp, window.cats, window.colours, window.people, window.countries);
