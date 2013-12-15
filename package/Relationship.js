@@ -12,8 +12,13 @@
         return function(foreignId) {
 
             var collection  = $catwalk.collection(descriptor.collection),
-                dimension   = collection._dimensions[descriptor.foreignKey],
-                model       = dimension.filterFunction(function(d) {
+                dimension   = collection._dimensions[descriptor.foreignKey];
+
+            if (typeof dimension === 'undefined') {
+                throw 'Attempting to map to an invalid "' + descriptor.foreignKey + '" property on the "' + descriptor.collection + '" collection.';
+            }
+
+            var model = dimension.filterFunction(function(d) {
                     return foreignId === d;
                 }).top(Infinity)[0];
 
@@ -61,8 +66,13 @@
         return function(foreignIds) {
 
             var collection  = $catwalk.collection(descriptor.collection),
-                dimension   = collection._dimensions[descriptor.foreignKey],
-                models      = dimension.filterAll().filterFunction(function(d) {
+                dimension   = collection._dimensions[descriptor.foreignKey];
+
+            if (typeof dimension === 'undefined') {
+                throw 'Attempting to map to an invalid "' + descriptor.foreignKey + '" property on the "' + descriptor.collection + '" collection.';
+            }
+
+            var models = dimension.filterAll().filterFunction(function(d) {
                     return !!_.contains(foreignIds, d);
                 }).top(Infinity);
 

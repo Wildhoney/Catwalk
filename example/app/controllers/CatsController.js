@@ -80,8 +80,8 @@
         $countries.createModel({ id: 2, name: 'Russian Federation', code: 'RU' });
 
         // ...And the possible owners.
-        $people.createModel({ id: 1, name: 'Adam', country: 'UK' });
-        $people.createModel({ id: 2, name: 'Masha', country: 'RU' });
+        $people.createModel({ id: 1, name: 'Adam', country: 1 });
+        $people.createModel({ id: 2, name: 'Masha', country: 2 });
 
     });
 

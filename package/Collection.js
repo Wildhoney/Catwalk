@@ -334,6 +334,13 @@
 
             Object.defineProperty(model, key, {
 
+                /**
+                 * Responsible for invoking the `hasOne`/`hasMany` method to complete
+                 * the mapped relationship.
+                 *
+                 * @method get
+                 * @return {Object}
+                 */
                 get: function() {
                     return _relationships[key](ids);
                 }
