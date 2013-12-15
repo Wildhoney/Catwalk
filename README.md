@@ -152,7 +152,7 @@ In order for Catwalk to begin mapping the relationship, our model defines the `c
 
 <h3>Updating Models</h3>
 
-You can modify any property of a model by using the `updateModel` method. Each and every can be updated, including the relationships.
+You can modify any property of a model by using the `updateModel` method. Each and every property can be updated, including the relationships.
 
 ```javascript
 $cats.updateModel(missKittens, {
@@ -223,7 +223,36 @@ $cats.watch('read', function(deferred, property, value) {
 });
 ```
 
-Contributions
+Relationships
 -----
 
-If you have any valuable contributions to offer Catwalk, they will be happily merged in to master!
+All relationships are defined with the protected `_relationships` property, and can be either a `hasOne` or `hasMany` relationship. Every single property can be involved in a relationship &ndash; not just the primary key.
+
+```javascript
+$countries.createModel({ id: 1, name: 'United Kingdom', code: 'UK' });
+$people.createModel({ id: 1, name: 'Adam', country: 'UK' });
+```
+
+In the above example we have created a `hasOne` relationship between people and countries on the `country` property.
+
+```javascript
+/**
+ * @property _relationships
+ * @type {Object}
+ * @protected
+ */
+_relationships: {
+
+    /**
+     * @property country
+     * @type {Object}
+     */
+    country: $catwalk.relationship.hasOne({
+        collection: 'countries',
+        foreignKey: 'code'
+    })
+
+}
+```
+
+We can therefore access the `country` property on each person model to bring back their related country. Notice that the relationship isn't performed on the primary key (`id`) but rather on the `code` property.
