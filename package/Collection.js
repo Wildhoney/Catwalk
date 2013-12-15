@@ -132,14 +132,15 @@
                 relationships       = this._properties._relationships || {},
                 defaultDimension    = this._dimensions.catwalkId;
 
-            // Apply an internal Catwalk ID to the model.
-            model._catwalkId = _.uniqueId('catwalk_');
+            // Apply an internal Catwalk ID to the model, and the `_isDirty` property.
+            model._catwalkId    = _.uniqueId('catwalk_');
+            model._isDirty      = true;
 
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
 
-                if (key === '_catwalkId' || key.charAt(0) === '$') {
-                    // We can't do much with the internal Catwalk ID.
+                if (key.charAt(0) === '_' || key.charAt(0) === '$') {
+                    // We can't do much with private/protected members.
                     return;
                 }
 
@@ -172,6 +173,16 @@
         },
 
         /**
+         * @method _createResolve
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _createResolve: function _createResolve(model) {
+            model._isDirty = false;
+        },
+
+        /**
          * @method _createReject
          * @param model {Object}
          * @return {void}
@@ -199,7 +210,8 @@
 
             // Create the new model with the properties from the old model, overwritten with
             // the properties we're updating the model with.
-            var updatedModel = _.extend(_.clone(model), properties);
+            var updatedModel        = _.extend(_.clone(model), properties);
+            updatedModel._isDirty   = true;
 
             // Copy across the relationships as well.
             _.forEach(this._properties._relationships, function(relationship, property) {
@@ -218,6 +230,16 @@
             // Create the new model and add it to the Crossfilter.
             return this._finalise('update', this.createModel(updatedModel), model, emitEvent);
 
+        },
+
+        /**
+         * @method _updateResolve
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _updateResolve: function _updateResolve(model) {
+            model._isDirty = false;
         },
 
         /**
@@ -248,6 +270,7 @@
 
             // Add the model to the deleted array.
             deletedIds.push(model._catwalkId);
+            model._isDirty = true;
 
             // Remove the model by its internal Catwalk ID.
             this._dimensions.catwalkId.filterFunction(function(d) {
@@ -256,6 +279,16 @@
 
             return this._finalise('delete', model, {}, emitEvent);
 
+        },
+
+        /**
+         * @method _deleteResolve
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _deleteResolve: function _deleteResolve(model) {
+            model._isDirty = false;
         },
 
         /**
@@ -396,10 +429,10 @@
                 this._events[eventName](deferred, simplifyModel(model));
 
                 // When the defer has been resolved.
-                deferred.promise.then(function() {
+                deferred.promise.then(_.bind(function() {
                     invokeCallback('Resolve');
                     contentUpdated();
-                });
+                }, this));
 
                 // When the defer has been rejected.
                 deferred.promise.fail(_.bind(function() {
