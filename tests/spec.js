@@ -6,12 +6,13 @@
 
             it('Can create collections', function() {
 
-                $catwalk.collection('cats', {
+                $catwalk.deleteCollection('catsOne');
+                $catwalk.collection('catsOne', {
                     name: $catwalk.attribute.string
                 });
 
-                expect(typeof $catwalk.collection('cats')).toEqual('object');
-                expect($catwalk.collection('cats')._name).toEqual('cats');
+                expect(typeof $catwalk.collection('catsOne')).toEqual('object');
+                expect($catwalk.collection('catsOne')._name).toEqual('catsOne');
 
             });
 
@@ -23,10 +24,11 @@
 
             beforeEach(function() {
 
-                $cats = $catwalk.collection('cats', {
+                $catwalk.deleteCollection('catsTwo');
+                $cats = $catwalk.collection('catsTwo', {
                     _primaryKey: 'id',
                     friends: $catwalk.relationship.hasMany({
-                        collection: 'cats',
+                        collection: 'catsTwo',
                         foreignKey: 'id'
                     }),
                     id: $catwalk.attribute.integer,
@@ -65,14 +67,15 @@
 
             beforeEach(function() {
 
-                $cats = $catwalk.collection('cats', {
+                $catwalk.deleteCollection('catsThree');
+                $cats = $catwalk.collection('catsThree', {
                     _primaryKey: 'id',
                     friends: $catwalk.relationship.hasMany({
-                        collection: 'cats',
+                        collection: 'catsThree',
                         foreignKey: 'id'
                     }),
                     sibling: $catwalk.relationship.hasOne({
-                        collection: 'cats',
+                        collection: 'catsThree',
                         foreignKey: 'id'
                     }),
                     id: $catwalk.attribute.integer,

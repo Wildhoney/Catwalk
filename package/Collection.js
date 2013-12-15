@@ -470,12 +470,37 @@
 
     };
 
-    $catwalk.collection = function(name, properties) {
+    /**
+     * @method deleteCollection
+     * @param name {String}
+     * @return {void}
+     */
+    $catwalk.deleteCollection = function deleteCollection(name) {
+        delete _collections[name];
+    };
+
+    /**
+     * @method collection
+     * @param name {String}
+     * @param properties {Object}
+     * @return {Object}
+     */
+    $catwalk.collection = function collection(name, properties) {
 
         if (properties) {
+
+            if (typeof _collections[name] !== 'undefined') {
+                throw 'You are attempting to overwrite an existing "' + name + '" collection.';
+            }
+
             // Instantiate a new collection because we've passed properties.
             _collections[name] = new CatWalkCollection(name, properties);
             return _collections[name];
+
+        }
+
+        if (typeof _collections[name] === 'undefined') {
+            throw 'Catwalk is unable to find a collection named "' + name + '".'
         }
 
         // Otherwise we'll attempt to find an existing collection by its name.
