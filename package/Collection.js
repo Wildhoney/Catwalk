@@ -325,6 +325,7 @@
          * @param model {Object}
          * @param key {String}
          * @param ids {Array|Number|String}
+         * @return {void}
          * @private
          */
         _createRelationship: function _createRelationship(model, key, ids) {
@@ -415,6 +416,7 @@
                 });
 
                 // Delete the unnecessary properties.
+                delete model._collection;
                 delete model._catwalkId;
                 delete model._relationshipMeta;
                 return model;
@@ -428,7 +430,7 @@
              */
             var invokeCallback = _.bind(function(state) {
 
-                // Find the related Reject method and invoke it.
+                // Find the related resolve/reject method and invoke it.
                 var methodName  = '_' + eventName + state,
                     callback    = this[methodName];
 
