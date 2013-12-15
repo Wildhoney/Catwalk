@@ -156,7 +156,7 @@
             var propertyMap         = this._properties,
                 createRelationship  = _.bind(this._createRelationship, this),
                 relationships       = this._properties._relationships || {},
-                defaultDimension    = this._dimensions.catwalkId;
+                primaryKeyDimension = this._dimensions[this._properties._primaryKey];
 
             // Apply an internal Catwalk ID to the model.
             model._catwalkId    = _.uniqueId('catwalk_');
@@ -194,7 +194,7 @@
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
 
-            return this._finalise('create', defaultDimension.top(Infinity)[0], {}, emitEvent);
+            return this._finalise('create', primaryKeyDimension.top(Infinity)[0], {}, emitEvent);
 
         },
 

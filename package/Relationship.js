@@ -24,23 +24,24 @@
             // to the developer, so that they can resolve it.
             if (!model) {
 
-                if (_.indexOf(collection._resolvedIds, foreignId) !== -1) {
+                if (_.indexOf(collection._resolvedIds, foreignId) === -1) {
+
                     // Don't resolve the ID again if we've already attempted it.
                     // You only get one chance to load it!
-                    return;
+
+                    var deferred = $q.defer();
+
+                    // Present the developer with the foreign ID to load, and the promise to resolve
+                    // or reject.
+                    collection._events.read(deferred, descriptor.foreignKey, foreignId);
+                    collection._resolvedIds.push(foreignId);
+
+                    // Once the promise has been resolved.
+                    deferred.promise.then(function(model) {
+                        collection.createModel(model);
+                    });
+
                 }
-
-                var deferred = $q.defer();
-
-                // Present the developer with the foreign ID to load, and the promise to resolve
-                // or reject.
-                collection._events.read(deferred, descriptor.foreignKey, foreignId);
-                collection._resolvedIds.push(foreignId);
-
-                // Once the promise has been resolved.
-                deferred.promise.then(function(model) {
-                    collection.createModel(model);
-                });
 
             }
 
