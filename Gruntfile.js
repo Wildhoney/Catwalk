@@ -17,13 +17,28 @@ module.exports = function(grunt) {
                 src: ['package/Catwalk.js', 'package/*.js'],
                 dest: 'dist/<%= pkg.buildName %>.min.js'
             }
+        },
+        jasmine: {
+            pivotal: {
+                src: ['package/Catwalk.js', 'package/*.js'],
+                options: {
+                    specs: 'tests/spec.js',
+                    helpers: [
+                        'bower_components/underscore/underscore.js',
+                        'bower_components/q/q.js',
+                        'bower_components/crossfilter/crossfilter.js'
+                    ]
+                }
+            }
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
+    grunt.registerTask('test', ['jshint', 'jasmine', 'uglify']);
     grunt.registerTask('build', ['jshint', 'uglify']);
-    grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'jasmine', 'uglify']);
 
 };
