@@ -120,6 +120,32 @@
         _deletedIds: [],
 
         /**
+         * @method watch
+         * @param type {String}
+         * @param callback {Function}
+         * @return {void}
+         */
+        watch: function watch(type, callback) {
+            this._events[type] = callback;
+        },
+
+        /**
+         * @method all
+         * @return {Array}
+         */
+        all: function all() {
+            return this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
+        },
+
+        /**
+         * @method size
+         * @return {Number}
+         */
+        size: function size() {
+            return this._crossfilter.size();
+        },
+
+        /**
          * @method createModel
          * @param model {Object}
          * @param [emitEvent = true] {Boolean}
@@ -133,7 +159,8 @@
                 defaultDimension    = this._dimensions.catwalkId;
 
             // Apply an internal Catwalk ID to the model.
-            model._catwalkId = _.uniqueId('catwalk_');
+            model._catwalkId    = _.uniqueId('catwalk_');
+            model._collection   = this._name;
 
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
@@ -190,9 +217,8 @@
          */
         updateModel: function updateModel(model, properties, emitEvent) {
 
-            if (!('_catwalkId' in model)) {
-                throw 'You are attempting to remove a non-Catwalk model.';
-            }
+            // Assert that the model is valid for this collection.
+            this._assertValid(model);
 
             // Delete the model from the Crossfilter.
             this.deleteModel(model, false);
@@ -239,6 +265,9 @@
          * @return {Object}
          */
         deleteModel: function deleteModel(model, emitEvent) {
+
+            // Assert that the model is valid for this collection.
+            this._assertValid(model);
 
             var deletedIds = this._deletedIds;
 
@@ -318,6 +347,27 @@
             model._relationshipMeta[key] = ids;
 
         },
+
+        /**
+         * @method _assertValid
+         * @param model {Object}
+         * @return {Boolean}
+         * @private
+         */
+        _assertValid: function _assertValid(model) {
+
+            if (!('_catwalkId' in model)) {
+                throw 'You are attempting to remove a non-Catwalk model.';
+            }
+
+            if (model._collection !== this._name) {
+                throw 'Model belongs to "' + model._collection + '" collection, not "' + this._name + '".';
+            }
+
+            return true;
+
+        },
+
 
         /**
          * @method finalise
@@ -414,32 +464,6 @@
 
             return model;
 
-        },
-
-        /**
-         * @method watch
-         * @param type {String}
-         * @param callback {Function}
-         * @return {void}
-         */
-        watch: function watch(type, callback) {
-            this._events[type] = callback;
-        },
-
-        /**
-         * @method all
-         * @return {Array}
-         */
-        all: function all() {
-            return this._dimensions[this._properties._primaryKey].filterAll().top(Infinity);
-        },
-
-        /**
-         * @method size
-         * @return {Number}
-         */
-        size: function size() {
-            return this._crossfilter.size();
         }
 
     };
