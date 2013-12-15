@@ -3,7 +3,7 @@ Catwalk.js
 
 <img src="https://travis-ci.org/Wildhoney/Catwalk.js.png?branch=master" />
 &nbsp;
-<img src="https://badge.fury.io/js/catwalk-js.png" />
+<img src="https://badge.fury.io/js/catwalk.js.png" />
 
 Why Catwalk? Because it's jam-packed full of models! Catwalk has engendered from the observations on the plight of <a href="https://github.com/emberjs/data" target="_blank">Ember Data</a>, and instead doesn't even *try* to predict everything &ndash; instead Catwalk.js is more focused on satisfying the <a href="http://en.wikipedia.org/wiki/KISS_principle" target="_blank">KISS principle</a>.
 
