@@ -223,6 +223,10 @@ $cats.watch('read', function(deferred, property, value) {
 });
 ```
 
+<h3>Transactions</h3>
+
+As Catwalk presents a promise for you to `resolve`/`reject`, it's **entirely** up to you at which point you perform that action. Therefore you could quite easily defer the promise until you have a handful and then process them in one fell swoop.
+
 Relationships
 -----
 
