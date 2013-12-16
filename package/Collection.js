@@ -219,19 +219,19 @@
 
             // Iterate over each model to ensure the developer isn't attempting to update
             // a relationship during its creation.
-            for (var property in properties) {
-
-                if (properties.hasOwnProperty(property)) {
-
-                    if (typeof model._relationshipMeta[property] === 'undefined') {
-                        continue;
-                    }
-
-                    throw 'You are attempting to manipulate the "' + property + '" relationship during model creation.';
-
-                }
-
-            }
+//            for (var property in properties) {
+//
+//                if (properties.hasOwnProperty(property)) {
+//
+//                    if (typeof model._relationshipMeta[property] === 'undefined') {
+//                        continue;
+//                    }
+//
+//                    throw 'You are attempting to manipulate the "' + property + '" relationship during model creation.';
+//
+//                }
+//
+//            }
 
             // Update the model with the properties that the resolve wanted to add
             // to the model after creation.
