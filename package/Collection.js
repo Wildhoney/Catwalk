@@ -199,6 +199,38 @@
         },
 
         /**
+         * @method _createResolve
+         * @param model {Object}
+         * @param previousModel {Object}
+         * @param properties {Object}
+         * @return {void}
+         * @private
+         */
+        _createResolve: function _createResolve(model, previousModel, properties) {
+
+            // Iterate over each model to ensure the developer isn't attempting to update
+            // a relationship during its creation.
+            for (var property in properties) {
+
+                if (properties.hasOwnProperty(property)) {
+
+                    if (typeof model._relationshipMeta[property] === 'undefined') {
+                        continue;
+                    }
+
+                    throw 'You are attempting to manipulate the "' + property + '" relationship during model creation.';
+
+                }
+
+            }
+
+            // Update the model with the properties that the resolve wanted to add
+            // to the model after creation.
+            model = _.extend(model, properties);
+
+        },
+
+        /**
          * @method _createReject
          * @param model {Object}
          * @return {void}
@@ -435,7 +467,7 @@
              * @param state {String}
              * @return {void}
              */
-            var invokeCallback = _.bind(function(state) {
+            var invokeCallback = _.bind(function(state, properties) {
 
                 // Find the related resolve/reject method and invoke it.
                 var methodName  = '_' + eventName + state,
@@ -445,7 +477,7 @@
                     return;
                 }
 
-                callback.apply(this, [model, previousModel]);
+                callback.apply(this, [model, previousModel, properties]);
 
             }, this);
 
@@ -455,8 +487,8 @@
                 this._events[eventName](deferred, simplifyModel(model));
 
                 // When the defer has been resolved.
-                deferred.promise.then(_.bind(function() {
-                    invokeCallback('Resolve');
+                deferred.promise.then(_.bind(function(properties) {
+                    invokeCallback('Resolve', properties);
                     contentUpdated();
                 }, this));
 

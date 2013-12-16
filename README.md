@@ -154,6 +154,18 @@ var missKittens = $cats.createModel({
 
 In order for Catwalk to begin mapping the relationship, our model defines the `colours` property with an array of IDs.
 
+During the `create` process it is possible to add properties to the model via the promise. Simply pass through any additional properties that should be set on the model after its creation via the `resolve` and Catwalk will do the rest.
+
+```javascript
+$cats.watch('create', function(deferred, model) {
+    deferred.resolve({
+        name: 'Adam'
+    });
+});
+```
+
+In the example above, every single created `cat` will inherit the name **Adam**. Only simple values can be updated this way, including the primary key &ndash; whereas relationships cannot.
+
 <h3>Updating Models</h3>
 
 You can modify any property of a model by using the `updateModel` method. Each and every property can be updated, including the relationships.

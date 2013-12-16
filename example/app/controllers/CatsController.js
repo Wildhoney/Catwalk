@@ -13,7 +13,9 @@
         });
 
         $cats.watch('create', function(deferred, model) {
-            deferred.resolve();
+            deferred.resolve({
+                name: 'Adam'
+            });
         });
 
         $cats.watch('delete', function(deferred, model) {
