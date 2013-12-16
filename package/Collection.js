@@ -156,10 +156,10 @@
             var propertyMap         = this._properties,
                 createRelationship  = _.bind(this._createRelationship, this),
                 relationships       = this._properties._relationships || {},
-                primaryKeyDimension = this._dimensions[this._properties._primaryKey];
+                defaultDimension    = this._dimensions.catwalkId;
 
             // Apply an internal Catwalk ID to the model.
-            model._catwalkId    = _.uniqueId('catwalk_');
+            model._catwalkId    = _.uniqueId();
             model._collection   = this._name;
 
             // Iterate over the properties to typecast them.
@@ -194,7 +194,7 @@
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
 
-            return this._finalise('create', primaryKeyDimension.top(Infinity)[0], {}, emitEvent);
+            return this._finalise('create', defaultDimension.top(Infinity)[0], {}, emitEvent);
 
         },
 
@@ -265,7 +265,7 @@
                 // Gather the raw relational data from the relationship meta data.
                 delete updatedModel[property];
                 updatedModel[property] = properties[property] ? properties[property]
-                                                              : model._relationshipMeta[property];
+                    : model._relationshipMeta[property];
 
             });
 
@@ -397,7 +397,7 @@
         _assertValid: function _assertValid(model) {
 
             if (!('_catwalkId' in model)) {
-                throw 'You are attempting to remove a non-Catwalk model.';
+                throw 'You are attempting to manipulate a non-Catwalk model.';
             }
 
             if (model._collection !== this._name) {
