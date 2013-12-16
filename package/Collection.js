@@ -274,7 +274,7 @@
             delete updatedModel._relationshipMeta;
 
             // Create the new model and add it to the Crossfilter.
-            return this._finalise('update', this.createModel(updatedModel), model, emitEvent);
+            return this._finalise('update', this.createModel(updatedModel, false), model, emitEvent);
 
         },
 
