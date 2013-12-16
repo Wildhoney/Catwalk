@@ -30,15 +30,25 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+        concat: {
+            options: {
+                separator: ';'
+            },
+            dist: {
+                src: ['package/*.js'],
+                dest: 'dist/<%= pkg.buildName %>.js'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.registerTask('test', ['jshint', 'jasmine', 'uglify']);
-    grunt.registerTask('build', ['jshint', 'uglify']);
-    grunt.registerTask('default', ['jshint', 'jasmine', 'uglify']);
+    grunt.registerTask('build', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'jasmine', 'uglify']);
 
 };
