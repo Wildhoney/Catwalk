@@ -159,12 +159,12 @@ During the `create` process it is possible to add properties to the model via th
 ```javascript
 $cats.watch('create', function(deferred, model) {
     deferred.resolve({
-        name: 'Adam'
+        name: 'Miss Kittens'
     });
 });
 ```
 
-In the example above, every single created `cat` will inherit the name **Adam**. Only simple values can be updated this way, including the primary key &ndash; whereas relationships cannot.
+In the example above, every single created `cat` will inherit the name **Miss Kittens** &dash uh-oh! Only simple values can be updated this way, including the primary key &ndash; whereas relationships cannot.
 
 <h3>Updating Models</h3>
 
