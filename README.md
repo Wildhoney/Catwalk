@@ -164,7 +164,7 @@ $cats.watch('create', function(deferred, model) {
 });
 ```
 
-In the example above, every single created `cat` will inherit the name **Miss Kittens** &dash; uh-oh! Only simple values can be updated this way, including the primary key &ndash; whereas relationships cannot.
+In the example above, every single created `cat` will inherit the name **Miss Kittens** &ndash; uh-oh! Only simple values can be updated this way, including the primary key &ndash; whereas relationships cannot.
 
 <h3>Updating Models</h3>
 
