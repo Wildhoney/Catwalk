@@ -146,6 +146,15 @@
         },
 
         /**
+         * @method addModel
+         * @param model {Object}
+         * @return {Object}
+         */
+        addModel: function addModel(model) {
+            return this.createModel(model, false);
+        },
+
+        /**
          * @method createModel
          * @param model {Object}
          * @param [emitEvent = true] {Boolean}

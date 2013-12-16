@@ -152,6 +152,8 @@ var missKittens = $cats.createModel({
 });
 ```
 
+Catwalk also has an `addModel` method which functions **exactly** like the `createModel` method except the `create` callback is not invoked.
+
 In order for Catwalk to begin mapping the relationship, our model defines the `colours` property with an array of IDs.
 
 During the `create` process it is possible to add properties to the model via the promise. Simply pass through any additional properties that should be set on the model after its creation via the `resolve` and Catwalk will do the rest.
