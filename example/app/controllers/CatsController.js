@@ -13,9 +13,7 @@
         });
 
         $cats.watch('create', function(deferred, model) {
-            deferred.resolve({
-                name: 'Adam'
-            });
+            deferred.resolve();
         });
 
         $cats.watch('delete', function(deferred, model) {
@@ -27,12 +25,10 @@
         });
 
         $colours.watch('read', function(deferred, property, value) {
-
             deferred.resolve({
                 id: value,
                 colour: 'Blue'
             });
-
         });
 
         /**
@@ -84,6 +80,10 @@
         // ...And the possible owners.
         $people.createModel({ id: 1, name: 'Adam', country: 1 });
         $people.createModel({ id: 2, name: 'Masha', country: 2 });
+
+        $cats.updateModel(missKittens, {
+            name: 'Lucifer'
+        });
 
     });
 

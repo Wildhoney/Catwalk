@@ -413,6 +413,10 @@
                 throw 'You are attempting to manipulate a non-Catwalk model.';
             }
 
+            if (_.indexOf(this._deletedIds, model._catwalkId) !== -1) {
+                throw 'You are trying to modify a model in the garbage collection.';
+            }
+
             if (model._collection !== this._name) {
                 throw 'Model belongs to "' + model._collection + '" collection, not "' + this._name + '".';
             }
