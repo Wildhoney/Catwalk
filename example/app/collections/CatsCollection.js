@@ -55,7 +55,7 @@
          * @property name
          * @type {String}
          */
-        name: $catwalk.attribute.string,
+        name: '',
 
         /**
          * @property age

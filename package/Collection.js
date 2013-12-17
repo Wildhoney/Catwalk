@@ -187,8 +187,12 @@
 
                 try {
 
-                    // Typecast the property based on what's defined in the collection.
-                    model[key] = propertyMap[key](value);
+                    if (typeof propertyMap[key] === 'function') {
+
+                        // Typecast the property based on what's defined in the collection.
+                        model[key] = propertyMap[key](value);
+
+                    }
 
                 } catch (e) {
 
