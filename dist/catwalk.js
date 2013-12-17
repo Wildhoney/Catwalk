@@ -82,6 +82,7 @@
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
+        this._properties    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
@@ -97,7 +98,7 @@
         this._properties    = properties;
 
         // Initiate the Crossfilter and its related dimensions.
-        var _crossfilter     = this._crossfilter = crossfilter([]),
+        var _crossfilter     = this._crossfilter = crossfilter(),
             _dimensions      = this._dimensions;
 
         // Create the dimensions for our model properties.
@@ -225,7 +226,7 @@
                 defaultDimension    = this._dimensions.catwalkId;
 
             // Apply an internal Catwalk ID to the model.
-            model._catwalkId    = _.uniqueId();
+            model._catwalkId    = parseInt(_.uniqueId(), 10);
             model._collection   = this._name;
 
             // Iterate over the properties to typecast them.
@@ -244,8 +245,12 @@
 
                 try {
 
-                    // Typecast the property based on what's defined in the collection.
-                    model[key] = propertyMap[key](value);
+                    if (typeof propertyMap[key] === 'function') {
+
+                        // Typecast the property based on what's defined in the collection.
+                        model[key] = propertyMap[key](value);
+
+                    }
 
                 } catch (e) {
 
@@ -331,7 +336,7 @@
                 // Gather the raw relational data from the relationship meta data.
                 delete updatedModel[property];
                 updatedModel[property] = properties[property] ? properties[property]
-                    : model._relationshipMeta[property];
+                                                              : model._relationshipMeta[property];
 
             });
 
@@ -464,6 +469,10 @@
 
             if (!('_catwalkId' in model)) {
                 throw 'You are attempting to manipulate a non-Catwalk model.';
+            }
+
+            if (_.indexOf(this._deletedIds, model._catwalkId) !== -1) {
+                throw 'You are trying to modify a model in the garbage collection.';
             }
 
             if (model._collection !== this._name) {
@@ -624,7 +633,7 @@
      */
     var hasOne = function hasOne(descriptor) {
 
-        return function(foreignId) {
+        return function hasOne(foreignId) {
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];
@@ -678,7 +687,7 @@
      */
     var hasMany = function hasMany(descriptor) {
 
-        return function(foreignIds) {
+        return function hasMany(foreignIds) {
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];

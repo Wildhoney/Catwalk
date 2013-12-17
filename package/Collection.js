@@ -25,6 +25,7 @@
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
+        this._properties    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
@@ -40,7 +41,7 @@
         this._properties    = properties;
 
         // Initiate the Crossfilter and its related dimensions.
-        var _crossfilter     = this._crossfilter = crossfilter([]),
+        var _crossfilter     = this._crossfilter = crossfilter(),
             _dimensions      = this._dimensions;
 
         // Create the dimensions for our model properties.
@@ -168,7 +169,7 @@
                 defaultDimension    = this._dimensions.catwalkId;
 
             // Apply an internal Catwalk ID to the model.
-            model._catwalkId    = _.uniqueId();
+            model._catwalkId    = parseInt(_.uniqueId(), 10);
             model._collection   = this._name;
 
             // Iterate over the properties to typecast them.
@@ -278,7 +279,7 @@
                 // Gather the raw relational data from the relationship meta data.
                 delete updatedModel[property];
                 updatedModel[property] = properties[property] ? properties[property]
-                    : model._relationshipMeta[property];
+                                                              : model._relationshipMeta[property];
 
             });
 

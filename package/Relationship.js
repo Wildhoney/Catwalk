@@ -9,7 +9,7 @@
      */
     var hasOne = function hasOne(descriptor) {
 
-        return function(foreignId) {
+        return function hasOne(foreignId) {
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];
@@ -63,7 +63,7 @@
      */
     var hasMany = function hasMany(descriptor) {
 
-        return function(foreignIds) {
+        return function hasMany(foreignIds) {
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];
