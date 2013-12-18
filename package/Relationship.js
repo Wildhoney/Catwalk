@@ -2,6 +2,10 @@
 
     "use strict";
 
+    if (typeof $catwalk === 'undefined') {
+        return;
+    }
+
     /**
      * @method hasOne
      * @param descriptor {Object}

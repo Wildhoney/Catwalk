@@ -2,6 +2,10 @@
 
     "use strict";
 
+    if (typeof $catwalk === 'undefined') {
+        return;
+    }
+
     /**
      * @property _collections
      * @type {Object}

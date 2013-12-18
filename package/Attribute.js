@@ -2,6 +2,10 @@
 
     "use strict";
 
+    if (typeof $window.catwalk === 'undefined') {
+        return;
+    }
+
     /**
      * @method toString
      */

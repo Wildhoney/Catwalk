@@ -2,6 +2,10 @@
 
     "use strict";
 
+    if (typeof $window.catwalk === 'undefined') {
+        return;
+    }
+
     /**
      * @method toString
      */
@@ -71,19 +75,35 @@
 
     };
 
-})(window);;(function($global) {
+})(window);;(function($window) {
 
     "use strict";
+
+    if (typeof $window.Q === 'undefined') {
+        throw 'Catwalk requires Q: https://github.com/kriskowal/q';
+    }
+
+    if (typeof $window._ === 'undefined') {
+        throw 'Catwalk requires Underscore: http://underscorejs.org/';
+    }
+
+    if (typeof $window.crossfilter === 'undefined') {
+        throw 'Catwalk requires Crossfilter: https://github.com/square/crossfilter';
+    }
 
     /**
      * @module Catwalk
      * @type {Object}
      */
-    $global.catwalk = {};
+    $window.catwalk = {};
 
-})(typeof window !== 'undefined' ? window : module);;(function($catwalk, $q, $crossfilter) {
+})(window);;(function($catwalk, $q, $crossfilter) {
 
     "use strict";
+
+    if (typeof $catwalk === 'undefined') {
+        return;
+    }
 
     /**
      * @property _collections
@@ -694,6 +714,10 @@
 })(window.catwalk, window.Q, window.crossfilter);;(function($window, $catwalk, $q) {
 
     "use strict";
+
+    if (typeof $catwalk === 'undefined') {
+        return;
+    }
 
     /**
      * @method hasOne
