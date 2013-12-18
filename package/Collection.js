@@ -1,4 +1,4 @@
-(function($catwalk, $q) {
+(function($catwalk, $q, $crossfilter) {
 
     "use strict";
 
@@ -49,7 +49,7 @@
         this._properties    = properties;
 
         // Initiate the Crossfilter and its related dimensions.
-        var _crossfilter     = this._crossfilter = crossfilter([]),
+        var _crossfilter     = this._crossfilter = $crossfilter([]),
             _dimensions      = this._dimensions;
 
         // Create the dimensions for our model properties.
@@ -602,4 +602,4 @@
 
     };
 
-})(window.catwalk, window.Q);
+})(window.catwalk, window.Q, window.crossfilter);
