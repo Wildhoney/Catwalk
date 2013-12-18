@@ -44,7 +44,18 @@ var $cats = $catwalk.collection('cats', {
 
 In the above example we have defined a `$cats` collection, which has three properties: `id`, `name`, and `age`. Each property can be assigned to a value, or a Catwalk function which will typecast the property for you.
 
-All simple properties can assume a default value for when a value hasn't specifically been set by the model. Simply define the property in the collection blueprint as the default value, and Catwalk will do the rest.
+All simple properties can assume a default value for when a value hasn't specifically been set by the model. Simply define the property in the collection blueprint as the default value, and Catwalk will do the rest. As you don't specify the typecast method any more, Catwalk automatically typecasts based on the `typeof` the default value.
+
+```javascript
+var $cats = $catwalk.collection('cats', {
+    /**
+     * @property name
+     * @type {String}
+     */
+    name: 'Kipper'
+
+});
+```
 
 Catwalk has the following *typecastable* functions:
 

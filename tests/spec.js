@@ -79,7 +79,7 @@
                         })
                     },
                     id: $catwalk.attribute.integer,
-                    name: 'Adam'
+                    name: $catwalk.attribute.string
                 });
 
             });
