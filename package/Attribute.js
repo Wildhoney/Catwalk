@@ -39,6 +39,7 @@
     $window.catwalk.attribute = {
 
         string  : toString,
+        number  : toInteger,
         integer : toInteger,
         float   : toFloat,
         boolean : toBoolean

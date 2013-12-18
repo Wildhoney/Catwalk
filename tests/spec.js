@@ -117,7 +117,8 @@
                 $cats = $catwalk.collection('catsFour', {
                     _primaryKey: 'id',
                     id: $catwalk.attribute.integer,
-                    name: 'Kipper'
+                    name: 'Kipper',
+                    age: 15
                 });
 
             });
@@ -134,6 +135,12 @@
             it('Can use its own value when necessary', function() {
                 var busters = $cats.addModel({ id: 2, name: 'Busters' });
                 expect(busters.name).toEqual('Busters');
+            });
+
+            it('Can typecast from a default value', function() {
+                var missKittens = $cats.addModel({ name: 'Miss Kittens', age: '5' });
+                expect(typeof missKittens.age).toEqual('number');
+                expect(missKittens.age).toEqual(5);
             });
 
         });

@@ -186,6 +186,7 @@
                     notSet      = typeof model[property] === 'undefined';
 
                 if (notSet && validType) {
+                    // Update the model's property to be the default value.
                     model[property] = value;
                 }
 
@@ -211,7 +212,16 @@
 
                         // Typecast the property based on what's defined in the collection.
                         model[key] = propertyMap[key](value);
+                        return;
 
+                    }
+
+                    // Otherwise we'll attempt to typecast the value based on the default value.
+                    var type         = typeof propertyMap[key],
+                        typecastable = _.contains(['string', 'number', 'boolean'], type);
+
+                    if (typecastable) {
+                        model[key] = $catwalk.attribute[type](value);
                     }
 
                 } catch (e) {

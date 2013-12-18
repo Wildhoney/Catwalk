@@ -49,9 +49,10 @@ All simple properties can assume a default value for when a value hasn't specifi
 Catwalk has the following *typecastable* functions:
 
  * `catwalk.attribute.string`
+ * `catwalk.attribute.number`
+ * `catwalk.attribute.boolean`
  * `catwalk.attribute.integer`
  * `catwalk.attribute.float`
- * `catwalk.attribute.boolean`
 
 Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.
 
