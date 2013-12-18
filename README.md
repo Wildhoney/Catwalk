@@ -37,12 +37,14 @@ var $cats = $catwalk.collection('cats', {
      * @property age
      * @type {Number}
      */
-    age : $catwalk.attribute.integer
+    age: $catwalk.attribute.integer
 
 });
 ```
 
 In the above example we have defined a `$cats` collection, which has three properties: `id`, `name`, and `age`. Each property can be assigned to a value, or a Catwalk function which will typecast the property for you.
+
+All simple properties can assume a default value for when a value hasn't specifically been set by the model. Simply define the property in the collection blueprint as the default value, and Catwalk will do the rest.
 
 Catwalk has the following *typecastable* functions:
 
