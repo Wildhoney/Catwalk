@@ -62,11 +62,23 @@ var $cats = $catwalk.collection('cats', {
 Catwalk has the following *typecastable* functions:
 
  * `catwalk.attribute.string`
- * `catwalk.attribute.number`
  * `catwalk.attribute.boolean`
- * `catwalk.attribute.integer`
+ * `catwalk.attribute.integer` (alias: `catwalk.attribute.number`)
  * `catwalk.attribute.date(format)` &ndash; requires <a href="http://momentjs.com/" target="_blank">Moment.js</a>
  * `catwalk.attribute.float(decimalPlaces)`
+ * `$catwalk.attribute.custom(callback)`
+
+With the `$catwalk.attribute.custom` typecast, the value of each model is passed into the <a href="http://en.wikipedia.org/wiki/Currying" target="_blank">curry</a> method, and it's entirely up to you how to format the value &ndash; as long as you remember to `return` it!
+
+```javascript
+/**
+ * @property name
+ * @type {String}
+ */
+name: $catwalk.attribute.custom(function(value) {
+    return String(value).toUpperCase();
+}),
+```
 
 Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.
 

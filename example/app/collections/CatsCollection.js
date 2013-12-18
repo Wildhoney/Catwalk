@@ -55,7 +55,9 @@
          * @property name
          * @type {String}
          */
-        name: '',
+        name: $catwalk.attribute.custom(function(value) {
+            return String(value).toUpperCase();
+        }),
 
         /**
          * @property age
