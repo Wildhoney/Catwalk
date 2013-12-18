@@ -48,9 +48,11 @@ All simple properties can assume a default value for when a value hasn't specifi
 
 ```javascript
 var $cats = $catwalk.collection('cats', {
+
     /**
      * @property name
      * @type {String}
+     * @default "Kipper"
      */
     name: 'Kipper'
 
