@@ -172,6 +172,25 @@
             model._catwalkId    = parseInt(_.uniqueId(), 10);
             model._collection   = this._name;
 
+            // Fill in the model with any defaults that have been configured.
+            _.forEach(this._properties, _.bind(function(value, property) {
+
+                if (property.charAt(0) === '_') {
+                    // Don't include any private Catwalk variables in the inheritance.
+                    return;
+                }
+
+                // Determine if it's one of the default types, and it hasn't been set
+                // by the current model.
+                var validType   = _.contains(['number', 'string', 'boolean', 'object'], typeof value),
+                    notSet      = typeof model[property] === 'undefined';
+
+                if (notSet && validType) {
+                    model[property] = value;
+                }
+
+            }, this));
+
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
 

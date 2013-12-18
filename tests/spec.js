@@ -79,7 +79,7 @@
                         })
                     },
                     id: $catwalk.attribute.integer,
-                    name: $catwalk.attribute.string
+                    name: 'Adam'
                 });
 
             });
@@ -104,6 +104,36 @@
                 expect(busters.friends.length).toEqual(2);
                 expect(busters.friends[0].name).toEqual('Miss Kittens');
                 expect(busters.friends[1].name).toEqual('Kipper');
+            });
+
+        });
+
+        describe('Defaults', function() {
+
+            var $cats;
+
+            beforeEach(function() {
+
+                $cats = $catwalk.collection('catsFour', {
+                    _primaryKey: 'id',
+                    id: $catwalk.attribute.integer,
+                    name: 'Kipper'
+                });
+
+            });
+
+            afterEach(function() {
+                $catwalk.deleteCollection('catsFour');
+            });
+
+            it('Can define a default string value', function() {
+                var kipper = $cats.addModel({ id: 1 });
+                expect(kipper.name).toEqual('Kipper');
+            });
+
+            it('Can use its own value when necessary', function() {
+                var busters = $cats.addModel({ id: 2, name: 'Busters' });
+                expect(busters.name).toEqual('Busters');
             });
 
         });
