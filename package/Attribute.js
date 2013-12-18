@@ -19,8 +19,24 @@
     /**
      * @method toFloat
      */
-    var toFloat = function toFloat(value) {
-        return Number(value);
+    var toFloat = function toFloat(decimalPlaces) {
+        return function(value) {
+            return Number(value).toFixed(decimalPlaces);
+        }
+    };
+
+    /**
+     * @method toDate
+     */
+    var toDate = function toDate(format) {
+
+        if (typeof $window.moment === 'undefined') {
+            throw 'Typecasting to date format requires Moment.js: http://momentjs.com/';
+        }
+
+        return function(value) {
+            return $window.moment(value).format(format);
+        }
     };
 
     /**
@@ -41,6 +57,7 @@
         string  : toString,
         number  : toInteger,
         integer : toInteger,
+        date    : toDate,
         float   : toFloat,
         boolean : toBoolean
 

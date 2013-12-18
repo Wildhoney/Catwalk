@@ -61,7 +61,13 @@
          * @property age
          * @type {Number}
          */
-        age : $catwalk.attribute.integer
+        age : $catwalk.attribute.number,
+
+        /**
+         * @property dateBorn
+         * @type {String}
+         */
+        dateBorn: $catwalk.attribute.date('MMMM Do, YYYY')
 
     });
 

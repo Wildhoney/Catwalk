@@ -65,7 +65,8 @@ Catwalk has the following *typecastable* functions:
  * `catwalk.attribute.number`
  * `catwalk.attribute.boolean`
  * `catwalk.attribute.integer`
- * `catwalk.attribute.float`
+ * `catwalk.attribute.date(format)` &ndash; requires <a href="http://momentjs.com/" target="_blank">Moment.js</a>
+ * `catwalk.attribute.float(decimalPlaces)`
 
 Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.
 
