@@ -74,6 +74,14 @@
      */
     var CatWalkCollection = function CatWalkCollection(name, properties) {
 
+        if (typeof properties._primaryKey === 'undefined') {
+            throw 'You must define the `_primaryKey` property for your collection.';
+        }
+
+        if (!_.contains(_.keys(properties), properties._primaryKey)) {
+            throw 'Your `_primaryKey` must map to one of your collection properties.';
+        }
+
         /**
          * @method noop
          * @return {void}

@@ -7,6 +7,7 @@
             it('Can create collections', function() {
 
                 $catwalk.collection('catsOne', {
+                    _primaryKey: 'name',
                     name: $catwalk.attribute.string
                 });
 
