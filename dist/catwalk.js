@@ -47,6 +47,13 @@
     };
 
     /**
+     * @method toCustom
+     */
+    var toCustom = function toCustom(callback) {
+        return callback;
+    };
+
+    /**
      * @module Catwalk
      * @submodule Collection
      * @type {Object}
@@ -59,7 +66,8 @@
         integer : toInteger,
         date    : toDate,
         float   : toFloat,
-        boolean : toBoolean
+        boolean : toBoolean,
+        custom  : toCustom
 
     };
 
