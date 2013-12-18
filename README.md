@@ -77,7 +77,7 @@ With the `$catwalk.attribute.custom` typecast, the value of each model is passed
  */
 name: $catwalk.attribute.custom(function(value) {
     return String(value).toUpperCase();
-}),
+})
 ```
 
 Each collection also needs to know what its primary key is &ndash; this can be defined with the protected `_primaryKey` property.

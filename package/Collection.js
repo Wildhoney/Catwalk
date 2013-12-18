@@ -176,9 +176,13 @@
                 relationships       = this._properties._relationships || {},
                 defaultDimension    = this._dimensions.catwalkId;
 
+            // Remove the property meta as that will be constructed again.
+            delete model._propertyMeta;
+
             // Apply an internal Catwalk ID to the model.
             model._catwalkId    = parseInt(_.uniqueId(), 10);
             model._collection   = this._name;
+            model._propertyMeta = _.clone(model);
 
             // Fill in the model with any defaults that have been configured.
             _.forEach(this._properties, _.bind(function(value, property) {
@@ -308,7 +312,7 @@
 
             // Create the new model with the properties from the old model, overwritten with
             // the properties we're updating the model with.
-            var updatedModel = _.extend(_.clone(model), properties);
+            var updatedModel = _.extend(_.clone(model._propertyMeta), properties);
 
             // Copy across the relationships as well.
             _.forEach(this._properties._relationships, function(relationship, property) {
@@ -510,10 +514,12 @@
                 });
 
                 // Delete the unnecessary properties.
-                delete model._collection;
-                delete model._catwalkId;
-                delete model._relationshipMeta;
-                return model;
+                var meta = model._propertyMeta;
+                delete meta._collection;
+                delete meta._catwalkId;
+                delete meta._relationshipMeta;
+                delete meta._propertyMeta;
+                return meta;
 
             };
 

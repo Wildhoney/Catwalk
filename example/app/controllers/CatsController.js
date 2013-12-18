@@ -71,7 +71,7 @@
             name: 'Miss Kittens',
             age: 2,
             colours: [1, 2, 3, 4, 12],
-            dateBorn: 'Aug 16th, 2013',
+            dateBorn: 'Aug 16, 2013',
             born: 2,
             owner: 2
         });
