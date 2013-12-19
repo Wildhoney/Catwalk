@@ -113,6 +113,22 @@ var $cats = $catwalk.collection('cats', {
 });
 ```
 
+<h3>Computed Properties</h3>
+
+Catwalk has support for computed properties which allow you to add your business logic to the models. To define a computed property simply assign a property to `catwalk.computedProperty` which will be invoked with the model scope as `this`.
+
+```javascript
+/**
+ * @property isAdult
+ * @type {Boolean}
+ */
+isAdult: $catwalk.computedProperty(function() {
+    return (this.age > 6);
+})
+```
+
+<h3>Relationships</h3>
+
 Last but not least, each collection can define its relationships to other collections with the protected `_relationships` object.
 
 ```javascript

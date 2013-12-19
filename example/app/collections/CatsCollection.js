@@ -55,9 +55,7 @@
          * @property name
          * @type {String}
          */
-        name: $catwalk.attribute.custom(function(value) {
-            return String(value).toUpperCase();
-        }),
+        name: $catwalk.attribute.string,
 
         /**
          * @property age
@@ -69,7 +67,15 @@
          * @property dateBorn
          * @type {String}
          */
-        dateBorn: $catwalk.attribute.date('MMMM Do, YYYY')
+        dateBorn: $catwalk.attribute.date('DD/MM/YY'),
+
+        /**
+         * @property isAdult
+         * @type {Boolean}
+         */
+        isAdult: $catwalk.computedProperty(function() {
+            return (this.age > 6);
+        })
 
     });
 
