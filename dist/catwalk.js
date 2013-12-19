@@ -148,8 +148,9 @@
         };
 
         // Gather the name and the properties for the models.
-        this._name          = name;
-        this._properties    = properties;
+        this._name                  = name;
+        this._properties            = properties;
+        this._properties._computed  = null;
 
         // Initiate the Crossfilter and its related dimensions.
         var _crossfilter     = this._crossfilter = $crossfilter([]),
@@ -158,7 +159,7 @@
         // Create the dimensions for our model properties.
         var keys = _.keys(properties);
 
-        _.forEach(keys, function(key) {
+        _.forEach(keys, _.bind(function(key) {
 
             if (key.charAt(0) === '_' || key.charAt(0) === '$') {
                 // We don't wish to include private/protected members.
@@ -170,7 +171,25 @@
                 return d[key];
             });
 
-        });
+            // If the function has zero arguments then we're assuming it's a
+            // computed property.
+            if (properties[key].length === 0) {
+
+                if (!this._properties._computed) {
+
+                    // Convert the `_computed` property into an object if we have
+                    // at least one.
+                    this._properties._computed = {};
+
+                }
+
+                // Store the computed property's function for later during the model's
+                // creation.
+                this._properties._computed[key] = properties[key];
+
+            }
+
+        }, this));
 
         // Create the dimension for the internal _catwalkId!
         _dimensions['catwalkId'] = _crossfilter.dimension(function(d) {
@@ -277,7 +296,8 @@
             var propertyMap         = this._properties,
                 createRelationship  = _.bind(this._createRelationship, this),
                 relationships       = this._properties._relationships || {},
-                defaultDimension    = this._dimensions.catwalkId;
+                defaultDimension    = this._dimensions.catwalkId,
+                computedProperties  = this._properties._computed;
 
             // Remove the property meta as that will be constructed again.
             delete model._propertyMeta;
@@ -315,6 +335,12 @@
                     return;
                 }
 
+                // Ensure that the user isn't attempting to override a computed property
+                // with their own simple value.
+                if (computedProperties && _.contains(_.keys(computedProperties), key)) {
+                    throw 'You are attempting to provide a value for the "' + key + '" computed property.';
+                }
+
                 // Determine if this property is part of a relationship.
                 if (typeof relationships[key] === 'function') {
                     createRelationship(model, key, value);
@@ -348,6 +374,15 @@
                 }
 
             });
+
+            if (computedProperties) {
+
+                // Computed any computed properties that are defined.
+                _.forEach(computedProperties, function(computedProperty, key) {
+                    model[key] = computedProperty.apply(model);
+                });
+
+            }
 
             // Add the model to our Crossfilter, and then finalise the creation!
             this._crossfilter.add([model]);
@@ -459,19 +494,17 @@
             // Assert that the model is valid for this collection.
             this._assertValid(model);
 
-            var deletedIds = this._deletedIds;
-
             if (!('_catwalkId' in model)) {
                 throw 'You are attempting to remove a non-Catwalk model.';
             }
 
             // Add the model to the deleted array.
-            deletedIds.push(model._catwalkId);
+            this._deletedIds.push(model._catwalkId);
 
             // Remove the model by its internal Catwalk ID.
-            this._dimensions.catwalkId.filterFunction(function(d) {
-                return !(_.contains(deletedIds, d));
-            });
+            this._dimensions.catwalkId.filterFunction(_.bind(function(d) {
+                return !(_.contains(this._deletedIds, d));
+            }, this));
 
             return this._finalise('delete', model, {}, emitEvent);
 
@@ -711,7 +744,24 @@
 
     };
 
-})(window.catwalk, window.Q, window.crossfilter);;(function($window, $catwalk, $q) {
+})(window.catwalk, window.Q, window.crossfilter);;(function($window) {
+
+    "use strict";
+
+    if (typeof $window.catwalk === 'undefined') {
+        return;
+    }
+
+    /**
+     * @module Catwalk
+     * @submodule ComputedProperty
+     * @type {Object}
+     */
+    $window.catwalk.computedProperty = function computedProperty(callback) {
+        return callback;
+    }
+
+})(window);;(function($window, $catwalk, $q) {
 
     "use strict";
 
@@ -835,7 +885,6 @@
      * @module Catwalk
      * @submodule Collection
      * @type {Object}
-     * @reference http://book.cakephp.org/2.0/en/models/associations-linking-models-together.html
      */
     $window.catwalk.relationship = {
 
