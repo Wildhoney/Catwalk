@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['package/*.js'],
+                src: ['package/Catwalk.js', 'package/*.js'],
                 dest: 'dist/<%= pkg.buildName %>.js'
             }
         }
