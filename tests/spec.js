@@ -146,6 +146,38 @@
 
         });
 
+        describe('Computed Properties', function() {
+
+            var $cats;
+
+            beforeEach(function() {
+
+                $cats = $catwalk.collection('catsFive', {
+                    _primaryKey: 'name',
+                    name: $catwalk.attribute.string,
+                    age: $catwalk.attribute.number,
+                    isAdult: $catwalk.computedProperty(function() {
+                        return (this.age > 6);
+                    })
+                });
+
+            });
+
+            afterEach(function() {
+                $catwalk.deleteCollection('catsFive');
+            });
+
+            it('Can compute a computed property', function() {
+                var kipper = $cats.addModel({ id: 1, name: 'Kipper', age: 15 });
+                expect(kipper.isAdult).toEqual(true);
+                var missKittens = $cats.addModel({ id: 2, name: 'Busters', age: 6 });
+                expect(missKittens.isAdult).toEqual(false);
+                var missKittens = $cats.addModel({ id: 3, name: 'Miss Kittens', age: 3 });
+                expect(missKittens.isAdult).toEqual(false);
+            });
+
+        });
+
     });
 
 })(window.catwalk);
