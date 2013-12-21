@@ -57,6 +57,8 @@
          */
         name: $catwalk.attribute.string,
 
+        essential: { id: 5 },
+
         /**
          * @property age
          * @type {Number}
