@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                     helpers: [
                         'bower_components/underscore/underscore.js',
                         'bower_components/q/q.js',
+                        'bower_components/moment/moment.js',
                         'bower_components/crossfilter/crossfilter.js'
                     ]
                 }
