@@ -13,7 +13,7 @@
         });
 
         $cats.watch('create', function(deferred, model) {
-            deferred.reject();
+            deferred.resolve();
         });
 
         $cats.watch('delete', function(deferred, model) {

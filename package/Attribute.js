@@ -41,6 +41,7 @@
         return function(value) {
             return $window.moment(value).format(format);
         }
+
     };
 
     /**

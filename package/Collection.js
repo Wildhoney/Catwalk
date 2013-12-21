@@ -551,12 +551,11 @@
                 });
 
                 // Delete the unnecessary properties.
-                var meta = model._propertyMeta;
-                delete meta._collection;
-                delete meta._catwalkId;
-                delete meta._relationshipMeta;
-                delete meta._propertyMeta;
-                return meta;
+                delete model._collection;
+                delete model._catwalkId;
+                delete model._relationshipMeta;
+                delete model._propertyMeta;
+                return model;
 
             };
 
