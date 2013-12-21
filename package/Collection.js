@@ -492,7 +492,7 @@
                 throw 'You are attempting to manipulate a non-Catwalk model.';
             }
 
-            if (_.indexOf(this._deletedIds, model._catwalkId) !== -1) {
+            if (_.contains(this._deletedIds, model._catwalkId)) {
                 throw 'You are trying to modify a model in the garbage collection.';
             }
 

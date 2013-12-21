@@ -44,9 +44,9 @@
         <li ng-repeat="cat in cats | orderBy: 'name'">
             <h2>
                 <a title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
-                {{cat.name}} is {{cat.age}} (born: {{cat.dateBorn}}) and is looked after by {{cat.owner.name}}</h2>
+                {{cat.name}} is {{cat.age}} and is looked after by {{cat.owner.name}}</h2>
             <h5>Lives in {{cat.owner.country.name}} and born in {{cat.born.name}}</h5>
-            <h6>Birth: {{cat.dateBorn}} and is {{cat.isAdult}}.</h6>
+            <h6>Birth: {{cat.dateBorn}} and is therefore {{cat.isAdult}}.</h6>
             <ul>
                 <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.colour}}</li>
             </ul>
