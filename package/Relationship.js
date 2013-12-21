@@ -47,7 +47,7 @@
 
                     // Once the promise has been resolved.
                     deferred.promise.then(function(model) {
-                        collection.createModel(model);
+                        collection.addModel(model);
                     });
 
                 }
@@ -107,7 +107,7 @@
 
                 // Once the promise has been resolved.
                 deferred.promise.then(function(model) {
-                    collection.createModel(model);
+                    collection.addModel(model);
                 });
 
             }
