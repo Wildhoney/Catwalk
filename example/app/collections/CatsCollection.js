@@ -74,7 +74,7 @@
          * @type {Boolean}
          */
         isAdult: $catwalk.computedProperty(function() {
-            return (this.age > 6);
+            return (this.age > 6) ? 'an adult cat' : 'a kitten';
         })
 
     });
