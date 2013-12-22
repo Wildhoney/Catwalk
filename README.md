@@ -323,3 +323,26 @@ _relationships: {
 ```
 
 We can therefore access the `country` property on each person model to bring back their related country. Notice that the relationship isn't performed on the primary key (`id`) but rather on the `code` property.
+
+In each relationship descriptor you can also define the format of the values. For example, if you're expecting an array of IDs and your API passes through an array of strings, you can typecast these &ndash; which is **highly** recommended to avoid annoying *bugs*.
+
+```javascript
+/**
+ * @property _relationships
+ * @type {Object}
+ * @protected
+ */
+_relationships: {
+
+    /**
+     * @property country
+     * @type {Object}
+     */
+    country: $catwalk.relationship.hasOne({
+        collection: 'countries',
+        foreignKey: 'id',
+        typecast:   $catwalk.attributes.integer
+    })
+
+}
+```
