@@ -12,6 +12,16 @@
 
         });
 
+        $colours.watch('content', function(collection) {
+
+            $scope.cats = window.catwalk.collection('cats').all();
+
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+
+        });
+
         $cats.watch('create', function(deferred, model) {
             deferred.resolve();
         });
@@ -25,10 +35,20 @@
         });
 
         $colours.watch('read', function(deferred, property, value) {
-            deferred.resolve({
-                id: value,
-                colour: 'Blue'
-            });
+
+            if (value !== 12) {
+                return;
+            }
+
+            setTimeout(function() {
+
+                deferred.resolve({
+                    id: value,
+                    colour: 'Blue'
+                });
+
+            }, 2100);
+
         });
 
         /**
@@ -46,31 +66,31 @@
         $colours.createModel({ id: 4, colour: 'Grey' });
 
         // ...And add all of the cats, too.
-//        var kipper = $cats.createModel({
-//            id: 1,
-//            name: 'Kipper',
-//            age: 14,
-//            colours: [1, 2],
-//            dateBorn: 'Oct 10, 1985',
-//            born: 1,
-//            owner: 1
-//        });
-//
-//        var busters = $cats.createModel({
-//            id: 2,
-//            name: 'Busters',
-//            age: 4,
-//            colours: [3],
-//            dateBorn: 'Jul 4, 2012',
-//            born: 2,
-//            owner: 2
-//        });
+        var kipper = $cats.createModel({
+            id: 1,
+            name: 'Kipper',
+            age: 14,
+            colours: [1, 2],
+            dateBorn: 'Oct 10, 1985',
+            born: 1,
+            owner: 1
+        });
+
+        var busters = $cats.createModel({
+            id: 2,
+            name: 'Busters',
+            age: 4,
+            colours: [3],
+            dateBorn: 'Jul 4, 2012',
+            born: 2,
+            owner: 2
+        });
 
         var missKittens = $cats.createModel({
             id: 3,
             name: 'Miss Kittens',
             age: 2,
-            colours: ["1","2","3"],
+            colours: [12],
             dateBorn: 'Aug 16, 2013',
             born: "2",
             owner: "2"
@@ -84,12 +104,9 @@
         $people.createModel({ id: 1, name: 'Adam', country: 1 });
         $people.createModel({ id: 2, name: 'Masha', country: 2 });
 
-        var lucifer = $cats.updateModel(missKittens, {
-            name: 'Lucifer'
-        });
-
-        $cats.updateModel(lucifer, {
-            name: 'Adam'
+        $cats.updateModel(missKittens, {
+            name: 'Lucifer',
+            colours: [12]
         });
 
     });
