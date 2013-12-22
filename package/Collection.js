@@ -361,6 +361,12 @@
                 updatedModel[property] = properties[property] ? properties[property]
                                                               : model._relationshipMeta[property];
 
+
+            });
+
+            // Copy across the relationships in their simple form.
+            _.forEach(updatedModel._relationshipMeta, function(relationship, property) {
+                updatedModel[property] = relationship;
             });
 
             // Remove the meta data for the relationships because it will be created again with
@@ -467,7 +473,9 @@
                  */
                 get: function() {
                     return _relationships[key](ids);
-                }
+                },
+
+                configurable: true
 
             });
 
