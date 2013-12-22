@@ -15,6 +15,10 @@
 
         return function hasOne(foreignId) {
 
+            if (_.isObject(foreignId)) {
+                return foreignId
+            }
+
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];
 
