@@ -130,12 +130,14 @@
         /**
          * @property events
          * @type {Object}
+         * @private
          */
         _events: {},
 
         /**
          * @property resolvedIds
          * @type {Array}
+         * @private
          */
         _resolvedIds: [],
 
@@ -163,8 +165,18 @@
         /**
          * @property _deletedIds
          * @type {Array}
+         * @private
          */
         _deletedIds: [],
+
+        /**
+         * Property used for keeping a track of the update emitting.
+         *
+         * @property
+         * @type {Object}
+         * @private
+         */
+        _emitUpdated: null,
 
         /**
          * @method watch
@@ -556,8 +568,14 @@
              */
             var contentUpdated = _.bind(function contentUpdated() {
 
+                if (this._emitUpdated) {
+                    clearTimeout(this._emitUpdated);
+                }
+
                 // Content has been updated!
-                _contentUpdated(_collections);
+                this._emitUpdated = setTimeout(function() {
+                    _contentUpdated(_collections);
+                }, 1);
 
             }, this);
 
