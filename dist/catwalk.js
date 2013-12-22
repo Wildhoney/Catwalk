@@ -114,6 +114,22 @@
     var _collections = {};
 
     /**
+     * @property _contentUpdated
+     * @type {Function}
+     * @private
+     */
+    var _contentUpdated = function() {};
+
+    /**
+     * Invoked whenever the content has been updated.
+     *
+     * @method updated
+     */
+    $catwalk.updated = function updated(callback) {
+        _contentUpdated = callback;
+    }
+
+    /**
      * @module Catwalk
      * @submodule Collection
      * @type {Object}
@@ -144,8 +160,7 @@
             create:     noop,
             read:       noop,
             update:     noop,
-            delete:     noop,
-            content:    noop
+            delete:     noop
         };
 
         // Gather the name and the properties for the models.
@@ -258,7 +273,13 @@
          * @return {void}
          */
         watch: function watch(type, callback) {
+
+            if (type === 'content') {
+                throw 'Observing content at model level has been deprecated. Please use $catwalk.updated instead.';
+            }
+
             this._events[type] = callback;
+
         },
 
         /**
@@ -636,7 +657,7 @@
             var contentUpdated = _.bind(function contentUpdated() {
 
                 // Content has been updated!
-                this._events.content(this.all());
+                _contentUpdated(_collections);
 
             }, this);
 

@@ -7,19 +7,9 @@
             countries   = $catwalk.collection('countries'), 
             people      = $catwalk.collection('people'); 
 
-        cats.watch('content', function(collection) {
+        $catwalk.updated(function(collections) {
 
-            $scope.cats = collection;
-
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-
-        });
-
-        colours.watch('content', function(collection) {
-
-            $scope.cats = window.catwalk.collection('cats').all();
+            $scope.cats = collections.cats.all();
 
             if (!$scope.$$phase) {
                 $scope.$apply();
