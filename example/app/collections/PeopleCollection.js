@@ -1,6 +1,6 @@
-(function($window, $catwalk) {
+(function($catwalk) {
 
-    $window.people = $catwalk.collection('people', {
+    $catwalk.collection('people', {
 
         /**
          * @property _primaryKey
@@ -41,4 +41,4 @@
 
     });
 
-})(window, window.catwalk);
+})(window.catwalk);

@@ -1,6 +1,6 @@
-(function($window, $catwalk) {
+(function($catwalk) {
 
-    $window.countries = $catwalk.collection('countries', {
+    $catwalk.collection('countries', {
 
         /**
          * @property _primaryKey
@@ -29,4 +29,4 @@
 
     });
 
-})(window, window.catwalk);
+})(window.catwalk);

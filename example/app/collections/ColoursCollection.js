@@ -1,6 +1,6 @@
-(function($window, $catwalk) {
+(function($catwalk) {
 
-    $window.colours = $catwalk.collection('colours', {
+    $catwalk.collection('colours', {
 
         /**
          * @property _primaryKey
@@ -23,4 +23,4 @@
 
     });
 
-})(window, window.catwalk);
+})(window.catwalk);

@@ -1,8 +1,13 @@
-(function($app, $cats, $colours, $people, $countries) {
+(function($app, $catwalk) {
 
     $app.controller('CatsController', function CatsController($scope, $timeout) {
+        
+        var cats        = $catwalk.collection('cats'),
+            colours     = $catwalk.collection('colours'), 
+            countries   = $catwalk.collection('countries'), 
+            people      = $catwalk.collection('people'); 
 
-        $cats.watch('content', function(collection) {
+        cats.watch('content', function(collection) {
 
             $scope.cats = collection;
 
@@ -12,7 +17,7 @@
 
         });
 
-        $colours.watch('content', function(collection) {
+        colours.watch('content', function(collection) {
 
             $scope.cats = window.catwalk.collection('cats').all();
 
@@ -22,25 +27,25 @@
 
         });
 
-        $cats.watch('create', function(deferred, model) {
+        cats.watch('create', function(deferred, model) {
             deferred.resolve();
         });
 
-        $cats.watch('delete', function(deferred, model) {
+        cats.watch('delete', function(deferred, model) {
             deferred.resolve();
         });
 
-        $cats.watch('update', function(deferred, model) {
+        cats.watch('update', function(deferred, model) {
             deferred.resolve();
         });
 
-        $colours.watch('read', function(deferred, property, value) {
+        colours.watch('read', function(deferred, property, value) {
 
             if (value !== 12) {
                 return;
             }
 
-            setTimeout(function() {
+            $timeout(function() {
 
                 deferred.resolve({
                     id: value,
@@ -56,17 +61,17 @@
          * @type {Function}
          */
         $scope.removeCat = function removeCat(model) {
-            $cats.deleteModel(model);
+            cats.deleteModel(model);
         };
 
         // Add all of the colours.
-        $colours.createModel({ id: 1, colour: 'Black' });
-        $colours.createModel({ id: 2, colour: 'White' });
-        $colours.createModel({ id: 3, colour: 'Ginger' });
-        $colours.createModel({ id: 4, colour: 'Grey' });
+        colours.createModel({ id: 1, colour: 'Black' });
+        colours.createModel({ id: 2, colour: 'White' });
+        colours.createModel({ id: 3, colour: 'Ginger' });
+        colours.createModel({ id: 4, colour: 'Grey' });
 
         // ...And add all of the cats, too.
-        var kipper = $cats.createModel({
+        var kipper = cats.createModel({
             id: 1,
             name: 'Kipper',
             age: 14,
@@ -76,7 +81,7 @@
             owner: 1
         });
 
-        var busters = $cats.createModel({
+        var busters = cats.createModel({
             id: 2,
             name: 'Busters',
             age: 4,
@@ -86,7 +91,7 @@
             owner: 2
         });
 
-        var missKittens = $cats.createModel({
+        var missKittens = cats.createModel({
             id: 3,
             name: 'Miss Kittens',
             age: 2,
@@ -97,18 +102,18 @@
         });
 
         // ...And their countries.
-        $countries.createModel({ id: 1, name: 'United Kingdom', code: 'UK' });
-        $countries.createModel({ id: 2, name: 'Russian Federation', code: 'RU' });
+        countries.createModel({ id: 1, name: 'United Kingdom', code: 'UK' });
+        countries.createModel({ id: 2, name: 'Russian Federation', code: 'RU' });
 
         // ...And the possible owners.
-        $people.createModel({ id: 1, name: 'Adam', country: 1 });
-        $people.createModel({ id: 2, name: 'Masha', country: 2 });
+        people.createModel({ id: 1, name: 'Adam', country: 1 });
+        people.createModel({ id: 2, name: 'Masha', country: 2 });
 
-        $cats.updateModel(missKittens, {
+        cats.updateModel(missKittens, {
             name: 'Lucifer',
-            colours: [12]
+            colours: [1,2,3,"12"]
         });
 
     });
 
-})(window.exampleApp, window.cats, window.colours, window.people, window.countries);
+})(window.exampleApp, window.catwalk);

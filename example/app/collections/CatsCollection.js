@@ -1,6 +1,6 @@
-(function($window, $catwalk) {
+(function($catwalk) {
 
-    $window.cats = $catwalk.collection('cats', {
+    $catwalk.collection('cats', {
 
         /**
          * @property _primaryKey
@@ -84,4 +84,4 @@
 
     });
 
-})(window, window.catwalk);
+})(window.catwalk);
