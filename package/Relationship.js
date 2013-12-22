@@ -15,11 +15,10 @@
 
         return function hasOne(foreignId) {
 
-//            if (_.isObject(foreignId)) {
-//                return foreignId
-//            }
-
-            console.log(foreignId);
+            if (descriptor.typecast) {
+                // Typecast foreign ID if the `typecast` property has been defined.
+                foreignId = descriptor.typecast(foreignId);
+            }
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];
@@ -74,6 +73,15 @@
     var hasMany = function hasMany(descriptor) {
 
         return function hasMany(foreignIds) {
+
+            if (descriptor.typecast) {
+
+                // Typecast foreign ID if the `typecast` property has been defined.
+                foreignIds = _.map(foreignIds, function(foreignId) {
+                    return descriptor.typecast(foreignId);
+                });
+
+            }
 
             var collection  = $catwalk.collection(descriptor.collection),
                 dimension   = collection._dimensions[descriptor.foreignKey];

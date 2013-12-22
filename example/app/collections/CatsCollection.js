@@ -22,7 +22,8 @@
              */
             colours: $catwalk.relationship.hasMany({
                 collection: 'colours',
-                foreignKey: 'id'
+                foreignKey: 'id',
+                typecast:   $catwalk.attribute.integer
             }),
 
             /**
@@ -31,7 +32,8 @@
              */
             owner: $catwalk.relationship.hasOne({
                 collection: 'people',
-                foreignKey: 'id'
+                foreignKey: 'id',
+                typecast:   $catwalk.attribute.integer
             }),
 
             /**
@@ -40,7 +42,8 @@
              */
             born: $catwalk.relationship.hasOne({
                 collection: 'countries',
-                foreignKey: 'id'
+                foreignKey: 'id',
+                typecast:   $catwalk.attribute.integer
             })
 
         },

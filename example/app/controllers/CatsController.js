@@ -70,10 +70,10 @@
             id: 3,
             name: 'Miss Kittens',
             age: 2,
-            colours: [],
+            colours: ["1","2","3"],
             dateBorn: 'Aug 16, 2013',
-            born: 2,
-            owner: 2
+            born: "2",
+            owner: "2"
         });
 
         // ...And their countries.
