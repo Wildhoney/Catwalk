@@ -823,26 +823,13 @@
      */
     var hasOne = function hasOne(descriptor) {
 
-        return function hasOne(foreignId) {
+        return _.bind(function hasOne(foreignId) {
 
-            if (descriptor.typecast) {
-                // Typecast foreign ID if the `typecast` property has been defined.
-                foreignId = descriptor.typecast(foreignId);
-            }
+            // Typecast the `foreignId` if necessary.
+            foreignId = this._typecast(descriptor, foreignId);
 
-            var collection  = $catwalk.collection(descriptor.collection),
-                dimension   = collection._dimensions[descriptor.foreignKey];
-
-            if (typeof dimension === 'undefined') {
-                throw 'Attempting to map to an invalid "' + descriptor.foreignKey + '" property on the "' + descriptor.collection + '" collection.';
-            }
-
-            var model = dimension.filterFunction(function(d) {
-                    return foreignId === d;
-                }).top(Infinity)[0];
-
-            // Reset the dimension we just filtered on.
-            dimension.filterAll();
+            var collection  = this._getCollection(descriptor),
+                model       = this._getModels(foreignId, descriptor)[0];
 
             // If we cannot find the model then we need to present the question of where is it
             // to the developer, so that they can resolve it.
@@ -871,7 +858,7 @@
 
             return model;
 
-        };
+        }, this);
 
     };
 
@@ -882,30 +869,13 @@
      */
     var hasMany = function hasMany(descriptor) {
 
-        return function hasMany(foreignIds) {
+        return _.bind(function hasMany(foreignIds) {
 
-            if (descriptor.typecast) {
+            // Typecast the `foreignIds` if necessary.
+            foreignIds = this._typecast(descriptor, foreignIds);
 
-                // Typecast foreign ID if the `typecast` property has been defined.
-                foreignIds = _.map(foreignIds, function(foreignId) {
-                    return descriptor.typecast(foreignId);
-                });
-
-            }
-
-            var collection  = $catwalk.collection(descriptor.collection),
-                dimension   = collection._dimensions[descriptor.foreignKey];
-
-            if (typeof dimension === 'undefined') {
-                throw 'Attempting to map to an invalid "' + descriptor.foreignKey + '" property on the "' + descriptor.collection + '" collection.';
-            }
-
-            var models = dimension.filterAll().filterFunction(function(d) {
-                    return !!_.contains(foreignIds, d);
-                }).top(Infinity);
-
-            // Reset the dimension we just filtered on.
-            dimension.filterAll();
+            var collection  = this._getCollection(descriptor),
+                models      = this._getModels(foreignIds, descriptor);
 
             // If there is a mismatch in this check then we're missing some of our
             // models. Perhaps we need an AJAX request to get more?
@@ -938,7 +908,7 @@
 
             return models;
 
-        };
+        }, this);
 
     };
 
@@ -946,13 +916,96 @@
      * @module Catwalk
      * @submodule Collection
      * @type {Object}
+     * @reference http://book.cakephp.org/2.0/en/models/associations-linking-models-together.html
      */
     $window.catwalk.relationship = {
 
         hasOne              : hasOne,
         hasMany             : hasMany,
         belongsTo           : function() {},
-        hasAndBelongsToMany : function() {}
+        hasAndBelongsToMany : function() {},
+
+        /**
+         * Responsible for obtaining the collection from the descriptor.
+         *
+         * @method _getCollection
+         * @param descriptor {Object}
+         * @return {object}
+         * @private
+         */
+        _getCollection: function _getCollection(descriptor) {
+            return $catwalk.collection(descriptor.collection);
+        },
+
+        /**
+         * Responsible for obtaining the models from the descriptor.
+         *
+         * @method _getModels
+         * @param value {Array|Number}
+         * @param descriptor {Object}
+         * @return {object}
+         * @private
+         */
+        _getModels: function _getModels(value, descriptor) {
+
+            var dimension   = this._getCollection(descriptor)._dimensions[descriptor.foreignKey],
+                find        = function () {};
+
+            if (typeof dimension === 'undefined') {
+                throw 'Attempting to map to an invalid "' + descriptor.foreignKey + '" property on the "' + descriptor.collection + '" collection.';
+            }
+
+            if (_.isArray(value)) {
+
+                // Because the `value` is an array we're dealing with a `hasMany`.
+                find = function findMany(d) {
+                    return _.contains(value, d);
+                };
+
+            } else {
+
+                // Otherwise we're dealing with a `hasOne` relationship.
+                find = function findOne(d) {
+                    return (d === value);
+                }
+
+            }
+
+            // Find all of the models from the foreign collection using the `find` method we
+            // defined above based on whether the `value` is an array or not.
+            var models = dimension.filterFunction(find).top(Infinity);
+
+            // Reset the dimension we just filtered on.
+            dimension.filterAll();
+
+            return models;
+
+        },
+
+        /**
+         * @method _typecast
+         * @param descriptor {Object}
+         * @param value {String}
+         * @return {Array|Number}
+         * @private
+         */
+        _typecast: function _typecast(descriptor, value) {
+
+            if (descriptor.typecast) {
+
+                if (!_.isArray(value)) {
+                    return descriptor.typecast(value);
+                }
+
+                return _.map(value, function(value) {
+                    return descriptor.typecast(value);
+                });
+
+            }
+
+            return value;
+
+        }
 
     };
 
