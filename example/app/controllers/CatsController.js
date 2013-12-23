@@ -1,7 +1,9 @@
 (function($app, $catwalk) {
 
-    $app.controller('CatsController', function CatsController($scope, $timeout, $window) {
-        
+    $app.controller('CatsController', function CatsController($scope, $window, $http) {
+
+        $scope.cats = [];
+
         var cats        = $catwalk.collection('cats'),
             colours     = $catwalk.collection('colours'), 
             countries   = $catwalk.collection('countries'), 
@@ -29,6 +31,10 @@
 
         });
 
+//        $catwalk.on('update', function(collection, deferred, model) {
+//
+//        });
+
         cats.watch('create', function(deferred, model) {
             deferred.resolve();
         });
@@ -43,80 +49,34 @@
 
         colours.watch('read', function(deferred, property, value) {
 
-            if (value !== 12) {
-                return;
-            }
-
-            $timeout(function() {
-
-                deferred.resolve({
-                    id: value,
-                    colour: 'Blue'
-                });
-
-            }, 2100);
+            $http({ url: 'http://localhost:8901/colours/' + value, method: 'get' }).then(function complete(model) {
+                deferred.resolve(model.data);
+            });
 
         });
 
-        /**
-         * @method removeCat
-         * @type {Function}
-         */
-        $scope.removeCat = function removeCat(model) {
-            cats.deleteModel(model);
-        };
+        countries.watch('read', function(deferred, property, value) {
 
-        // Add all of the colours.
-        colours.createModel({ id: 1, colour: 'Black' });
-        colours.createModel({ id: 2, colour: 'White' });
-        colours.createModel({ id: 3, colour: 'Ginger' });
-        colours.createModel({ id: 4, colour: 'Grey' });
+            $http({ url: 'http://localhost:8901/countries/' + value, method: 'get' }).then(function complete(model) {
+                deferred.resolve(model.data);
+            });
 
-        // ...And add all of the cats, too.
-        var kipper = cats.createModel({
-            id: 1,
-            name: 'Kipper',
-            age: 14,
-            colours: [1, 2],
-            dateBorn: 'Oct 10, 1985',
-            born: 1,
-            owner: 1,
-            friends: []
         });
 
-        var busters = cats.createModel({
-            id: 2,
-            name: 'Busters',
-            age: 4,
-            colours: [3],
-            dateBorn: 'Jul 4, 2012',
-            born: 2,
-            owner: 2,
-            friends: []
+        people.watch('read', function(deferred, property, value) {
+
+            $http({ url: 'http://localhost:8901/people/' + value, method: 'get' }).then(function complete(model) {
+                deferred.resolve(model.data);
+            });
+
         });
 
-        var missKittens = cats.createModel({
-            id: 3,
-            name: 'Miss Kittens',
-            age: 2,
-            colours: [12],
-            dateBorn: 'Aug 16, 2013',
-            born: "2",
-            owner: "2",
-            friends: []
-        });
+        $http({ url: 'http://localhost:8901/cats', method: 'get' }).then(function complete(models) {
 
-        // ...And their countries.
-        countries.createModel({ id: 1, name: 'United Kingdom', code: 'UK' });
-        countries.createModel({ id: 2, name: 'Russian Federation', code: 'RU' });
+            _.forEach(models.data, function(model) {
+                cats.addModel(model);
+            });
 
-        // ...And the possible owners.
-        people.createModel({ id: 1, name: 'Adam', country: 1 });
-        people.createModel({ id: 2, name: 'Masha', country: 2 });
-
-        cats.updateModel(missKittens, {
-            name: 'Lucifer',
-            colours: [1,2,3,"12"]
         });
 
     });

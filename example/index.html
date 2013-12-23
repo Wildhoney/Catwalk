@@ -49,7 +49,7 @@
             <h4>Lives in {{cat.owner.country.name}} and born in {{cat.born.name}}</h4>
             <h5>Birth: {{cat.dateBorn}} and is therefore {{cat.isAdult}}.</h5>
             <ul>
-                <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.colour}}</li>
+                <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.name}}</li>
             </ul>
         </li>
     </ul>

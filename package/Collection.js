@@ -14,6 +14,15 @@
     var _collections = {};
 
     /**
+     * Property used for keeping a track of the update emitting.
+     *
+     * @property _emitUpdated
+     * @type {Object}
+     * @private
+     */
+    var _emitUpdated = null;
+
+    /**
      * @property _contentUpdated
      * @type {Function}
      * @private
@@ -27,7 +36,7 @@
      */
     $catwalk.updated = function updated(callback) {
         _contentUpdated = callback;
-    }
+    };
 
     /**
      * @module Catwalk
@@ -174,15 +183,6 @@
          * @private
          */
         _deletedIds: [],
-
-        /**
-         * Property used for keeping a track of the update emitting.
-         *
-         * @property
-         * @type {Object}
-         * @private
-         */
-        _emitUpdated: null,
 
         /**
          * @method watch
@@ -556,7 +556,6 @@
 
         },
 
-
         /**
          * @method finalise
          * @param eventName {String}
@@ -579,12 +578,12 @@
              */
             var contentUpdated = _.bind(function contentUpdated() {
 
-                if (this._emitUpdated) {
-                    clearTimeout(this._emitUpdated);
+                if (_emitUpdated) {
+                    clearTimeout(_emitUpdated);
                 }
 
                 // Content has been updated!
-                this._emitUpdated = setTimeout(function() {
+                _emitUpdated = setTimeout(function() {
                     _contentUpdated(_collections);
                 }, 1);
 

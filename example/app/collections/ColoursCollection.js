@@ -17,13 +17,12 @@
         _relationships: {
 
             /**
-             * @property parentCat
+             * @property id
              * @type {Object}
              */
-            cat: $catwalk.relationship.belongsTo({
+            id: $catwalk.relationship.belongsTo({
                 collection: 'cats',
-                foreignKey: 'id',
-                localKey:   'colours',
+                foreignKey: 'colours',
                 typecast:   $catwalk.attribute.integer
             })
 
@@ -36,10 +35,10 @@
         id: $catwalk.attribute.integer,
 
         /**
-         * @property colour
+         * @property name
          * @type {String}
          */
-        colour: $catwalk.attribute.string
+        name: $catwalk.attribute.string
 
     });
 
