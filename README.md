@@ -204,7 +204,7 @@ In order for Catwalk to begin mapping the relationship, our model defines the `c
 During the `create` process it is possible to add properties to the model via the promise. Simply pass through any additional properties that should be set on the model after its creation via the `resolve` and Catwalk will do the rest.
 
 ```javascript
-$cats.watch('create', function(deferred, model) {
+$cats.event.on('create', function(collectionName, deferred, model) {
     deferred.resolve({
         name: 'Miss Kittens'
     });
@@ -237,12 +237,12 @@ $cats.deleteModel(missKittens);
 Updates
 -----
 
-Whenever a collection has been updated, the `content` event is invoked. You can watch the `content` event with the `watch` method &ndash; which is the same method you use for listening to CRUD events.
+Whenever a collection has been updated, the `content` event is invoked. You can watch the `content` event with the `on` method &ndash; which is the same method you use for listening to CRUD events.
 
-For instance, in Angular you could use the `watch` method and update the collection:
+For instance, in Angular you could use the `on` method and update the collection:
 
 ```javascript
-$cats.watch('content', function(collection) {
+$cats.event.on('content', function(collection) {
 
     $scope.cats = collection;
 
@@ -261,7 +261,7 @@ With each create, read, update, and delete, Catwalk invokes a callback which all
 For example, if you used the `createModel` method, then the `create` callback will be invoked &ndash; passing through the promise, and the model that was created. Once you have saved the model via your API, you can resolve the promise. If for some reason the save fails then you can reject the promise &ndash; Catwalk will rollback the creation of the model.
 
 ```javascript
-$cats.watch('create', function(deferred, model) {
+$cats.event.on('create', function(collectionName, deferred, model) {
     myApi.save(JSON.stringify(model));
     deferred.resolve();
 });
@@ -272,7 +272,7 @@ Other callbacks are exactly the same and provide the same rollback functionality
 However, `read` is the exception because a model does not yet exist. With the `read` callback we are asking your API to return the model because Catwalk does not have it &ndash; with this we merely pass through the ID of the model. You are only given **one** opportunity to return a desired model.
 
 ```javascript
-$cats.watch('read', function(deferred, property, value) {
+$cats.event.on('read', function(collectionName, deferred, property, value) {
 
     myApi('http://www.example.org/cat/' + property + '/' + value, function(model) {
 
