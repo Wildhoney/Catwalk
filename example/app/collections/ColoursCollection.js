@@ -10,6 +10,26 @@
         _primaryKey: 'id',
 
         /**
+         * @property _relationships
+         * @type {Object}
+         * @protected
+         */
+        _relationships: {
+
+            /**
+             * @property parentCat
+             * @type {Object}
+             */
+            cat: $catwalk.relationship.belongsTo({
+                collection: 'cats',
+                foreignKey: 'id',
+                localKey:   'colours',
+                typecast:   $catwalk.attribute.integer
+            })
+
+        },
+
+        /**
          * @property id
          * @type {Number}
          */

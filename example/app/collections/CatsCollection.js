@@ -27,6 +27,16 @@
             }),
 
             /**
+             * @property friends
+             * @type {Object}
+             */
+            friends: $catwalk.relationship.hasMany({
+                collection: 'cats',
+                foreignKey: 'id',
+                typecast:   $catwalk.attribute.integer
+            }),
+
+            /**
              * @property owner
              * @type {Object}
              */
@@ -59,8 +69,6 @@
          * @type {String}
          */
         name: $catwalk.attribute.string,
-
-        essential: { id: 5 },
 
         /**
          * @property age

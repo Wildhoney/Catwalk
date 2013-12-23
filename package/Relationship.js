@@ -103,6 +103,40 @@
     };
 
     /**
+     * @method belongsTo
+     * @param descriptor {Object}
+     * @return {{updateRelated: Function}}
+     */
+    var belongsTo = function belongsTo(descriptor) {
+
+        var _getModels = _.bind(this._getModels, this);
+
+        return {
+
+            /**
+             * Responsible for updating all of the related models.
+             *
+             * @method updateRelated
+             * @param model {Object}
+             * @param localKey {String}
+             * @return {void}
+             */
+            updateRelated: function resolve(model, localKey) {
+
+                var foreignId       = model[localKey],
+                    foreignModel    = _getModels(foreignId, descriptor)[0],
+                    foreignIds      = foreignModel._relationshipMeta[descriptor.localKey];
+
+                // Update the model with the correct key.
+                foreignIds.push(model[descriptor.foreignKey]);
+
+            }
+
+        };
+
+    };
+
+    /**
      * @module Catwalk
      * @submodule Collection
      * @type {Object}
@@ -112,7 +146,7 @@
 
         hasOne              : hasOne,
         hasMany             : hasMany,
-        belongsTo           : function() {},
+        belongsTo           : belongsTo,
         hasAndBelongsToMany : function() {},
 
         /**

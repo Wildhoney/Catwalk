@@ -18,7 +18,7 @@
      * @type {Function}
      * @private
      */
-    var _contentUpdated = function() {};
+    var _contentUpdated = function _noopContentUpdated() { return this; };
 
     /**
      * Invoked whenever the content has been updated.
@@ -50,6 +50,12 @@
          */
         var noop = function noop() {};
 
+        /**
+         * @method resolve
+         * @return {void}
+         */
+        var resolve = function resolve(deferred) { deferred.resolve(); };
+
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
@@ -57,10 +63,10 @@
         this._deletedIds    = [];
         this._resolvedIds   = [];
         this._events        = {
-            create:     noop,
+            create:     resolve,
             read:       noop,
-            update:     noop,
-            delete:     noop
+            update:     resolve,
+            delete:     resolve
         };
 
         // Gather the name and the properties for the models.
@@ -281,30 +287,24 @@
                     return;
                 }
 
-                try {
+                if (!_.contains(_.keys(propertyMap), key) && !_.contains(_.keys(relationships), key)) {
+//                    throw 'You forgot to define the `' + key + '` property on the collection blueprint.';
+                }
 
-                    if (typeof propertyMap[key] === 'function') {
+                if (typeof propertyMap[key] === 'function') {
 
-                        // Typecast the property based on what's defined in the collection.
-                        model[key] = propertyMap[key](value);
-                        return;
+                    // Typecast the property based on what's defined in the collection.
+                    model[key] = propertyMap[key](value);
+                    return;
 
-                    }
+                }
 
-                    // Otherwise we'll attempt to typecast the value based on the default value.
-                    var type         = typeof propertyMap[key],
-                        typecastable = _.contains(['string', 'number', 'boolean'], type);
+                // Otherwise we'll attempt to typecast the value based on the default value.
+                var type         = typeof propertyMap[key],
+                    typecastable = _.contains(['string', 'number', 'boolean'], type);
 
-                    if (typecastable) {
-                        model[key] = $catwalk.attribute[type](value);
-                    }
-
-                } catch (e) {
-
-                    // Otherwise we'll throw the exception to notify the developer that the
-                    // key was missed from the collection.
-                    throw 'You forgot to define the `' + key + '` property on the collection blueprint.';
-
+                if (typecastable) {
+                    model[key] = $catwalk.attribute[type](value);
                 }
 
             });
@@ -334,6 +334,17 @@
          * @private
          */
         _createResolve: function _createResolve(model, previousModel, properties) {
+
+            // Attempt to resolve any `belongsTo` relationships.
+            _.forEach(this._properties._relationships, function(relationship, property) {
+
+                // If the `typeof` the relationship is "object" then we've discovered
+                // a `belongsTo` relationship!
+                if (typeof relationship === 'object' && model[property]) {
+                    relationship.updateRelated(model, property);
+                }
+
+            });
 
             // Iterate over each model to ensure the developer isn't attempting to update
             // a relationship during its creation.

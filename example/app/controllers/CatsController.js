@@ -1,11 +1,23 @@
 (function($app, $catwalk) {
 
-    $app.controller('CatsController', function CatsController($scope, $timeout) {
+    $app.controller('CatsController', function CatsController($scope, $timeout, $window) {
         
         var cats        = $catwalk.collection('cats'),
             colours     = $catwalk.collection('colours'), 
             countries   = $catwalk.collection('countries'), 
-            people      = $catwalk.collection('people'); 
+            people      = $catwalk.collection('people');
+
+        $scope.addColour = function addColour(parentCatId) {
+
+            var name = $window.prompt('What is the colour?');
+
+            colours.createModel({
+                id: 15,
+                colour: name,
+                cat: parentCatId
+            });
+
+        };
 
         $catwalk.updated(function(collections) {
 
@@ -68,7 +80,8 @@
             colours: [1, 2],
             dateBorn: 'Oct 10, 1985',
             born: 1,
-            owner: 1
+            owner: 1,
+            friends: []
         });
 
         var busters = cats.createModel({
@@ -78,7 +91,8 @@
             colours: [3],
             dateBorn: 'Jul 4, 2012',
             born: 2,
-            owner: 2
+            owner: 2,
+            friends: []
         });
 
         var missKittens = cats.createModel({
@@ -88,7 +102,8 @@
             colours: [12],
             dateBorn: 'Aug 16, 2013',
             born: "2",
-            owner: "2"
+            owner: "2",
+            friends: []
         });
 
         // ...And their countries.
