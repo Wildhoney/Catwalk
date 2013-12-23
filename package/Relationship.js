@@ -34,7 +34,7 @@
 
                     // Present the developer with the foreign ID to load, and the promise to resolve
                     // or reject.
-                    collection._events.read(deferred, descriptor.foreignKey, foreignId);
+                    $catwalk.event.broadcastRead('read', collection, deferred, descriptor.foreignKey, foreignId);
                     collection._resolvedIds.push(foreignId);
 
                     // Once the promise has been resolved.
@@ -84,7 +84,7 @@
 
                     // Prompt the developer for the missing IDs with the required IDs and the
                     // promise to resolve or reject.
-                    collection._events.read(deferred, descriptor.foreignKey, id);
+                    $catwalk.event.broadcastRead('read', collection, deferred, descriptor.foreignKey, id);
                     collection._resolvedIds.push(id);
 
                 });

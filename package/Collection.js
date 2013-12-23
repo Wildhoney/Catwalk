@@ -71,12 +71,6 @@
         this._properties    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
-        this._events        = {
-            create:     resolve,
-            read:       noop,
-            update:     resolve,
-            delete:     resolve
-        };
 
         // Gather the name and the properties for the models.
         this._name                  = name;
@@ -143,13 +137,6 @@
         _name: '',
 
         /**
-         * @property events
-         * @type {Object}
-         * @private
-         */
-        _events: {},
-
-        /**
          * @property resolvedIds
          * @type {Array}
          * @private
@@ -183,22 +170,6 @@
          * @private
          */
         _deletedIds: [],
-
-        /**
-         * @method watch
-         * @param type {String}
-         * @param callback {Function}
-         * @return {void}
-         */
-        watch: function watch(type, callback) {
-
-            if (type === 'content') {
-                throw 'Observing content at model level has been deprecated. Please use $catwalk.updated instead.';
-            }
-
-            this._events[type] = callback;
-
-        },
 
         /**
          * @method all
@@ -638,7 +609,7 @@
             if (emitEvent) {
 
                 // Invoke the related CRUD function.
-                this._events[eventName](deferred, simplifyModel(model));
+                $catwalk.event.broadcastOthers(eventName, this, deferred, simplifyModel(model));
 
                 // When the defer has been resolved.
                 deferred.promise.then(_.bind(function(properties) {

@@ -2,6 +2,10 @@
 
     $app.controller('CatsController', function CatsController($scope, $window, $http) {
 
+        /**
+         * @property cats
+         * @type {Array}
+         */
         $scope.cats = [];
 
         var cats        = $catwalk.collection('cats'),
@@ -9,6 +13,11 @@
             countries   = $catwalk.collection('countries'), 
             people      = $catwalk.collection('people');
 
+        /**
+         * @method addColour
+         * @param parentCatId {Number}
+         * @return {void}
+         */
         $scope.addColour = function addColour(parentCatId) {
 
             var name = $window.prompt('What is the colour?');
@@ -21,6 +30,16 @@
 
         };
 
+        /**
+         * @method removeCat
+         * @param model {Object}
+         * @return {void}
+         */
+        $scope.removeCat = function removeCat(model) {
+            cats.deleteModel(model);
+        };
+
+        // When the content of a collection has been updated.
         $catwalk.updated(function(collections) {
 
             $scope.cats = collections.cats.all();
@@ -31,46 +50,35 @@
 
         });
 
-//        $catwalk.on('update', function(collection, deferred, model) {
-//
-//        });
+        // When a model is needed to be loaded into the collection.
+        $catwalk.event.on('read', function(collection, deferred, property, value) {
 
-        cats.watch('create', function(deferred, model) {
-            deferred.resolve();
-        });
+            var request = $http({
+                url:    'http://localhost:8901/' + collection + '/' + value,
+                method: 'get'
+            });
 
-        cats.watch('delete', function(deferred, model) {
-            deferred.resolve();
-        });
-
-        cats.watch('update', function(deferred, model) {
-            deferred.resolve();
-        });
-
-        colours.watch('read', function(deferred, property, value) {
-
-            $http({ url: 'http://localhost:8901/colours/' + value, method: 'get' }).then(function complete(model) {
+            request.then(function read(model) {
                 deferred.resolve(model.data);
             });
 
         });
 
-        countries.watch('read', function(deferred, property, value) {
+        // When a model has been deleted from the collection.
+        $catwalk.event.on('delete', function(collection, deferred, model) {
 
-            $http({ url: 'http://localhost:8901/countries/' + value, method: 'get' }).then(function complete(model) {
-                deferred.resolve(model.data);
+            var request = $http({
+                url:    'http://localhost:8901/' + collection + '/' + model.id,
+                method: 'delete'
+            });
+
+            request.then(function deleted() {
+                deferred.resolve();
             });
 
         });
 
-        people.watch('read', function(deferred, property, value) {
-
-            $http({ url: 'http://localhost:8901/people/' + value, method: 'get' }).then(function complete(model) {
-                deferred.resolve(model.data);
-            });
-
-        });
-
+        // Get the starting path which is an array of all the cats.
         $http({ url: 'http://localhost:8901/cats', method: 'get' }).then(function complete(models) {
 
             _.forEach(models.data, function(model) {
