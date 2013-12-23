@@ -153,30 +153,12 @@
             throw 'Your `_primaryKey` must map to one of your collection properties.';
         }
 
-        /**
-         * @method noop
-         * @return {void}
-         */
-        var noop = function noop() {};
-
-        /**
-         * @method resolve
-         * @return {void}
-         */
-        var resolve = function resolve(deferred) { deferred.resolve(); };
-
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
         this._properties    = {};
         this._deletedIds    = [];
         this._resolvedIds   = [];
-        this._events        = {
-            create:     resolve,
-            read:       noop,
-            update:     resolve,
-            delete:     resolve
-        };
 
         // Gather the name and the properties for the models.
         this._name                  = name;
@@ -243,13 +225,6 @@
         _name: '',
 
         /**
-         * @property events
-         * @type {Object}
-         * @private
-         */
-        _events: {},
-
-        /**
          * @property resolvedIds
          * @type {Array}
          * @private
@@ -283,22 +258,6 @@
          * @private
          */
         _deletedIds: [],
-
-        /**
-         * @method watch
-         * @param type {String}
-         * @param callback {Function}
-         * @return {void}
-         */
-        watch: function watch(type, callback) {
-
-            if (type === 'content') {
-                throw 'Observing content at model level has been deprecated. Please use $catwalk.updated instead.';
-            }
-
-            this._events[type] = callback;
-
-        },
 
         /**
          * @method all
@@ -738,7 +697,7 @@
             if (emitEvent) {
 
                 // Invoke the related CRUD function.
-                this._events[eventName](deferred, simplifyModel(model));
+                $catwalk.event.broadcastOthers(eventName, this, deferred, simplifyModel(model));
 
                 // When the defer has been resolved.
                 deferred.promise.then(_.bind(function(properties) {
@@ -818,7 +777,87 @@
         return callback;
     }
 
-})(window);;(function($window, $catwalk, $q) {
+})(window);;(function($catwalk) {
+
+    "use strict";
+
+    /**
+     * @property _resolve
+     * @type {Object}
+     */
+    var _resolve = function defaultResolve(collection, deferred) { deferred.resolve(); };
+
+    $catwalk.event = {
+
+        /**
+         * @property _events
+         * @type {Object}
+         * @protected
+         */
+        _events: {
+            create: _resolve,
+            read:   _resolve,
+            update: _resolve,
+            delete: _resolve
+        },
+
+        /**
+         * @method on
+         * @param namespace {String}
+         * @param callback {Function}
+         * @return {void}
+         */
+        on: function on(namespace, callback) {
+            this._events[namespace] = callback;
+        },
+
+        /**
+         * @method broadcastRead
+         * @param type {String}
+         * @param collection {Object}
+         * @param deferred {Object}
+         * @param property {String}
+         * @param value {String}
+         * @return {void}
+         */
+        broadcastRead: function broadcastRead(type, collection, deferred, property, value) {
+            var eventName = type + '/' + collection._name;
+            this._getCallback(eventName, type)(collection._name, deferred, property, value);
+        },
+
+        /**
+         * @method broadcastOthers
+         * @param type {String}
+         * @param collection {Object}
+         * @param deferred {Object}
+         * @param model {Object}
+         * @return {void}
+         */
+        broadcastOthers: function broadcastOthers(type, collection, deferred, model) {
+            var eventName = type + '/' + collection._name;
+            this._getCallback(eventName, type)(collection._name, deferred, model);
+        },
+
+        /**
+         * @method _getCallback
+         * @param specificCallbackPath {String}
+         * @param generalCallbackPath {String}
+         * @return {Function}
+         * @private
+         */
+        _getCallback: function _getPath(specificCallbackPath, generalCallbackPath) {
+
+            if (_.contains(_.keys(this._events), specificCallbackPath)) {
+                return this._events[specificCallbackPath];
+            }
+
+            return this._events[generalCallbackPath];
+
+        }
+
+    };
+
+})(window.catwalk);;(function($window, $catwalk, $q) {
 
     "use strict";
 
@@ -854,7 +893,7 @@
 
                     // Present the developer with the foreign ID to load, and the promise to resolve
                     // or reject.
-                    collection._events.read(deferred, descriptor.foreignKey, foreignId);
+                    $catwalk.event.broadcastRead('read', collection, deferred, descriptor.foreignKey, foreignId);
                     collection._resolvedIds.push(foreignId);
 
                     // Once the promise has been resolved.
@@ -904,7 +943,7 @@
 
                     // Prompt the developer for the missing IDs with the required IDs and the
                     // promise to resolve or reject.
-                    collection._events.read(deferred, descriptor.foreignKey, id);
+                    $catwalk.event.broadcastRead('read', collection, deferred, descriptor.foreignKey, id);
                     collection._resolvedIds.push(id);
 
                 });

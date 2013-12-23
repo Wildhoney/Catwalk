@@ -1,5 +1,7 @@
 (function($catwalk) {
 
+    "use strict";
+
     /**
      * @property _resolve
      * @type {Object}

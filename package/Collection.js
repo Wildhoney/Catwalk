@@ -53,18 +53,6 @@
             throw 'Your `_primaryKey` must map to one of your collection properties.';
         }
 
-        /**
-         * @method noop
-         * @return {void}
-         */
-        var noop = function noop() {};
-
-        /**
-         * @method resolve
-         * @return {void}
-         */
-        var resolve = function resolve(deferred) { deferred.resolve(); };
-
         // Reset the variables because of JavaScript!
         this._crossfilter   = {};
         this._dimensions    = {};
