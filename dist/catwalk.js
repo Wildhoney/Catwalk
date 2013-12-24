@@ -307,24 +307,7 @@
             model._propertyMeta = _.clone(model);
 
             // Fill in the model with any defaults that have been configured.
-            _.forEach(this._properties, _.bind(function(value, property) {
-
-                if (property.charAt(0) === '_') {
-                    // Don't include any private Catwalk variables in the inheritance.
-                    return;
-                }
-
-                // Determine if it's one of the default types, and it hasn't been set
-                // by the current model.
-                var validType   = _.contains(['number', 'string', 'boolean', 'object'], typeof value),
-                    notSet      = typeof model[property] === 'undefined';
-
-                if (notSet && validType) {
-                    // Update the model's property to be the default value.
-                    model[property] = value;
-                }
-
-            }, this));
+            this._fillDefaults(model);
 
             // Iterate over the properties to typecast them.
             _.forEach(model, function(value, key) {
@@ -338,6 +321,11 @@
                 // with their own simple value.
                 if (computedProperties && _.contains(_.keys(computedProperties), key)) {
                     throw 'You are attempting to provide a value for the "' + key + '" computed property.';
+                }
+
+                // We don't want to pay attention to any `belongsTo` relationships.
+                if (typeof relationships[key] === 'object') {
+                    return;
                 }
 
                 // Determine if this property is part of a relationship.
@@ -400,7 +388,7 @@
                 // If the `typeof` the relationship is "object" then we've discovered
                 // a `belongsTo` relationship!
                 if (typeof relationship === 'object' && model[property]) {
-                    relationship.updateRelated(model, property);
+                    relationship.createAssociation(model, property);
                 }
 
             });
@@ -616,6 +604,35 @@
         },
 
         /**
+         * @method _fillDefaults
+         * @param model {Object}
+         * @return {void}
+         * @private
+         */
+        _fillDefaults: function _fillDefaults(model) {
+
+            _.forEach(this._properties, _.bind(function(value, property) {
+
+                if (property.charAt(0) === '_') {
+                    // Don't include any private Catwalk variables in the inheritance.
+                    return;
+                }
+
+                // Determine if it's one of the default types, and it hasn't been set
+                // by the current model.
+                var validType   = _.contains(['number', 'string', 'boolean', 'object'], typeof value),
+                    notSet      = typeof model[property] === 'undefined';
+
+                if (notSet && validType) {
+                    // Update the model's property to be the default value.
+                    model[property] = value;
+                }
+
+            }, this));
+
+        },
+
+        /**
          * @method finalise
          * @param eventName {String}
          * @param model {Object}
@@ -653,7 +670,7 @@
              * @param model {Object}
              * @return {Object}
              */
-            var simplifyModel = function simplifyModel(model) {
+            var simplifyModel = _.bind(function simplifyModel(model) {
 
                 if (typeof model === 'undefined') {
                     return {};
@@ -670,10 +687,24 @@
                 delete model._collection;
                 delete model._catwalkId;
                 delete model._relationshipMeta;
+
+                var keys = _.keys(this._properties);
+
+                // Only restrict the properties to those defined in the collection.
+                _.forEach(model, function(property, key) {
+
+                    if (_.contains(keys, key)) {
+                        return;
+                    }
+
+                    delete model[key];
+
+                });
+
                 delete model._propertyMeta;
                 return model;
 
-            };
+            }, this);
 
             /**
              * @method invokeCallback
@@ -964,30 +995,37 @@
     /**
      * @method belongsTo
      * @param descriptor {Object}
-     * @return {{updateRelated: Function}}
+     * @return {Object}
      */
     var belongsTo = function belongsTo(descriptor) {
-
-        var _getModels = _.bind(this._getModels, this);
 
         return {
 
             /**
              * Responsible for updating all of the related models.
              *
-             * @method updateRelated
+             * @method createAssociation
              * @param model {Object}
-             * @param localKey {String}
+             * @param key {String}
              * @return {void}
              */
-            updateRelated: function resolve(model, localKey) {
+            createAssociation: function createAssociation(model, key) {
 
-                var foreignId       = model[localKey],
-                    foreignModel    = _getModels(foreignId, descriptor)[0],
-                    foreignIds      = foreignModel._relationshipMeta[descriptor.localKey];
+                /**
+                 * @method find
+                 * @param d {Number|String|Boolean}
+                 * @return {Boolean}
+                 */
+                var find = function findOne(d) {
+                    return (d === model[descriptor.collection]);
+                };
 
-                // Update the model with the correct key.
-                foreignIds.push(model[descriptor.foreignKey]);
+                var foreignCollection   = $catwalk.collection(descriptor.collection),
+                    dimension           = foreignCollection._dimensions[key],
+                    foreignModel        = dimension.filterFunction(find).top(Infinity)[0],
+                    foreignIds          = foreignModel._relationshipMeta[descriptor.foreignKey];
+
+                foreignIds.push(model[key]);
 
             }
 

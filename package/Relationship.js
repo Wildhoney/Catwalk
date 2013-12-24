@@ -105,30 +105,37 @@
     /**
      * @method belongsTo
      * @param descriptor {Object}
-     * @return {{updateRelated: Function}}
+     * @return {Object}
      */
     var belongsTo = function belongsTo(descriptor) {
-
-        var _getModels = _.bind(this._getModels, this);
 
         return {
 
             /**
              * Responsible for updating all of the related models.
              *
-             * @method updateRelated
+             * @method createAssociation
              * @param model {Object}
-             * @param localKey {String}
+             * @param key {String}
              * @return {void}
              */
-            updateRelated: function resolve(model, localKey) {
+            createAssociation: function createAssociation(model, key) {
 
-                var foreignId       = model[localKey],
-                    foreignModel    = _getModels(foreignId, descriptor)[0],
-                    foreignIds      = foreignModel._relationshipMeta[descriptor.localKey];
+                /**
+                 * @method find
+                 * @param d {Number|String|Boolean}
+                 * @return {Boolean}
+                 */
+                var find = function findOne(d) {
+                    return (d === model[descriptor.collection]);
+                };
 
-                // Update the model with the correct key.
-                foreignIds.push(model[descriptor.foreignKey]);
+                var foreignCollection   = $catwalk.collection(descriptor.collection),
+                    dimension           = foreignCollection._dimensions[key],
+                    foreignModel        = dimension.filterFunction(find).top(Infinity)[0],
+                    foreignIds          = foreignModel._relationshipMeta[descriptor.foreignKey];
+
+                foreignIds.push(model[key]);
 
             }
 

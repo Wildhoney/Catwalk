@@ -26,12 +26,12 @@
          */
         $scope.addColour = function addColour(parentCatId) {
 
-            var name = $window.prompt('What is the colour?');
+            var name    = $window.prompt('What is the colour?');
 
             colours.createModel({
                 id: 15,
-                colour: name,
-                cat: parentCatId
+                name: name,
+                cats: parentCatId
             });
 
         };
@@ -59,14 +59,16 @@
         // When a model has been added to the collection.
         $catwalk.event.on('create', function(collection, deferred, model) {
 
-            var request = $http({
-                url:    $scope.url + collection + '/' + model.id,
-                method: 'post'
-            });
+            deferred.resolve();
 
-            request.then(function created() {
-                deferred.resolve();
-            });
+//            var request = $http({
+//                url:    $scope.url + collection + '/' + model.id,
+//                method: 'post'
+//            });
+//
+//            request.then(function created() {
+//                deferred.resolve();
+//            });
 
         });
 
