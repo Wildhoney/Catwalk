@@ -24,22 +24,28 @@
         });
     });
 
-    app.get('/people/:id', function getPeople(request, response) {
-        db.each('SELECT * FROM people WHERE id = ' + request.params.id, function row(err, row) {
+    app.post('/:collection/:id', function createModel(request, response) {
+//        db.each('UPDATE ' + request.params.collection + ' WHERE id = ' + request.params.id, function row(err, row) {
+//            response.send(row);
+//        });
+    });
+
+    app.get('/:collection/:id', function readModel(request, response) {
+        db.each('SELECT * FROM ' + request.params.collection + ' WHERE id = ' + request.params.id, function row(err, row) {
             response.send(row);
         });
     });
 
-    app.get('/colours/:id', function getColours(request, response) {
-        db.each('SELECT * FROM colours WHERE id = ' + request.params.id, function row(err, row) {
-            response.send(row);
-        });
+    app.put('/:collection/:id', function updateModel(request, response) {
+//        db.each('UPDATE ' + request.params.collection + ' WHERE id = ' + request.params.id, function row(err, row) {
+//            response.send(row);
+//        });
     });
 
-    app.get('/countries/:id', function getCountries(request, response) {
-        db.each('SELECT * FROM countries WHERE id = ' + request.params.id, function row(err, row) {
-            response.send(row);
-        });
+    app.del('/:collection/:id', function deleteModel(request, response) {
+//        db.each('DELETE FROM ' + request.params.collection + ' WHERE id = ' + request.params.id, function row(err, row) {
+//            response.send(row);
+//        });
     });
 
     app.listen(8901);
