@@ -8,6 +8,12 @@
          */
         $scope.cats = [];
 
+        /**
+         * @property url
+         * @type {String}
+         */
+        $scope.url = 'http://localhost:8901/';
+
         var cats        = $catwalk.collection('cats'),
             colours     = $catwalk.collection('colours'), 
             countries   = $catwalk.collection('countries'), 
@@ -50,11 +56,39 @@
 
         });
 
+        // When a model has been added to the collection.
+        $catwalk.event.on('create', function(collection, deferred, model) {
+
+            var request = $http({
+                url:    $scope.url + collection + '/' + model.id,
+                method: 'post'
+            });
+
+            request.then(function created() {
+                deferred.resolve();
+            });
+
+        });
+
+        // When a model has been updated in the collection.
+        $catwalk.event.on('update', function(collection, deferred, model) {
+
+            var request = $http({
+                url:    $scope.url + collection + '/' + model.id,
+                method: 'put'
+            });
+
+            request.then(function updated() {
+                deferred.resolve();
+            });
+
+        });
+
         // When a model is needed to be loaded into the collection.
         $catwalk.event.on('read', function(collection, deferred, property, value) {
 
             var request = $http({
-                url:    'http://localhost:8901/' + collection + '/' + value,
+                url:    $scope.url + collection + '/' + value,
                 method: 'get'
             });
 
@@ -68,7 +102,7 @@
         $catwalk.event.on('delete', function(collection, deferred, model) {
 
             var request = $http({
-                url:    'http://localhost:8901/' + collection + '/' + model.id,
+                url:    $scope.url + collection + '/' + model.id,
                 method: 'delete'
             });
 
