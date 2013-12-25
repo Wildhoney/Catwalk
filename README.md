@@ -66,7 +66,7 @@ Catwalk has the following *typecastable* functions:
  * `catwalk.attribute.integer` (alias: `catwalk.attribute.number`)
  * `catwalk.attribute.date(format)` &ndash; requires <a href="http://momentjs.com/" target="_blank">Moment.js</a>
  * `catwalk.attribute.float(decimalPlaces)`
- * `$catwalk.attribute.custom(callback)`
+ * `catwalk.attribute.custom(callback)`
 
 With the `$catwalk.attribute.custom` typecast, the value of each model is passed into the <a href="http://en.wikipedia.org/wiki/Currying" target="_blank">curry</a> method, and it's entirely up to you how to format the value &ndash; as long as you remember to `return` it!
 

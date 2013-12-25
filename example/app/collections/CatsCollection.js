@@ -10,6 +10,21 @@
         _primaryKey: 'id',
 
         /**
+         * @property _constraints
+         * @type {Object}
+         * @protected
+         */
+        _constraints: {
+
+            /**
+             * @property nameAge
+             * @type {Array}
+             */
+            nameAge: ['name', 'age']
+
+        },
+
+        /**
          * @property _relationships
          * @type {Object}
          * @protected

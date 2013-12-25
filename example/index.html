@@ -42,7 +42,7 @@
     <h1>Cats ({{cats.length}})</h1>
 
     <ul>
-        <li ng-repeat="cat in cats | orderBy: 'name'">
+        <li ng-repeat="cat in cats track by $index | orderBy: 'name'">
             <h2>
                 <a class="delete" title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
                 {{cat.name}} is {{cat.age}} and is looked after by {{cat.owner.name}} &ndash;

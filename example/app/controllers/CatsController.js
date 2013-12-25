@@ -61,6 +61,12 @@
 
             deferred.resolve();
 
+//            if (colour) {
+//                deferred.resolve(colour);
+//            }
+//
+//            deferred.resolve();
+
 //            var request = $http({
 //                url:    $scope.url + collection + '/' + model.id,
 //                method: 'post'
