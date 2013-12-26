@@ -59,22 +59,14 @@
         // When a model has been added to the collection.
         $catwalk.event.on('create', function(collection, deferred, model) {
 
+            var colours = _.where($catwalk.collection('colours').all(), { name: model.name });
+
+            if (colours.length > 1) {
+                console.log('Update');
+//                deferred.resolve(colours[colours.length - 1]);
+            }
+
             deferred.resolve();
-
-//            if (colour) {
-//                deferred.resolve(colour);
-//            }
-//
-//            deferred.resolve();
-
-//            var request = $http({
-//                url:    $scope.url + collection + '/' + model.id,
-//                method: 'post'
-//            });
-//
-//            request.then(function created() {
-//                deferred.resolve();
-//            });
 
         });
 
