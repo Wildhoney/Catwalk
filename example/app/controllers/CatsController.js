@@ -62,8 +62,7 @@
             var colours = _.where($catwalk.collection('colours').all(), { name: model.name });
 
             if (colours.length > 1) {
-                console.log('Update');
-//                deferred.resolve(colours[colours.length - 1]);
+                deferred.resolve(colours[colours.length - 1]);
             }
 
             deferred.resolve();

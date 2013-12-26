@@ -283,7 +283,9 @@
         _createResolve: function _createResolve(model, previousModel, properties) {
 
             // Determine if the resolved model is different to the current one.
-            if ('_catwalkId' in properties && properties._catwalkId !== model._catwalkId) {
+            var differentModels = (properties._catwalkId !== model._catwalkId);
+
+            if (properties && '_catwalkId' in properties && differentModels) {
 
 //                this._deleteModel(model, false);
 //                model = properties;

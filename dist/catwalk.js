@@ -382,6 +382,16 @@
          */
         _createResolve: function _createResolve(model, previousModel, properties) {
 
+            // Determine if the resolved model is different to the current one.
+            var differentModels = (properties._catwalkId !== model._catwalkId);
+
+            if (properties && '_catwalkId' in properties && differentModels) {
+
+//                this._deleteModel(model, false);
+//                model = properties;
+
+            }
+
             // Attempt to resolve any `belongsTo` relationships.
             _.forEach(this._properties._relationships, function(relationship, property) {
 
@@ -961,10 +971,11 @@
             // models. Perhaps we need an AJAX request to get more?
             if (foreignIds.length !== models.length) {
 
-                var deferred    = $q.defer(),
-                    requiredIds = _.difference(foreignIds, _.pluck(models, 'id'));
+                var requiredIds = _.difference(foreignIds, _.pluck(models, 'id'));
 
                 _.forEach(requiredIds, function(id) {
+
+                    var deferred = $q.defer();
 
                     if (_.indexOf(collection._resolvedIds, id) !== -1) {
                         // Don't resolve the ID again if we've already attempted it.
@@ -977,11 +988,11 @@
                     $catwalk.event.broadcastRead('read', collection, deferred, descriptor.foreignKey, id);
                     collection._resolvedIds.push(id);
 
-                });
+                    // Once the promise has been resolved.
+                    deferred.promise.then(function(model) {
+                        collection.addModel(model);
+                    });
 
-                // Once the promise has been resolved.
-                deferred.promise.then(function(model) {
-                    collection.addModel(model);
                 });
 
             }
