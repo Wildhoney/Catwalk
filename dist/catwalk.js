@@ -298,6 +298,11 @@
                 defaultDimension    = this._dimensions.catwalkId,
                 computedProperties  = this._properties._computed;
 
+            // Assume a primary key if one isn't set.
+            if (model[this._properties._primaryKey] === null) {
+                model.id = parseInt(_.uniqueId(), 10);
+            }
+
             // Remove the property meta as that will be constructed again.
             delete model._propertyMeta;
 
@@ -384,8 +389,10 @@
 
             // Determine if the resolved model is different to the current one.
 //            var differentModels = (properties._catwalkId !== model._catwalkId);
-//
+
 //            if (properties && '_catwalkId' in properties && differentModels) {
+//
+//                console.log('HEre');
 //
 ////                this._deleteModel(model, false);
 ////                model = properties;
