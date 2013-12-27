@@ -283,14 +283,14 @@
         _createResolve: function _createResolve(model, previousModel, properties) {
 
             // Determine if the resolved model is different to the current one.
-            var differentModels = (properties._catwalkId !== model._catwalkId);
-
-            if (properties && '_catwalkId' in properties && differentModels) {
-
-//                this._deleteModel(model, false);
-//                model = properties;
-
-            }
+//            var differentModels = (properties._catwalkId !== model._catwalkId);
+//
+//            if (properties && '_catwalkId' in properties && differentModels) {
+//
+////                this._deleteModel(model, false);
+////                model = properties;
+//
+//            }
 
             // Attempt to resolve any `belongsTo` relationships.
             _.forEach(this._properties._relationships, function(relationship, property) {
