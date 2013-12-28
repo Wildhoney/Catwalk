@@ -59,7 +59,7 @@
         // When a model has been added to the collection.
         $catwalk.event.on('create', function(collection, deferred, model) {
 
-            var colours = _.where($catwalk.collection('colours').all(), { name: model.name });
+            var colours = _.where(this.collection('colours').all(), { name: model.name });
 
             if (colours.length > 1) {
                 deferred.resolve(colours[colours.length - 1]);
