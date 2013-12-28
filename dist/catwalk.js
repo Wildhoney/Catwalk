@@ -389,16 +389,14 @@
         _createResolve: function _createResolve(model, previousModel, properties) {
 
             // Determine if the resolved model is different to the current one.
-//            var differentModels = (properties._catwalkId !== model._catwalkId);
+            var beenReplaced = !!(properties && '_catwalkId' in properties && properties._catwalkId !== model._catwalkId);
 
-//            if (properties && '_catwalkId' in properties && differentModels) {
-//
-//                console.log('HEre');
-//
-////                this._deleteModel(model, false);
-////                model = properties;
-//
-//            }
+            if (beenReplaced) {
+                // Copy across the ID if we're replacing the current model, and delete the model
+                // that was just created because it's not required any longer.
+                this.deleteModel(model);
+                model.id = properties.id;
+            }
 
             // Attempt to resolve any `belongsTo` relationships.
             _.forEach(this._properties._relationships, function(relationship, property) {
@@ -410,6 +408,13 @@
                 }
 
             });
+
+
+            if (beenReplaced) {
+                // We don't want to do anything else if the model has been overwritten by
+                // an existing model.
+                return;
+            }
 
             // Iterate over each model to ensure the developer isn't attempting to update
             // a relationship during its creation.
