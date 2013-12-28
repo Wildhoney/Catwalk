@@ -233,7 +233,7 @@ Sometimes you may wish to `resolve` the promise, but resolve it with a different
 ```javascript
 $catwalk.event.on('create', function(collection, deferred, model) {
 
-    var colours = _.where($catwalk.collection('colours').all(), { name: model.name });
+    var colours = _.where(this.collection('colours').all(), { name: model.name });
 
     if (colours.length > 1) {
         deferred.resolve(colours[colours.length - 1]);
