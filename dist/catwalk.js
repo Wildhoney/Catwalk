@@ -296,18 +296,19 @@
                 createRelationship  = _.bind(this._createRelationship, this),
                 relationships       = this._properties._relationships || {},
                 defaultDimension    = this._dimensions.catwalkId,
-                computedProperties  = this._properties._computed;
+                computedProperties  = this._properties._computed,
+                uniqueIdentifier    = parseInt(_.uniqueId(), 10);
 
             // Assume a primary key if one isn't set.
             if (model[this._properties._primaryKey] === null) {
-                model.id = parseInt(_.uniqueId(), 10);
+                model.id = parseInt(uniqueIdentifier);
             }
 
             // Remove the property meta as that will be constructed again.
             delete model._propertyMeta;
 
             // Apply an internal Catwalk ID to the model.
-            model._catwalkId    = parseInt(_.uniqueId(), 10);
+            model._catwalkId    = uniqueIdentifier;
             model._collection   = this._name;
             model._propertyMeta = _.clone(model);
 

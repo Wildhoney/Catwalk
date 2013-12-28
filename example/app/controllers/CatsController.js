@@ -66,7 +66,9 @@
 //                return;
 //            }
 
-            deferred.resolve();
+            deferred.resolve({
+                name: 'Red'
+            });
 
         });
 
