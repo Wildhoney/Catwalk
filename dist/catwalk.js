@@ -876,7 +876,7 @@
          */
         broadcastRead: function broadcastRead(type, collection, deferred, property, value) {
             var eventName = type + '/' + collection._name;
-            this._getCallback(eventName, type)(collection._name, deferred, property, value);
+            this._getCallback(eventName, type).call($catwalk, collection._name, deferred, property, value);
         },
 
         /**
@@ -889,7 +889,7 @@
          */
         broadcastOthers: function broadcastOthers(type, collection, deferred, model) {
             var eventName = type + '/' + collection._name;
-            this._getCallback(eventName, type)(collection._name, deferred, model);
+            this._getCallback(eventName, type).call($catwalk, collection._name, deferred, model);
         },
 
         /**
