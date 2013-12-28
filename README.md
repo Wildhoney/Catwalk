@@ -226,6 +226,27 @@ $cats.updateModel(missKittens, {
 
 In the above example we have changed Miss Kittens to Lucifer &ndash; a **very** apt name! We have also updated the relationship to only two colours instead of three.
 
+<h4>Replacing Models</h4>
+
+Sometimes you may wish to `resolve` the promise, but resolve it with a different model to what we have &ndash; especially in cases where you have added a duplicate model.
+
+```javascript
+$catwalk.event.on('create', function(collection, deferred, model) {
+
+    var colours = _.where($catwalk.collection('colours').all(), { name: model.name });
+
+    if (colours.length > 1) {
+        deferred.resolve(colours[colours.length - 1]);
+        return;
+    }
+
+    deferred.resolve();
+
+});
+```
+
+With the code above we're checking the `colours` collection for an existing model by the `name` property. If we find an existing model with the `length` property then we'll use that model instead of the newly created one. We still `resolve` the promise, but pass along the model we wish to replace it with.
+
 <h3>Deleting Models</h3>
 
 We can delete models using the `deleteModel` method which accepts one parameter of the model you wish to delete.
