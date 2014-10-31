@@ -26,7 +26,6 @@
             this.name       = name;
             this.properties = properties;
             this.models     = [];
-
         }
 
         /**
