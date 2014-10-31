@@ -69,6 +69,6 @@
 
     gulp.task('test', ['build-es5-temp', 'karma']);
     gulp.task('build', ['build-es5', 'build-es6']);
-    gulp.task('default', ['traceur']);
+    gulp.task('default', ['test', 'build']);
 
 })();

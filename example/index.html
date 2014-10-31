@@ -4,56 +4,12 @@
 
     <title>Catwalk.js Example</title>
 
-    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="../bower_components/crossfilter/crossfilter.js"></script>
-    <script type="text/javascript" src="../bower_components/underscore/underscore.js"></script>
-    <script type="text/javascript" src="../bower_components/q/q.js"></script>
-    <script type="text/javascript" src="../bower_components/moment/moment.js"></script>
-
-    <script type="text/javascript" src="../package/Catwalk.js"></script>
-    <script type="text/javascript" src="../package/Attribute.js"></script>
-    <script type="text/javascript" src="../package/Collection.js"></script>
-    <script type="text/javascript" src="../package/Event.js"></script>
-    <script type="text/javascript" src="../package/Relationship.js"></script>
-    <script type="text/javascript" src="../package/ComputedProperty.js"></script>
-
-    <script type="text/javascript" src="app/Default.js"></script>
-    <script type="text/javascript" src="app/collections/CatsCollection.js"></script>
-    <script type="text/javascript" src="app/collections/ColoursCollection.js"></script>
-    <script type="text/javascript" src="app/collections/PeopleCollection.js"></script>
-    <script type="text/javascript" src="app/collections/CountriesCollection.js"></script>
-    <script type="text/javascript" src="app/controllers/CatsController.js"></script>
-
-    <style type="text/css">
-
-        a {
-            color: dodgerblue;
-            font-weight: normal;
-            font-size: 20px;
-            padding-right: 6px;
-            cursor: pointer;
-        }
-
-    </style>
+    <!-- Application! -->
+    <script type="text/javascript;version=1.7" src="../package/Catwalk.js"></script>
+    <script type="text/javascript;version=1.7" src="../package/Collection.js"></script>
 
 </head>
-<body ng-app="exampleApp" ng-controller="CatsController">
-
-    <h1>Cats ({{cats.length}})</h1>
-
-    <ul>
-        <li ng-repeat="cat in cats | orderBy: 'name'">
-            <h2>
-                <a class="delete" title="Delete {{cat.name}}" ng-click="removeCat(cat)">&times;</a>
-                {{cat.name}} is {{cat.age}} and is looked after by {{cat.owner.name}} &ndash;
-                <a ng-click="addColour(cat.id)">Add Colour</a></h2>
-            <h4>Lives in {{cat.owner.country.name}} and born in {{cat.born.name}}</h4>
-            <h5>Birth: {{cat.dateBorn}} and is therefore {{cat.isAdult}}.</h5>
-            <ul>
-                <li ng-repeat="colour in cat.colours | orderBy: 'colour'">{{colour.id}} {{colour.name}}</li>
-            </ul>
-        </li>
-    </ul>
+<body>
 
 </body>
 </html>
