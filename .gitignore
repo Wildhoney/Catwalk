@@ -2,3 +2,5 @@
 /node_modules
 /example/vendor/*
 !/example/vendor/.gitkeep
+/tests/es5-build/catwalk.es5.tests.js
+!/tests/es5-build/.gitkeep
