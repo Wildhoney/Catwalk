@@ -14,7 +14,7 @@
          * @return {Catwalk}
          */
         constructor() {
-
+            this.typecast = new $window.Catwalk.Typecast();
         }
 
         /**

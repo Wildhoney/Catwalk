@@ -8,7 +8,7 @@
 
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
-            name: ''
+            name: catwalk.typecast.string()
         });
 
         models.first  = collection.addModel({ name: 'Kipper' });
@@ -32,7 +32,7 @@
             it('Should be able to create a collection;', function() {
                 expect(collection instanceof $Catwalk.Collection);
                 expect(collection.name).toEqual('cats');
-                expect(collection.properties.name).toBeDefined();
+                expect(collection.blueprint.name).toBeDefined();
             });
 
             it('Should be able to add models that are immutable;', function() {
@@ -58,7 +58,6 @@
             it('Should be able to iterate over the models using generators;', function() {
 
                 expect(collection.getModels).toBeDefined();
-
                 var modelGenerator = collection.getModels();
                 expect(typeof modelGenerator.next).toBe('function');
 
@@ -69,6 +68,14 @@
                 var secondYield = modelGenerator.next();
                 expect(secondYield.done).toEqual(false);
                 expect(secondYield.value).toEqual(models.second);
+
+            });
+
+            it('Should be able to typecast properties and set defaults;', function() {
+
+                var model = collection.addModel({ name: 7 });
+                expect(typeof model.name).toEqual('string');
+                expect(model.name).toEqual('7');
 
             });
 

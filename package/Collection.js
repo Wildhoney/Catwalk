@@ -18,14 +18,14 @@
         /**
          * @method constructor
          * @param {String} name
-         * @param {Object} properties
+         * @param {Object} blueprint
          * @return {CatwalkCollection}
          */
-        constructor(name, properties) {
+        constructor(name, blueprint) {
             this.id         = 0;
             this.name       = name;
-            this.properties = properties;
             this.models     = [];
+            this.blueprint  = blueprint;
         }
 
         /**
@@ -51,8 +51,20 @@
             let model = {};
             model[CATWALK_PROPERTY] = ++this.id;
 
-            $object.keys(properties).forEach(function forEach(property) {
-                model[property] = properties[property];
+            $object.keys(properties).forEach(property => {
+
+                var value           = properties[property],
+                    propertyHandler = this.blueprint[property];
+
+                if (typeof propertyHandler === 'function') {
+
+                    // Typecast property to the defined type.
+                    value = propertyHandler(value);
+
+                }
+
+                model[property] = value;
+
             });
 
             // Make the model immutable, and then add it to the array.
