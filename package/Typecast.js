@@ -11,14 +11,35 @@
 
         /**
          * @method string
-         * @param value {String|Boolean|Number}
-         * @return {String}
+         * @return {Function}
          */
-        string(value) {
+        string() {
 
-            return value => {
+            /**
+             * @method stringTypecast
+             * @param [value=''] {String|Boolean|Number}
+             * @return {String}
+             */
+            return function stringTypecast(value = '') {
                 return $window.String(value);
-            };
+            }
+
+        }
+
+        /**
+         * @method number
+         * @return {Function}
+         */
+        number() {
+
+            /**
+             * @method numberTypecast
+             * @param [value=0] {String|Boolean|Number}
+             * @return {String}
+             */
+            return function numberTypecast(value = 0) {
+                return $window.parseInt(value);
+            }
 
         }
 

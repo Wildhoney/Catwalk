@@ -8,7 +8,8 @@
 
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
-            name: catwalk.typecast.string()
+            name: catwalk.typecast.string(),
+            age:  catwalk.typecast.number()
         });
 
         models.first  = collection.createModel({ name: 'Kipper' });
@@ -86,16 +87,15 @@
                 expect(superfluousModel.location).toBeUndefined();
             });
 
-            it('Should be able to typecast properties and set defaults;', function() {
+            iit('Should be able to typecast properties and set defaults;', function() {
 
-                var typecastModel = collection.createModel({ name: 7 });
-                expect(typeof typecastModel.name).toEqual('string');
-                expect(typecastModel.name).toEqual('7');
+                var typecastModelString = collection.createModel({ name: 7 });
+                expect(typeof typecastModelString.name).toEqual('string');
+                expect(typecastModelString.name).toEqual('7');
 
-                var defaultModel = collection.createModel();
-                expect(defaultModel.name).toBeDefined();
-                expect(typeof defaultModel.name).toEqual('string');
-                expect(defaultModel.name).toEqual('');
+                var typecastModelNumber = collection.createModel({ name: 'Kipper', age: '17' });
+                expect(typeof typecastModelNumber.age).toEqual('number');
+                expect(typecastModelNumber.age).toEqual(17);
 
             });
 

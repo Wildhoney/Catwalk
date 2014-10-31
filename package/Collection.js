@@ -75,7 +75,7 @@
                 if (typeof model[property] === 'undefined') {
 
                     var propertyHandler = this.blueprint[property];
-                    model[property]     = propertyHandler('');
+                    model[property]     = propertyHandler();
 
                 }
 
