@@ -11,11 +11,11 @@
             name: catwalk.typecast.string()
         });
 
-        models.first  = collection.addModel({ name: 'Kipper' });
-        models.second = collection.addModel({ name: 'Splodge' });
-        models.third  = collection.addModel({ name: 'Mango' });
-        models.fourth = collection.addModel({ name: 'Miss Kittens' });
-        models.fifth  = collection.addModel({ name: 'Tinker' });
+        models.first  = collection.createModel({ name: 'Kipper' });
+        models.second = collection.createModel({ name: 'Splodge' });
+        models.third  = collection.createModel({ name: 'Mango' });
+        models.fourth = collection.createModel({ name: 'Miss Kittens' });
+        models.fifth  = collection.createModel({ name: 'Tinker' });
 
 
     });
@@ -81,18 +81,18 @@
             });
 
             it('Should be able to remove superfluous properties that are not in the blueprint;', function() {
-                var superfluousModel = collection.addModel({ name: 'Molly', location: 'London' });
+                var superfluousModel = collection.createModel({ name: 'Molly', location: 'London' });
                 expect(superfluousModel.name).toEqual('Molly');
                 expect(superfluousModel.location).toBeUndefined();
             });
 
             it('Should be able to typecast properties and set defaults;', function() {
 
-                var typecastModel = collection.addModel({ name: 7 });
+                var typecastModel = collection.createModel({ name: 7 });
                 expect(typeof typecastModel.name).toEqual('string');
                 expect(typecastModel.name).toEqual('7');
 
-                var defaultModel = collection.addModel();
+                var defaultModel = collection.createModel();
                 expect(defaultModel.name).toBeDefined();
                 expect(typeof defaultModel.name).toEqual('string');
                 expect(defaultModel.name).toEqual('');

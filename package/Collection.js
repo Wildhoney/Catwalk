@@ -42,11 +42,11 @@
         }
 
         /**
-         * @method addModel
+         * @method createModel
          * @param {Object} [properties={}]
          * @return {Object}
          */
-         addModel(properties = {}) {
+         createModel(properties = {}) {
 
             let model = {};
             model = this.iterateProperties(properties);
