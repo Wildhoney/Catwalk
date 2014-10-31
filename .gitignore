@@ -1,6 +1,10 @@
 /.idea
 /node_modules
+
+# Bower Dependencies
 /example/vendor/*
 !/example/vendor/.gitkeep
+
+# ES5 Compilation for Karma Tests
 /tests/es5-build/catwalk.es5.tests.js
 !/tests/es5-build/.gitkeep
