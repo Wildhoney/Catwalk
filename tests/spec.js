@@ -39,6 +39,8 @@
                 expect(models.first.name).toEqual('Kipper');
                 models.first.name = 'Bob';
                 expect(models.first.name).toEqual('Kipper');
+                expect(Object.isFrozen(models.first)).toBeTruthy();
+                expect(Object.isFrozen(models.fifth)).toBeTruthy();
             });
 
             it('Should be able to assign a unique ID to the model;', function() {
@@ -69,13 +71,31 @@
                 expect(secondYield.done).toEqual(false);
                 expect(secondYield.value).toEqual(models.second);
 
+                modelGenerator.next();
+                modelGenerator.next();
+                modelGenerator.next();
+                var lastYield = modelGenerator.next();
+                expect(lastYield.done).toEqual(true);
+                expect(lastYield.value).toBeUndefined();
+
+            });
+
+            iit('Should be able to remove superfluous properties that are not in the blueprint;', function() {
+                var superfluousModel = collection.addModel({ name: 'Molly', location: 'London' });
+                expect(superfluousModel.name).toEqual('Molly');
+                expect(superfluousModel.location).toBeUndefined();
             });
 
             it('Should be able to typecast properties and set defaults;', function() {
 
-                var model = collection.addModel({ name: 7 });
-                expect(typeof model.name).toEqual('string');
-                expect(model.name).toEqual('7');
+                var typecastModel = collection.addModel({ name: 7 });
+                expect(typeof typecastModel.name).toEqual('string');
+                expect(typecastModel.name).toEqual('7');
+
+                var defaultModel = collection.addModel();
+                expect(defaultModel.name).toBeDefined();
+                expect(typeof defaultModel.name).toEqual('string');
+                expect(defaultModel.name).toEqual('');
 
             });
 

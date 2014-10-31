@@ -25,7 +25,7 @@
             this.id         = 0;
             this.name       = name;
             this.models     = [];
-            this.blueprint  = blueprint;
+            this.blueprint  = $object.freeze(blueprint);
         }
 
         /**
@@ -43,18 +43,71 @@
 
         /**
          * @method addModel
+         * @param {Object} [properties={}]
+         * @return {Object}
+         */
+         addModel(properties = {}) {
+
+            let model = {};
+            model = this.iterateProperties(properties);
+            model = this.iterateBlueprint(model);
+            model[CATWALK_PROPERTY] = ++this.id;
+
+            // Make the model immutable, and then add it to the array.
+            this.models.push($object.freeze(model));
+            return model;
+
+        }
+
+        /**
+         * Responsible for iterating over the blueprint to determine if any properties are missing
+         * from the current model, that have been defined in the blueprint and therefore should be
+         * present.
+         *
+         * @method iterateBlueprint
+         * @param model {Object}
+         * @return {Object}
+         */
+        iterateBlueprint(model) {
+
+            $object.keys(this.blueprint).forEach(property => {
+
+                if (typeof model[property] === 'undefined') {
+
+                    var propertyHandler = this.blueprint[property];
+                    model[property]     = propertyHandler('');
+
+                }
+
+            });
+
+            return model;
+
+        }
+
+        /**
+         * Responsible for iterating over the passed in model properties to ensure they're in the blueprint,
+         * and typecasting the properties based on the define blueprint for the current collection.
+         *
+         * @method iterateProperties
          * @param properties {Object}
          * @return {Object}
          */
-         addModel(properties) {
+        iterateProperties(properties) {
 
-            let model = {};
-            model[CATWALK_PROPERTY] = ++this.id;
+            var model = {};
 
             $object.keys(properties).forEach(property => {
 
                 var value           = properties[property],
                     propertyHandler = this.blueprint[property];
+
+                if (typeof propertyHandler === 'undefined') {
+
+                    // Property doesn't belong in the model because it's not in the blueprint.
+                    return;
+
+                }
 
                 if (typeof propertyHandler === 'function') {
 
@@ -67,8 +120,6 @@
 
             });
 
-            // Make the model immutable, and then add it to the array.
-            this.models.push($object.freeze(model));
             return model;
 
         }
