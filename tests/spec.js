@@ -80,7 +80,7 @@
 
             });
 
-            iit('Should be able to remove superfluous properties that are not in the blueprint;', function() {
+            it('Should be able to remove superfluous properties that are not in the blueprint;', function() {
                 var superfluousModel = collection.addModel({ name: 'Molly', location: 'London' });
                 expect(superfluousModel.name).toEqual('Molly');
                 expect(superfluousModel.location).toBeUndefined();
