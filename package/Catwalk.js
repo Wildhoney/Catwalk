@@ -2,22 +2,34 @@
 
     "use strict";
 
-    if (typeof $window.Q === 'undefined') {
-        throw 'Catwalk requires Q: https://github.com/kriskowal/q';
-    }
-
-    if (typeof $window._ === 'undefined') {
-        throw 'Catwalk requires Underscore: http://underscorejs.org/';
-    }
-
-    if (typeof $window.crossfilter === 'undefined') {
-        throw 'Catwalk requires Crossfilter: https://github.com/square/crossfilter';
-    }
-
     /**
-     * @module Catwalk
-     * @type {Object}
+     * @class Catwalk
+     * @author Adam Timberlake
+     * @link https://github.com/Wildhoney/Catwalk.js
      */
-    $window.catwalk = {};
+    class Catwalk {
+
+        /**
+         * @constructor
+         * @return {Catwalk}
+         */
+        constructor() {
+
+        }
+
+        /**
+         * @method createCollection
+         * @param {String} name
+         * @param {Object} properties
+         * @return {window.Catwalk.Collection}
+         */
+        createCollection(name, properties) {
+            return new $window.Catwalk.Collection(name, properties);
+        }
+
+    }
+
+    // Expose the `Catwalk` class.
+    $window.Catwalk = Catwalk;
 
 })(window);
