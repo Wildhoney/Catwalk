@@ -30,6 +30,19 @@
         }
 
         /**
+         * @method getModels
+         * @return {Object}
+         * @generator
+         */
+        *getModels() {
+
+            for (let model of this.models) {
+                yield model;
+            }
+
+        }
+
+        /**
          * @method addModel
          * @param properties {Object}
          * @return {Object}

@@ -50,15 +50,45 @@
             it('Should be able to delete and clear models;', function() {
 
                 var collection  = catwalk.createCollection('cats', { name: '' }),
-                    firstModel  = collection.addModel({ name: 'Splodge' }),
-                    secondModel = collection.addModel({ name: 'Busters' }),
-                    thirdModel  = collection.addModel({ name: 'Tinker' });
+                    firstModel  = collection.addModel({ name: 'Splodge' });
+                collection.addModel({ name: 'Busters' });
+                collection.addModel({ name: 'Tinker' });
 
                 expect(collection.models.length).toEqual(3);
                 collection.deleteModel(firstModel);
                 expect(collection.models.length).toEqual(2);
                 collection.clearModels();
                 expect(collection.models.length).toEqual(0);
+
+            });
+
+            it('Should be able to iterate over the models using generators;', function() {
+
+                var collection  = catwalk.createCollection('cats', { name: '' }),
+                    firstModel  = collection.addModel({ name: 'Kipper' }),
+                    secondModel = collection.addModel({ name: 'Mango' }),
+                    thirdModel = collection.addModel({ name: 'Splodge' });
+
+                expect(collection.getModels).toBeDefined();
+
+                var models = collection.getModels();
+                expect(typeof models.next).toBe('function');
+
+                var firstYield = models.next();
+                expect(firstYield.done).toEqual(false);
+                expect(firstYield.value).toEqual(firstModel);
+
+                var secondYield = models.next();
+                expect(secondYield.done).toEqual(false);
+                expect(secondYield.value).toEqual(secondModel);
+
+                var thirdYield = models.next();
+                expect(thirdYield.done).toEqual(false);
+                expect(thirdYield.value).toEqual(thirdModel);
+
+                var fourthYield = models.next();
+                expect(fourthYield.done).toEqual(true);
+                expect(fourthYield.value).toBeUndefined();
 
             });
 
