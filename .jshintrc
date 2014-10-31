@@ -22,5 +22,9 @@
     "sub"           : true,
 
     "browser"       : true,
-    "jquery"        : true
+    "jquery"        : true,
+
+    // Hello, ES6!
+    "esnext"        : true
+
 }

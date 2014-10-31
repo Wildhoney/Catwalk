@@ -9,7 +9,8 @@
         concat     = require('gulp-concat'),
         uglify     = require('gulp-uglify'),
         rename     = require('gulp-rename'),
-        karma      = require('gulp-karma');
+        karma      = require('gulp-karma'),
+        jshint     = require('gulp-jshint');
 
     // Options for Traceur compilation.
     var traceurOptions = { blockBinding: true };
@@ -67,7 +68,15 @@
         });
     });
 
-    gulp.task('test', ['build-es5-temp', 'karma']);
+    gulp.task('hint', function gulpHint() {
+
+        return gulp.src(files)
+            .pipe(jshint('.jshintrc'))
+            .pipe(jshint.reporter('default'));
+
+    });
+
+    gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
     gulp.task('build', ['build-es5', 'build-es6']);
     gulp.task('default', ['test', 'build']);
 

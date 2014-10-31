@@ -1,4 +1,7 @@
+# WebStorm IDE
 /.idea
+
+# npm Depencencies
 /node_modules
 
 # Bower Dependencies
