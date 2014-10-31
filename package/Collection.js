@@ -13,7 +13,7 @@
      * @author Adam Timberlake
      * @link https://github.com/Wildhoney/Catwalk.js
      */
-    class CatwalkCollection {
+    class CatwalkCollection extends $Catwalk {
 
         /**
          * @method constructor
@@ -21,7 +21,15 @@
          * @param {Object} blueprint
          * @return {CatwalkCollection}
          */
-        constructor(name, blueprint) {
+        constructor(name = '', blueprint = {}) {
+
+            if (name === '') {
+
+                // No `undefined` values allowed!
+                this.throwException('You must specify a name for the collection');
+
+            }
+
             this.id         = 0;
             this.name       = name;
             this.models     = [];
@@ -74,7 +82,7 @@
 
                 if (typeof model[property] === 'undefined') {
 
-                    var propertyHandler = this.blueprint[property];
+                    let propertyHandler = this.blueprint[property];
                     model[property]     = propertyHandler();
 
                 }

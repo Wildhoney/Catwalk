@@ -36,6 +36,18 @@
                 expect(collection.blueprint.name).toBeDefined();
             });
 
+            it('Should throw an exception when the collection name is empty;', function() {
+
+                expect(function() {
+                    catwalk.createCollection();
+                }).toThrow('Catwalk.js: You must specify a name for the collection.');
+
+            });
+
+            it('Should be able to return the collection name using the factor;', function() {
+                expect(catwalk.collection('cats')).toEqual(collection);
+            });
+
             it('Should be able to add models that are immutable;', function() {
                 expect(models.first.name).toEqual('Kipper');
                 models.first.name = 'Bob';
@@ -87,7 +99,7 @@
                 expect(superfluousModel.location).toBeUndefined();
             });
 
-            iit('Should be able to typecast properties and set defaults;', function() {
+            it('Should be able to typecast properties and set defaults;', function() {
 
                 var typecastModelString = collection.createModel({ name: 7 });
                 expect(typeof typecastModelString.name).toEqual('string');
