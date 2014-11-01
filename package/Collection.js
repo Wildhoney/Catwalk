@@ -56,15 +56,83 @@
          */
          createModel(properties = {}) {
 
-            let model = {};
-            model = this.iterateProperties(properties);
-            model = this.iterateBlueprint(model);
+            let model = this.cleanModel(properties);
             model[CATWALK_PROPERTY] = ++this.id;
 
             // Make the model immutable, and then add it to the array.
             this.models.push($object.freeze(model));
             return model;
 
+        }
+
+        /**
+         * @method deleteModel
+         * @param model {Object}
+         * @return {Object}
+         */
+        deleteModel(model) {
+            this.spliceModel(model);
+            return model;
+        }
+
+        /**
+         * @method spliceModel
+         * @param model {Object}
+         */
+        spliceModel(model) {
+            let index = this.models.indexOf(model);
+            this.models.splice(index, 1);
+        }
+
+        /**
+         * @method cleanModel
+         * @param properties {Object}
+         * @return {Object}
+         */
+        cleanModel(properties) {
+            let model = this.iterateProperties(properties);
+            return this.iterateBlueprint(model);
+        }
+
+        /**
+         * @method updateModel
+         * @param model {Object}
+         * @param properties {Object}
+         * @return {Object}
+         */
+        updateModel(model, properties) {
+
+            let updatedModel = {};
+
+            $object.keys(model).forEach(property => {
+
+                // Clone the current model since it is frozen.
+                updatedModel[property] = model[property];
+
+            });
+
+            $object.keys(properties).forEach(property => {
+
+                // Iterate over the properties to be updated for the model.
+                updatedModel[property] = properties[property];
+
+            });
+
+            updatedModel = this.cleanModel(updatedModel);
+            updatedModel[CATWALK_PROPERTY] = model[CATWALK_PROPERTY];
+
+            this.spliceModel(model);
+            this.models.push($object.freeze(updatedModel));
+            return updatedModel;
+
+        }
+
+        /**
+         * @method clearModels
+         * @return {void}
+         */
+        clearModels() {
+            this.models.length = 0;
         }
 
         /**
@@ -130,27 +198,6 @@
 
             return model;
 
-        }
-
-        /**
-         * @method deleteModel
-         * @param model {Object}
-         * @return {Object}
-         */
-        deleteModel(model) {
-
-            let index = this.models.indexOf(model);
-            this.models.splice(index, 1);
-            return model;
-
-        }
-
-        /**
-         * @method clearModels
-         * @return {void}
-         */
-        clearModels() {
-            this.models.length = 0;
         }
 
     }

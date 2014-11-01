@@ -19,7 +19,7 @@
         models.second = collection.createModel({ name: 'Splodge' });
         models.third  = collection.createModel({ name: 'Mango' });
         models.fourth = collection.createModel({ name: 'Miss Kittens' });
-        models.fifth  = collection.createModel({ name: 'Tinker' });
+        models.fifth  = collection.createModel({ name: 'Tinker', age: 15 });
 
 
     });
@@ -118,6 +118,16 @@
                 var typecastModelCustom = collection.createModel({ name: 'Tinker', isKitten: 0 });
                 expect(typeof typecastModelCustom.isKitten).toBe('boolean');
                 expect(typecastModelCustom.isKitten === false).toBeTruthy();
+            });
+
+            it('Should be able to update a model and retain its internal ID;', function() {
+                var fifthModelUpdated = collection.updateModel(models.fifth, { name: 'Little Tinker', superfluous: 'Pfft!' });
+                expect(collection.models.length).toEqual(5);
+                expect(fifthModelUpdated.name).toEqual('Little Tinker');
+                expect(fifthModelUpdated.superfluous).toBeUndefined();
+                expect(fifthModelUpdated.age).toEqual(15);
+                expect(Object.isFrozen(fifthModelUpdated)).toBeTruthy();
+                expect(fifthModelUpdated.__catwalkId).toEqual(models.fifth.__catwalkId);
             });
 
         });
