@@ -9,7 +9,10 @@
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
             name: catwalk.typecast.string(),
-            age:  catwalk.typecast.number()
+            age:  catwalk.typecast.number(),
+            isKitten: catwalk.typecast.custom(function custom(value) {
+                return !!value;
+            })
         });
 
         models.first  = collection.createModel({ name: 'Kipper' });
@@ -109,6 +112,12 @@
                 expect(typeof typecastModelNumber.age).toEqual('number');
                 expect(typecastModelNumber.age).toEqual(17);
 
+            });
+
+            it('Should be able to add a custom typecast function;', function() {
+                var typecastModelCustom = collection.createModel({ name: 'Tinker', isKitten: 0 });
+                expect(typeof typecastModelCustom.isKitten).toBe('boolean');
+                expect(typecastModelCustom.isKitten === false).toBeTruthy();
             });
 
         });
