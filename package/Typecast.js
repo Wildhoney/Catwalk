@@ -16,13 +16,13 @@
         string() {
 
             /**
-             * @method stringTypecast
+             * @method typecastString
              * @param [value=''] {String|Boolean|Number}
              * @return {String}
              */
-            return function stringTypecast(value = '') {
+            return function typecastString(value = '') {
                 return $window.String(value);
-            }
+            };
 
         }
 
@@ -33,14 +33,23 @@
         number() {
 
             /**
-             * @method numberTypecast
+             * @method {Anonymous}
              * @param [value=0] {String|Boolean|Number}
              * @return {String}
              */
-            return function numberTypecast(value = 0) {
+            return function typecastNumber(value = 0) {
                 return $window.parseInt(value);
-            }
+            };
 
+        }
+
+        /**
+         * @method custom
+         * @param typecastFn {Function}
+         * @return {Function}
+         */
+        custom(typecastFn) {
+            return typecastFn;
         }
 
     }
