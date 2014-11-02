@@ -3,7 +3,7 @@
     "use strict";
 
     /**
-     * @class Catwalk
+     * @class CatwalkTypecast
      * @author Adam Timberlake
      * @link https://github.com/Wildhoney/Catwalk.js
      */
