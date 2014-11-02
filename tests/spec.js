@@ -39,6 +39,10 @@
                 expect(collection.blueprint.name).toBeDefined();
             });
 
+            it('Should be able to hook up the Utility class;', function() {
+                expect(collection.utility instanceof $Catwalk.Utility).toBeTruthy();
+            });
+
             it('Should throw an exception when the collection name is empty;', function() {
 
                 expect(function() {
