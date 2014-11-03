@@ -20,8 +20,7 @@
         models.third  = collection.createModel({ name: 'Mango' });
         models.fourth = collection.createModel({ name: 'Miss Kittens' });
         models.fifth  = collection.createModel({ name: 'Tinker', age: 15 });
-
-
+        models.sixth  = collection.createModel({ name: 'Busters', age: 4 });
     });
 
     describe('Catwalk', function Catwalk() {
@@ -36,7 +35,7 @@
             it('Should be able to create a collection;', function() {
                 expect(collection instanceof $Catwalk.Collection);
                 expect(collection.name).toEqual('cats');
-                expect(collection.blueprint.name).toBeDefined();
+                expect(collection.blueprint.model.name).toBeDefined();
             });
 
             it('Should be able to hook up the Utility class;', function() {
@@ -64,15 +63,15 @@
             });
 
             it('Should be able to assign a unique ID to the model;', function() {
-                expect(models.first.__catwalkId).toEqual(1);
-                expect(models.second.__catwalkId).toEqual(2);
-                expect(models.third.__catwalkId).toEqual(3);
+                expect(models.first.__catwalkMeta.id).toEqual(1);
+                expect(models.second.__catwalkMeta.id).toEqual(2);
+                expect(models.third.__catwalkMeta.id).toEqual(3);
             });
 
             it('Should be able to delete and clear models;', function() {
-                expect(collection.models.length).toEqual(5);
+                expect(collection.models.length).toEqual(6);
                 collection.deleteModel(models.first);
-                expect(collection.models.length).toEqual(4);
+                expect(collection.models.length).toEqual(5);
                 collection.clearModels();
                 expect(collection.models.length).toEqual(0);
             });
@@ -91,6 +90,7 @@
                 expect(secondYield.done).toEqual(false);
                 expect(secondYield.value).toEqual(models.second);
 
+                modelGenerator.next();
                 modelGenerator.next();
                 modelGenerator.next();
                 modelGenerator.next();
@@ -126,12 +126,12 @@
 
             it('Should be able to update a model and retain its internal ID;', function() {
                 var fifthModelUpdated = collection.updateModel(models.fifth, { name: 'Little Tinker', superfluous: 'Pfft!' });
-                expect(collection.models.length).toEqual(5);
+                expect(collection.models.length).toEqual(6);
                 expect(fifthModelUpdated.name).toEqual('Little Tinker');
                 expect(fifthModelUpdated.superfluous).toBeUndefined();
                 expect(fifthModelUpdated.age).toEqual(15);
                 expect(Object.isFrozen(fifthModelUpdated)).toBeTruthy();
-                expect(fifthModelUpdated.__catwalkId).toEqual(models.fifth.__catwalkId);
+                expect(fifthModelUpdated.__catwalkMeta.id).toEqual(models.fifth.__catwalkMeta.id);
             });
 
         });

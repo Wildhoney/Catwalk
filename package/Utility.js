@@ -19,11 +19,11 @@
             return {
 
                 /**
-                 * @method remove
+                 * @method removeModel
                  * @param model {Object}
                  * @return {Object}
                  */
-                remove: (model) => {
+                removeModel: (model) => {
                     let index = collection.indexOf(model);
                     collection.splice(index, 1);
                     return model;

@@ -1,4 +1,4 @@
-(function($window, $Catwalk) {
+(function(Catwalk, $window) {
 
     "use strict";
 
@@ -55,6 +55,6 @@
     }
 
     // Expose the `Catwalk.Collection` property.
-    $Catwalk.Typecast = CatwalkTypecast;
+    Catwalk.Typecast = CatwalkTypecast;
 
-})(window, window.Catwalk);
+})(window.Catwalk, window);

@@ -20,7 +20,7 @@
          * @return {Catwalk}
          */
         constructor() {
-            this.typecast = new $window.Catwalk.Typecast();
+            this.typecast = new Catwalk.Typecast();
         }
 
         /**
@@ -31,7 +31,7 @@
          */
         createCollection(name, properties) {
 
-            var collection    = new $window.Catwalk.Collection(name, properties);
+            var collection    = new Catwalk.Collection(name, properties);
             collections[name] = collection;
             return collection;
 
@@ -59,5 +59,20 @@
 
     // Expose the `Catwalk` class.
     $window.Catwalk = Catwalk;
+
+    /**
+     * @constant Catwalk.PRIVATE
+     * @type {String}
+     */
+    Catwalk.PRIVATE = '__catwalkMeta';
+
+    /**
+     * @constant Catwalk.STATUS
+     * @type {Object}
+     */
+    Catwalk.STATUS = {
+        DIRTY: 1,
+        RESOLVED: 2
+    };
 
 })(window);
