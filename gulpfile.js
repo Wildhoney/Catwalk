@@ -1,6 +1,6 @@
 (function main() {
 
-    var files   = 'package/*.js',
+    var files   = ['package/Catwalk.js', 'package/*.js', 'package/**/*.js'],
         distDir = 'dist';
 
     var gulp       = require('gulp'),
