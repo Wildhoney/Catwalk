@@ -9,7 +9,10 @@
 
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
-            id: 0, name: '', age: 0
+            id: 0,
+            name: '',
+            age: 0,
+            colours: catwalk.relationship.hasMany('colour', 'colours')
         });
 
         models.first  = collection.createModel({ name: 'Kipper' });
@@ -314,6 +317,25 @@
                     expect(collection.models.length).toEqual(6);
 
                 });
+
+            });
+
+        });
+
+        describe('Relationship', function() {
+
+            beforeEach(function() {
+
+                models.seventh = collection.createModel({
+                    name: 'Lucy',
+                    colours: ['black', 'white', 'ginger', 'grey']
+                });
+
+            });
+
+            it('Should be able to define the relationship;', function() {
+
+                expect(models.seventh.colours).toBeDefined();
 
             });
 
