@@ -6,6 +6,7 @@
 
     beforeEach(function beforeEach() {
 
+
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
             id: 0, name: '', age: 0
@@ -77,6 +78,11 @@
             beforeEach(function() {
                 expect(collection.blueprint).toBeDefined();
                 expect(Object.isFrozen(collection.blueprint.model)).toBeTruthy();
+                spyOn(collection, 'conditionallyEmitEvent').andCallThrough();
+            });
+
+            afterEach(function() {
+                expect(collection.conditionallyEmitEvent).toHaveBeenCalled();
             });
 
             describe('Create', function() {
@@ -91,6 +97,7 @@
                     expect(model[catwalkMeta]).toBeDefined();
                     expect(model[catwalkMeta].id).toEqual(7);
                     expect(model[catwalkMeta].status).toEqual(1);
+                    collection.conditionallyEmitEvent();
 
                 });
 
@@ -98,12 +105,14 @@
                     var model = collection.createModel({ name: 'Charlie' });
                     expect(model.name).toEqual('Charlie');
                     expect(model.age).toBeDefined();
+                    collection.conditionallyEmitEvent();
                 });
 
                 it('Should be able to remove superfluous properties;', function() {
                     var model = collection.createModel({ name: 'Moose', lives: 'Manchester' });
                     expect(model.name).toEqual('Moose');
                     expect(model.lives).toBeUndefined();
+                    collection.conditionallyEmitEvent();
                 });
 
                 it('Should be able to add a model and resolve the promise;', function() {
@@ -193,6 +202,7 @@
                     expect(updatedModel.age).toBeDefined();
                     expect(updatedModel === models.first).toBeTruthy();
                     expect(collection.models.length).toEqual(6);
+                    collection.conditionallyEmitEvent();
 
                 });
 
@@ -273,6 +283,7 @@
                     var model = collection.deleteModel(models.third);
                     expect(model === models.third).toBeTruthy();
                     expect(collection.models.length).toEqual(5);
+                    collection.conditionallyEmitEvent();
 
                 });
 
