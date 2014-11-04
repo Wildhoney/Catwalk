@@ -24,8 +24,9 @@
          * @return {Catwalk}
          */
         constructor() {
-            this.events      = {};
-            this.collections = {};
+            this.events       = {};
+            this.collections  = {};
+            this.relationship = new Relationship();
         }
 
         /**
@@ -509,6 +510,65 @@
             return model;
 
         }
+
+    }
+
+    /**
+     * @class Relationship
+     */
+    class Relationship {
+
+        /**
+         * @method hasOne
+         * @param foreignKey {String}
+         * @param collectionName {String}
+         * @return {RelationshipHasOne}
+         */
+        hasOne(foreignKey, collectionName) {
+            return new RelationshipHasOne(foreignKey, collectionName);
+        }
+
+        /**
+         * @method hasMany
+         * @param foreignKey {String}
+         * @param collectionName {String}
+         * @return {RelationshipHasMany}
+         */
+        hasMany(foreignKey, collectionName) {
+            return new RelationshipHasMany(foreignKey, collectionName);
+        }
+
+    }
+
+    /**
+     * @class RelationshipAbstract
+     */
+    class RelationshipAbstract {
+
+        /**
+         * @constructor
+         * @param foreignKey {String}
+         * @param collectionName {String}
+         * @return {void}
+         */
+        constructor(foreignKey, collectionName) {
+            this.foreignKey     = foreignKey;
+            this.collectionName = collectionName;
+        }
+
+    }
+
+    /**
+     * @class RelationshipHasMany
+     */
+    class RelationshipHasMany extends RelationshipAbstract {
+
+    }
+
+    /**
+     * @class RelationshipHasOne
+     */
+    class RelationshipHasOne extends RelationshipAbstract {
 
     }
 
