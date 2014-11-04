@@ -265,6 +265,47 @@
 
             });
 
+            describe('Delete', function() {
+
+                it('Should be able to delete a model;', function() {
+
+                    expect(collection.models.length).toEqual(6);
+                    var model = collection.deleteModel(models.third);
+                    expect(model === models.third).toBeTruthy();
+                    expect(collection.models.length).toEqual(5);
+
+                });
+
+                it('Should be able to delete a model and resolve the promise;', function() {
+
+                    catwalk.on('delete', function(collectionName, model, promise) {
+                        expect(collectionName).toEqual('cats');
+                        expect(model[catwalkMeta]).toBeUndefined();
+                        promise.resolve();
+                    });
+
+                    var model = collection.deleteModel(models.fifth);
+                    expect(model[catwalkMeta].status).toEqual(8);
+                    expect(collection.models.length).toEqual(5);
+
+                });
+
+                it('Should be able to delete a model and reject the promise;', function() {
+
+                    catwalk.on('delete', function(collectionName, model, promise) {
+                        expect(collectionName).toEqual('cats');
+                        expect(model[catwalkMeta]).toBeUndefined();
+                        promise.reject();
+                    });
+
+                    var model = collection.deleteModel(models.third);
+                    expect(model[catwalkMeta].status).toEqual(1);
+                    expect(collection.models.length).toEqual(6);
+
+                });
+
+            });
+
         });
 
     });

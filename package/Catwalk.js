@@ -138,11 +138,10 @@
              * @method remove
              * @param model {Object}
              * @param index {Number}
-             * @return {void}
+             * @return {Object}
              */
             var remove = (model, index) => {
 
-                model[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.DELETED;
                 this.issuePromise('delete', null, model);
                 this.models.splice(index, 1);
 
@@ -175,6 +174,8 @@
                 });
 
             })();
+
+            return model;
 
         }
 
@@ -216,7 +217,9 @@
             new Promise((resolve, reject) => {
 
                 // Issue the promise for back-end persistence of the model.
-                catwalk.events[eventName](this.name, this.cleanModel(currentModel), { resolve: resolve, reject: reject });
+                catwalk.events[eventName](this.name, this.cleanModel(currentModel || previousModel), {
+                    resolve: resolve, reject: reject
+                });
 
             }).then((resolutionParams) => {
 
@@ -236,12 +239,29 @@
          * @method resolvePromise
          * @param eventName {String}
          * @param currentModel {Object}
+         * @param previousModel {Object}
          * @return {Function}
          */
-        resolvePromise(eventName, currentModel) {
+        resolvePromise(eventName, currentModel, previousModel) {
 
-            // Model has been successfully persisted!
-            currentModel[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.SAVED;
+            // Currently unused properties.
+            void(previousModel);
+
+            // When we're in the process of deleting a model, the `currentModel` is unset; instead the
+            // `previousModel` will be defined.
+            if (currentModel && eventName === 'create') {
+
+                // Model has been successfully persisted!
+                currentModel[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.SAVED;
+
+            }
+
+            if ((currentModel === null && previousModel) && eventName === 'delete') {
+
+                // Model has been successfully deleted!
+                previousModel[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.DELETED;
+
+            }
 
             return (properties) => {
 
@@ -261,7 +281,9 @@
 
         /**
          * @method rejectPromise
-         * @param eventName {String}
+         * @param eventName {String} - Event name is actually not required, because we can deduce the subsequent action
+         *                             from the state of the `currentModel` and `previousModel`, but we add it to add
+         *                             clarification to our logical steps.
          * @param currentModel {Object}
          * @param previousModel {Object}
          * @return {Function}
@@ -284,6 +306,7 @@
                             // User passed in a model and therefore the previous should be deleted, but only
                             // when we're updating!
                             this.deleteModel(previousModel);
+                            previousModel[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.DELETED;
 
                         }
 
@@ -299,12 +322,13 @@
 
             };
 
-            if (previousModel === null) {
+            if (previousModel === null && eventName === 'create') {
 
                 this.silently(() => {
 
                     // Previous model was actually NULL and therefore we'll delete it.
                     this.deleteModel(currentModel);
+                    currentModel[CATWALK_META_PROPERTY].status = CATWALK_STATES_PROPERTIES.DELETED;
 
                 });
 
@@ -312,7 +336,20 @@
 
             }
 
-            if (currentModel && previousModel) {
+            if (currentModel === null && eventName === 'delete' ) {
+
+                this.silently(() => {
+
+                    // Developer doesn't actually want to delete the model, and therefore we need to revert it to
+                    // the model it was, and set its flag back to what it was.
+                    var model = this.updateModel({}, previousModel);
+                    this.models.push(model);
+
+                });
+
+            }
+
+            if ((currentModel && previousModel) && eventName === 'update') {
 
                 this.silently(() => {
 
