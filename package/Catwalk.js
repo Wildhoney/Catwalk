@@ -27,11 +27,12 @@
             this.events       = {};
             this.collections  = {};
             this.relationship = new Relationship();
+            this.typecast     = new Typecast();
         }
 
         /**
          * @method createCollection
-         * @return {Catwalk.Collection}
+         * @return {Collection}
          */
         createCollection(name, properties) {
 
@@ -42,6 +43,31 @@
         }
 
         /**
+         * @method collection
+         * @param name {String}
+         * @return {Collection}
+         */
+        collection(name) {
+
+            if (typeof this.collections[name] === 'undefined') {
+                this.throwException(`Unable to find collection "${name}"`);
+            }
+
+            return this.collections[name];
+
+        }
+
+        /**
+         * @method throwException
+         * @throws Exception
+         * @param message {String}
+         * @return {void}
+         */
+        throwException(message) {
+            throw `Catwalk: ${message}.`;
+        }
+
+        /**
          * @method on
          * @param name {String}
          * @param eventFn {Function}
@@ -49,6 +75,15 @@
          */
         on(name, eventFn) {
             this.events[name] = eventFn;
+        }
+
+        /**
+         * @method off
+         * @param name {String}
+         * @return {void}
+         */
+        off(name) {
+            delete this.events[name];
         }
 
     }
@@ -69,7 +104,7 @@
             this.name      = name;
             this.models    = [];
             this.silent    = false;
-            this.blueprint = new BlueprintModel(properties);
+            this.blueprint = new BlueprintModel(name, properties);
         }
 
         /**
@@ -85,10 +120,10 @@
 
         /**
          * @method createModel
-         * @param properties {Object}
+         * @param [properties={}] {Object}
          * @return {Object}
          */
-        createModel(properties) {
+        createModel(properties = {}) {
 
             // Ensure the model conforms to the blueprint.
             var model = this.blueprint.iterateAll(properties);
@@ -99,6 +134,16 @@
             this.issuePromise('create', model, null);
             return model;
 
+        }
+
+        /**
+         * @method readModel
+         * @param properties {Object}
+         * @return {Object}
+         */
+        readModel(properties) {
+            this.issuePromise('read', properties, null);
+            return properties;
         }
 
         /**
@@ -268,8 +313,17 @@
 
                 this.silently(() => {
 
-                    if (properties) {
+                    if (properties && eventName !== 'read') {
                         this.updateModel(currentModel, properties);
+                    }
+
+                    if (eventName === 'read') {
+
+                        var model = this.createModel(properties);
+
+                        // Update the model to reflect the changes on the object that `readModel` return.
+                        this.updateModel(currentModel, model);
+
                     }
 
                 });
@@ -418,9 +472,12 @@
 
         /**
          * @constructor
+         * @param name {String}
+         * @param blueprint {Object}
          * @return {BlueprintModel}
          */
-        constructor(blueprint) {
+        constructor(name, blueprint) {
+            this.name  = name;
             this.model = Object.freeze(blueprint);
         }
 
@@ -460,6 +517,14 @@
 
                 }
 
+                if (propertyHandler instanceof RelationshipAbstract) {
+
+                    // Property is actually a relationship to another collection.
+                    Object.defineProperty(model, property, propertyHandler.defineRelationship(this.name, property));
+                    propertyHandler.setValues(properties[property]);
+
+                }
+
                 if (typeof propertyHandler === 'function') {
 
                     // Typecast property to the defined type.
@@ -488,26 +553,59 @@
 
             Object.keys(this.model).forEach(property => {
 
-                // Determine if the property has a property handler method which would be responsible
-                // for typecasting, and determining the default value.
-                if (typeof model[property] === 'function') {
-
-                    let propertyHandler = this.model[property];
-                    model[property]     = propertyHandler();
-                    return;
-
-                }
 
                 if (typeof model[property] === 'undefined') {
 
                     // Ensure that it is defined.
-                    model[property] = null;
+                    model[property] = this.model[property];
+
+                    if (typeof this.model[property] === 'function') {
+
+                        // Determine if the property has a property handler method which would be responsible
+                        // for typecasting, and determining the default value.
+                        let propertyHandler = this.model[property];
+                        model[property]     = propertyHandler();
+
+                    }
 
                 }
 
             });
 
             return model;
+
+        }
+
+    }
+
+    /**
+     * @class Typecast
+     */
+    class Typecast {
+
+        /**
+         * @method string
+         * @param defaultValue {String}
+         * @return {Function}
+         */
+        string(defaultValue = '') {
+
+            return (value) => {
+                return String(value || defaultValue);
+            };
+
+        }
+
+        /**
+         * @method number
+         * @param defaultValue {Number}
+         * @return {Function}
+         */
+        number(defaultValue = 0) {
+
+            return (value) => {
+                return Number(value || defaultValue);
+            };
 
         }
 
@@ -552,8 +650,42 @@
          * @return {void}
          */
         constructor(foreignKey, collectionName) {
-            this.foreignKey     = foreignKey;
-            this.collectionName = collectionName;
+
+            this.target = {
+                collection: collectionName,
+                key: foreignKey
+            };
+
+        }
+
+        /**
+         * @method setValues
+         * @param model {Object}
+         * @return {void}
+         */
+        setValues(values) {
+            this.values = this.value = values;
+        }
+
+        /**
+         * @method defineRelationship
+         * @param collectionName {String}
+         * @param localKey {String}
+         * @param accessorFunctions {Function}
+         * @return {Object}
+         */
+        defineRelationship(collectionName, localKey, accessorFunctions) {
+
+            this.source = {
+                collection: collectionName,
+                key: localKey
+            };
+
+            return {
+                get: accessorFunctions.get,
+                set: accessorFunctions.set
+            }
+
         }
 
     }
@@ -563,12 +695,142 @@
      */
     class RelationshipHasMany extends RelationshipAbstract {
 
+        /**
+         * @method defineRelationship
+         * @param collectionName {String}
+         * @param localKey {String}
+         * @return {Object}
+         */
+        defineRelationship(collectionName, localKey) {
+
+            return super(collectionName, localKey, {
+                get: this.getModels.bind(this),
+                set: this.setModels.bind(this)
+            });
+
+        }
+
+        /**
+         * @method getModels
+         * @return {Array}
+         */
+        getModels() {
+
+            /**
+             * @method loadModels
+             * @return {Array}
+             */
+            var loadModels = () => {
+
+                return foreignCollection.models.filter((foreignModel) => {
+                    return this.values.indexOf(foreignModel[this.target.key]) !== -1;
+                });
+
+            };
+
+            var arrayDiff = (firstArray, secondArray) => {
+                return firstArray.filter(function(i) {return secondArray.indexOf(i) < 0;});
+            };
+
+            var foreignCollection = catwalk.collection(this.target.collection),
+                models            = loadModels();
+
+            // If there is a discrepancy between the counts, then we know all the models haven't been loaded.
+            if (models.length !== this.values.length) {
+
+                // Discover the keys that are currently not loaded.
+                var loadedKeys   = models.map(model => model[this.target.key]),
+                    requiredKeys = arrayDiff(this.values, loadedKeys);
+
+                requiredKeys.forEach((foreignKey) => {
+
+                    var requiredModel = {};
+                    requiredModel[this.target.key] = foreignKey;
+                    foreignCollection.readModel(requiredModel);
+
+                });
+
+                // Attempt to read the models again immediately.
+                models = loadModels();
+
+            }
+
+            return models;
+
+        }
+
+        /**
+         * @method setModels
+         * @return {void}
+         */
+        setModels(values) {
+            this.values = values;
+        }
+
     }
 
     /**
      * @class RelationshipHasOne
      */
     class RelationshipHasOne extends RelationshipAbstract {
+
+        /**
+         * @method defineRelationship
+         * @param collectionName {String}
+         * @param localKey {String}
+         * @return {Object}
+         */
+        defineRelationship(collectionName, localKey) {
+
+            return super(collectionName, localKey, {
+                get: this.getModel.bind(this),
+                set: this.setModel.bind(this)
+            });
+
+        }
+
+        /**
+         * @method getModel
+         * @return {Array}
+         */
+        getModel() {
+
+            /**
+             * @method loadModel
+             * @return {Object}
+             */
+            var loadModel = () => {
+                return foreignCollection.models.find((foreignModel) => {
+                    return this.value === foreignModel[this.target.key];
+                });  
+            };
+
+            var foreignCollection = catwalk.collection(this.target.collection),
+                model             = loadModel();
+
+            if (!model) {
+
+                // Model cannot be found and therefore we'll attempt to read the model into the collection.
+                var requiredModel   = {};
+                requiredModel[this.target.key] = this.value;
+                foreignCollection.readModel(requiredModel);
+
+                // Attempt to read the model again immediately.
+                model = loadModel();
+
+            }
+
+            return model;
+
+        }
+
+        /**
+         * @method setModel
+         * @return {void}
+         */
+        setModel(value) {
+            this.value = value;
+        }
 
     }
 
