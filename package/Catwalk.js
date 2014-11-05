@@ -317,7 +317,7 @@
                         this.updateModel(currentModel, properties);
                     }
 
-                    if (eventName === 'read') {
+                    if (properties && !properties.hasOwnProperty(CATWALK_META_PROPERTY) && eventName === 'read') {
 
                         var model = this.createModel(properties);
 
