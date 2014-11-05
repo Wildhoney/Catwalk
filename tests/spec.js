@@ -6,13 +6,13 @@
 
     beforeEach(function beforeEach() {
 
-
         // Define the "cats" collection.
         collection = catwalk.createCollection('cats', {
             id: 0,
-            name: '',
+            name: 'None',
             age: 0,
-            colours: catwalk.relationship.hasMany('colour', 'colours')
+            colours: catwalk.relationship.hasMany('name', 'colours'),
+            primeColour: catwalk.relationship.hasOne('name', 'colours')
         });
 
         models.first  = collection.createModel({ name: 'Kipper' });
@@ -76,245 +76,339 @@
             expect(catwalk.createCollection).toBeDefined();
         });
 
+        it('Should be able to add and then remove an event;', function() {
+
+            expect(catwalk.events.create).toBeUndefined();
+            catwalk.on('create', function() {});
+            expect(catwalk.events.create).toBeDefined();
+
+            expect(catwalk.events.delete).toBeUndefined();
+            catwalk.off('delete');
+            expect(catwalk.events.delete).toBeUndefined();
+            expect(catwalk.events.create).toBeDefined();
+
+            catwalk.off('create');
+            expect(catwalk.events.create).toBeUndefined();
+
+        });
+
         describe('Collection', function() {
 
-            beforeEach(function() {
-                expect(collection.blueprint).toBeDefined();
-                expect(Object.isFrozen(collection.blueprint.model)).toBeTruthy();
-                spyOn(collection, 'conditionallyEmitEvent').andCallThrough();
+            it('Should be able to return the collection using the factory method;', function() {
+                expect(typeof catwalk.collection('cats')).toBe('object');
             });
 
-            afterEach(function() {
-                expect(collection.conditionallyEmitEvent).toHaveBeenCalled();
+            it('Should be able to throw an exception when the collection name is invalid;', function() {
+                expect(function() { catwalk.collection('dogs'); }).toThrow('Catwalk: Unable to find collection "dogs".');
             });
 
-            describe('Create', function() {
+            describe('Typecast', function() {
 
-                it('Should be able to add a model;', function() {
+                var dogCollection;
 
-                    var model = collection.createModel({ name: 'Moose' });
-                    expect(model.name).toEqual('Moose');
-                    expect(collection.models.length).toEqual(7);
+                beforeEach(function() {
 
-                    // Model meta-data.
-                    expect(model[catwalkMeta]).toBeDefined();
-                    expect(model[catwalkMeta].id).toEqual(7);
-                    expect(model[catwalkMeta].status).toEqual(1);
-                    collection.conditionallyEmitEvent();
-
-                });
-
-                it('Should be able to add required properties;', function() {
-                    var model = collection.createModel({ name: 'Charlie' });
-                    expect(model.name).toEqual('Charlie');
-                    expect(model.age).toBeDefined();
-                    collection.conditionallyEmitEvent();
-                });
-
-                it('Should be able to remove superfluous properties;', function() {
-                    var model = collection.createModel({ name: 'Moose', lives: 'Manchester' });
-                    expect(model.name).toEqual('Moose');
-                    expect(model.lives).toBeUndefined();
-                    collection.conditionallyEmitEvent();
-                });
-
-                it('Should be able to add a model and resolve the promise;', function() {
-
-                    catwalk.on('create', function(collectionName, model, promise) {
-                        expect(collectionName).toEqual('cats');
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.resolve();
+                    dogCollection = catwalk.createCollection('dogs', {
+                        name: catwalk.typecast.string('None'),
+                        age: catwalk.typecast.number(5)
                     });
 
-                    var model = collection.createModel({ name: 'Charlie', age: 7 });
-                    expect(collection.models.length).toEqual(7);
-                    expect(model[catwalkMeta].status).toEqual(4);
-
                 });
 
-                it('Should be able to add a model and resolve the promise and modify the properties;', function() {
-
-                    catwalk.on('create', function(collectionName, model, promise) {
-                        expect(collectionName).toEqual('cats');
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.resolve({ id: 6, age: 9 });
-                    });
-
-                    var model = collection.createModel({ name: 'Moose', age: 8 });
-                    expect(collection.models.length).toEqual(7);
-                    expect(model[catwalkMeta].status).toEqual(4);
-                    expect(model.name).toEqual('Moose');
-                    expect(model.id).toEqual(6);
-                    expect(model.age).toEqual(9);
-
+                it('Should be able to add to typecast a model;', function() {
+                    var model = dogCollection.createModel({ name: 7 });
+                    expect(model.name).toEqual('7');
                 });
 
-                it('Should be able to add a model and reject the promise;', function() {
-
-                    catwalk.on('create', function(collectionName, model, promise) {
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.reject();
-                    });
-
-                    // Ensure the delete callback isn't invoked when the user rejects the creation
-                    // of a model!
-                    var Mock = { Delete: function() {} };
-                    catwalk.on('delete', Mock.Delete);
-                    spyOn(Mock, 'Delete');
-
-                    var model = collection.createModel({ name: 'Charlie', age: 7 });
-                    expect(collection.models.length).toEqual(6);
-                    expect(model[catwalkMeta].status).toEqual(8);
-                    expect(Mock.Delete).not.toHaveBeenCalled();
-
+                it('Should be able to add a model and fill in the defaults;', function() {
+                    var model = dogCollection.createModel();
+                    expect(model.name).toEqual('None');
+                    expect(model.age).toEqual(5);
                 });
 
-                it('Should be able to add a model and reject the promise in favour of a duplicate model;', function() {
-
-                    catwalk.on('create', function(collectionName, model, promise) {
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.reject(models.first);
-                    });
-
-                    var model = collection.createModel({ name: 'Charlie', age: 7 });
-                    expect(collection.models.length).toEqual(6);
-                    expect(model.name).toEqual('Kipper');
-
-                    collection.deleteModel(model);
-                    expect(collection.models.length).toEqual(5);
-
-                    // Idempotent?
-                    collection.deleteModel(model);
-                    expect(collection.models.length).toEqual(5);
-
-                    var updatedModel = collection.updateModel(model, { name: 'Bob' });
-                    expect(model.name).toEqual('Bob');
-                    expect(model === updatedModel).toBeTruthy();
-
+                it('Should be able to add a model and fill in the missing defaults;', function() {
+                    var model = dogCollection.createModel({ name: 'Rex' });
+                    expect(model.name).toEqual('Rex');
+                    expect(model.age).toEqual(5);
                 });
 
             });
 
-            describe('Update', function() {
+            describe('CRUD Methods', function() {
 
-                it('Should be able to update a model;', function() {
+                describe('Create', function() {
 
-                    var updatedModel = collection.updateModel(models.first, { name: 'Jeremy', lives: 'London' });
-                    expect(updatedModel.name).toEqual('Jeremy');
-                    expect(updatedModel.lives).toBeUndefined();
-                    expect(updatedModel.age).toBeDefined();
-                    expect(updatedModel === models.first).toBeTruthy();
-                    expect(collection.models.length).toEqual(6);
-                    collection.conditionallyEmitEvent();
-
-                });
-
-                it('Should be able to update a model and then resolve the promise;', function() {
-
-                    catwalk.on('update', function(collectionName, model, promise) {
-                        promise.resolve();
+                    beforeEach(function() {
+                        expect(collection.blueprint).toBeDefined();
+                        expect(Object.isFrozen(collection.blueprint.model)).toBeTruthy();
+                        spyOn(collection, 'conditionallyEmitEvent').andCallThrough();
                     });
 
-                    var model = collection.createModel({ name: 'Boris' });
-                    expect(model.name).toEqual('Boris');
-                    var updatedModel = collection.updateModel(model, { name: 'Carla' });
-                    expect(model === updatedModel).toBeTruthy();
-                    expect(updatedModel.name).toEqual('Carla');
-                    expect(collection.models.length).toEqual(7);
-
-                });
-
-                it('Should be able to update a model and then resolve the promise with additional properties;', function() {
-
-                    catwalk.on('update', function(collectionName, model, promise) {
-                        promise.resolve({ id: 25, name: 'Lara' });
+                    afterEach(function() {
+                        expect(collection.conditionallyEmitEvent).toHaveBeenCalled();
                     });
 
-                    expect(models.first.id).not.toEqual(25);
-                    expect(models.first.name).toEqual('Kipper');
-                    var updatedModel = collection.updateModel(models.first);
+                    it('Should be able to add a model;', function() {
 
-                    expect(updatedModel.id).toEqual(25);
-                    expect(updatedModel.name).toEqual('Lara');
-                    expect(updatedModel === models.first);
+                        var model = collection.createModel({ name: 'Moose' });
+                        expect(model.name).toEqual('Moose');
+                        expect(collection.models.length).toEqual(7);
 
-                });
+                        // Model meta-data.
+                        expect(model[catwalkMeta]).toBeDefined();
+                        expect(model[catwalkMeta].id).toEqual(7);
+                        expect(model[catwalkMeta].status).toEqual(1);
+                        collection.conditionallyEmitEvent();
 
-                it('Should be able to update a model and then reject the promise;', function() {
-
-                    catwalk.on('update', function(collectionName, model, promise) {
-                        promise.reject();
                     });
 
-                    var model = collection.createModel({ name: 'Boris' });
-                    expect(model.name).toEqual('Boris');
-                    var updatedModel = collection.updateModel(model, { name: 'Carla' });
-                    expect(model === updatedModel).toBeTruthy();
-                    expect(updatedModel.name).toEqual('Boris');
-                    expect(collection.models.length).toEqual(7);
-
-                    var anotherUpdatedModel = collection.updateModel(model, { age: 17 });
-                    expect(anotherUpdatedModel.age).not.toEqual(17);
-
-                    collection.deleteModel(updatedModel);
-                    expect(collection.models.length).toEqual(6);
-
-                });
-
-                it('Should be able to update a model and then reject the promise in favour of a duplicate model;', function() {
-
-                    catwalk.on('update', function(collectionName, model, promise) {
-                        promise.reject(models.second);
+                    it('Should be able to add a model with a default value;', function() {
+                        var model = collection.createModel({ age: 12 });
+                        expect(model.name).toEqual('None');
+                        collection.conditionallyEmitEvent();
                     });
 
-                    expect(collection.models.length).toEqual(6);
-                    var updatedModel = collection.updateModel(models.first);
-                    expect(updatedModel.name).toEqual('Splodge');
-                    expect(updatedModel === models.first);
-                    expect(collection.models.length).toEqual(5);
-                    expect(updatedModel[catwalkMeta].status).toEqual(4);
-
-                });
-
-            });
-
-            describe('Delete', function() {
-
-                it('Should be able to delete a model;', function() {
-
-                    expect(collection.models.length).toEqual(6);
-                    var model = collection.deleteModel(models.third);
-                    expect(model === models.third).toBeTruthy();
-                    expect(collection.models.length).toEqual(5);
-                    collection.conditionallyEmitEvent();
-
-                });
-
-                it('Should be able to delete a model and resolve the promise;', function() {
-
-                    catwalk.on('delete', function(collectionName, model, promise) {
-                        expect(collectionName).toEqual('cats');
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.resolve();
+                    it('Should be able to add required properties;', function() {
+                        var model = collection.createModel({ name: 'Charlie' });
+                        expect(model.name).toEqual('Charlie');
+                        expect(model.age).toBeDefined();
+                        collection.conditionallyEmitEvent();
                     });
 
-                    var model = collection.deleteModel(models.fifth);
-                    expect(model[catwalkMeta].status).toEqual(8);
-                    expect(collection.models.length).toEqual(5);
+                    it('Should be able to remove superfluous properties;', function() {
+                        var model = collection.createModel({ name: 'Moose', lives: 'Manchester' });
+                        expect(model.name).toEqual('Moose');
+                        expect(model.lives).toBeUndefined();
+                        collection.conditionallyEmitEvent();
+                    });
+
+                    it('Should be able to add a model and resolve the promise;', function() {
+
+                        catwalk.on('create', function(collectionName, model, promise) {
+                            expect(collectionName).toEqual('cats');
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.resolve();
+                        });
+
+                        var model = collection.createModel({ name: 'Charlie', age: 7 });
+                        expect(collection.models.length).toEqual(7);
+                        expect(model[catwalkMeta].status).toEqual(4);
+
+                    });
+
+                    it('Should be able to add a model and resolve the promise and modify the properties;', function() {
+
+                        catwalk.on('create', function(collectionName, model, promise) {
+                            expect(collectionName).toEqual('cats');
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.resolve({ id: 6, age: 9 });
+                        });
+
+                        var model = collection.createModel({ name: 'Moose', age: 8 });
+                        expect(collection.models.length).toEqual(7);
+                        expect(model[catwalkMeta].status).toEqual(4);
+                        expect(model.name).toEqual('Moose');
+                        expect(model.id).toEqual(6);
+                        expect(model.age).toEqual(9);
+
+                    });
+
+                    it('Should be able to add a model and reject the promise;', function() {
+
+                        catwalk.on('create', function(collectionName, model, promise) {
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.reject();
+                        });
+
+                        // Ensure the delete callback isn't invoked when the user rejects the creation
+                        // of a model!
+                        var Mock = { Delete: function() {} };
+                        catwalk.on('delete', Mock.Delete);
+                        spyOn(Mock, 'Delete');
+
+                        var model = collection.createModel({ name: 'Charlie', age: 7 });
+                        expect(collection.models.length).toEqual(6);
+                        expect(model[catwalkMeta].status).toEqual(8);
+                        expect(Mock.Delete).not.toHaveBeenCalled();
+
+                    });
+
+                    it('Should be able to add a model and reject the promise in favour of a duplicate model;', function() {
+
+                        catwalk.on('create', function(collectionName, model, promise) {
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.reject(models.first);
+                        });
+
+                        var model = collection.createModel({ name: 'Charlie', age: 7 });
+                        expect(collection.models.length).toEqual(6);
+                        expect(model.name).toEqual('Kipper');
+
+                        collection.deleteModel(model);
+                        expect(collection.models.length).toEqual(5);
+
+                        // Idempotent?
+                        collection.deleteModel(model);
+                        expect(collection.models.length).toEqual(5);
+
+                        var updatedModel = collection.updateModel(model, { name: 'Bob' });
+                        expect(model.name).toEqual('Bob');
+                        expect(model === updatedModel).toBeTruthy();
+
+                    });
 
                 });
 
-                it('Should be able to delete a model and reject the promise;', function() {
+                describe('Read', function() {
 
-                    catwalk.on('delete', function(collectionName, model, promise) {
-                        expect(collectionName).toEqual('cats');
-                        expect(model[catwalkMeta]).toBeUndefined();
-                        promise.reject();
+                    it('Should be able to load a model into the collection by promise resolution;', function() {
+
+                        catwalk.on('read', function(collectionName, model, promise) {
+                            promise.resolve({ id: 10, name: 'Ellie' });
+                        });
+
+                        var model = collection.readModel({ id: 10 });
+                        expect(collection.models.length).toEqual(7);
+                        expect(model.id).toEqual(10);
+                        expect(model.name).toEqual('Ellie');
+
                     });
 
-                    var model = collection.deleteModel(models.third);
-                    expect(model[catwalkMeta].status).toEqual(1);
-                    expect(collection.models.length).toEqual(6);
+                    it('Should be able to load a model into the collection by promise rejection;', function() {
+
+                        catwalk.on('read', function(collectionName, model, promise) {
+                            promise.reject();
+                        });
+
+                        collection.readModel({ id: 10 });
+                        expect(collection.models.length).toEqual(6);
+
+                    });
+
+                });
+
+                describe('Update', function() {
+
+                    it('Should be able to update a model;', function() {
+
+                        var updatedModel = collection.updateModel(models.first, { name: 'Jeremy', lives: 'London' });
+                        expect(updatedModel.name).toEqual('Jeremy');
+                        expect(updatedModel.lives).toBeUndefined();
+                        expect(updatedModel.age).toBeDefined();
+                        expect(updatedModel === models.first).toBeTruthy();
+                        expect(collection.models.length).toEqual(6);
+                        collection.conditionallyEmitEvent();
+
+                    });
+
+                    it('Should be able to update a model and then resolve the promise;', function() {
+
+                        catwalk.on('update', function(collectionName, model, promise) {
+                            promise.resolve();
+                        });
+
+                        var model = collection.createModel({ name: 'Boris' });
+                        expect(model.name).toEqual('Boris');
+                        var updatedModel = collection.updateModel(model, { name: 'Carla' });
+                        expect(model === updatedModel).toBeTruthy();
+                        expect(updatedModel.name).toEqual('Carla');
+                        expect(collection.models.length).toEqual(7);
+
+                    });
+
+                    it('Should be able to update a model and then resolve the promise with additional properties;', function() {
+
+                        catwalk.on('update', function(collectionName, model, promise) {
+                            promise.resolve({ id: 25, name: 'Lara' });
+                        });
+
+                        expect(models.first.id).not.toEqual(25);
+                        expect(models.first.name).toEqual('Kipper');
+                        var updatedModel = collection.updateModel(models.first);
+
+                        expect(updatedModel.id).toEqual(25);
+                        expect(updatedModel.name).toEqual('Lara');
+                        expect(updatedModel === models.first);
+
+                    });
+
+                    it('Should be able to update a model and then reject the promise;', function() {
+
+                        catwalk.on('update', function(collectionName, model, promise) {
+                            promise.reject();
+                        });
+
+                        var model = collection.createModel({ name: 'Boris' });
+                        expect(model.name).toEqual('Boris');
+                        var updatedModel = collection.updateModel(model, { name: 'Carla' });
+                        expect(model === updatedModel).toBeTruthy();
+                        expect(updatedModel.name).toEqual('Boris');
+                        expect(collection.models.length).toEqual(7);
+
+                        var anotherUpdatedModel = collection.updateModel(model, { age: 17 });
+                        expect(anotherUpdatedModel.age).not.toEqual(17);
+
+                        collection.deleteModel(updatedModel);
+                        expect(collection.models.length).toEqual(6);
+
+                    });
+
+                    it('Should be able to update a model and then reject the promise in favour of a duplicate model;', function() {
+
+                        catwalk.on('update', function(collectionName, model, promise) {
+                            promise.reject(models.second);
+                        });
+
+                        expect(collection.models.length).toEqual(6);
+                        var updatedModel = collection.updateModel(models.first);
+                        expect(updatedModel.name).toEqual('Splodge');
+                        expect(updatedModel === models.first);
+                        expect(collection.models.length).toEqual(5);
+                        expect(updatedModel[catwalkMeta].status).toEqual(4);
+
+                    });
+
+                });
+
+                describe('Delete', function() {
+
+                    it('Should be able to delete a model;', function() {
+
+                        expect(collection.models.length).toEqual(6);
+                        var model = collection.deleteModel(models.third);
+                        expect(model === models.third).toBeTruthy();
+                        expect(collection.models.length).toEqual(5);
+                        collection.conditionallyEmitEvent();
+
+                    });
+
+                    it('Should be able to delete a model and resolve the promise;', function() {
+
+                        catwalk.on('delete', function(collectionName, model, promise) {
+                            expect(collectionName).toEqual('cats');
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.resolve();
+                        });
+
+                        var model = collection.deleteModel(models.fifth);
+                        expect(model[catwalkMeta].status).toEqual(8);
+                        expect(collection.models.length).toEqual(5);
+
+                    });
+
+                    it('Should be able to delete a model and reject the promise;', function() {
+
+                        catwalk.on('delete', function(collectionName, model, promise) {
+                            expect(collectionName).toEqual('cats');
+                            expect(model[catwalkMeta]).toBeUndefined();
+                            promise.reject();
+                        });
+
+                        var model = collection.deleteModel(models.third);
+                        expect(model[catwalkMeta].status).toEqual(1);
+                        expect(collection.models.length).toEqual(6);
+
+                    });
 
                 });
 
@@ -324,18 +418,89 @@
 
         describe('Relationship', function() {
 
+            var colourCollection, colourModels = {};
+
             beforeEach(function() {
+
+                colourCollection = catwalk.createCollection('colours', {
+                    name: catwalk.typecast.string()
+                });
+
+                colourModels.first  = colourCollection.createModel({ name: 'Black' });
+                colourModels.second = colourCollection.createModel({ name: 'White' });
 
                 models.seventh = collection.createModel({
                     name: 'Lucy',
-                    colours: ['black', 'white', 'ginger', 'grey']
+                    colours: ['Black', 'White'],
+                    primeColour: 'White'
                 });
 
             });
 
-            it('Should be able to define the relationship;', function() {
+            describe('One-to-One', function() {
 
-                expect(models.seventh.colours).toBeDefined();
+                it('Should be able to fetch the model from a relationship;', function() {
+                    expect(models.seventh.primeColour).toBeDefined();
+                    expect(models.seventh.primeColour).toEqual(colourModels.second);
+                    expect(models.seventh.primeColour.name).toEqual('White');
+                });
+
+                it('Should be able to modify the relationship and return the new model;', function() {
+                    var model = collection.updateModel(models.seventh, { primeColour: 'Black' });
+                    expect(model.primeColour.name).toEqual('Black');
+                });
+
+                it('Should be able to fetch a model that is currently unloaded;', function() {
+
+                    catwalk.on('read', function(collectionName, model, promise) {
+                        expect(model.hasOwnProperty('name')).toBeTruthy();
+                        promise.resolve({ name: 'Grey' });
+                    });
+
+                    expect(colourCollection.models.length).toEqual(2);
+                    var model = collection.updateModel(models.seventh, { primeColour: 'Grey' });
+                    expect(model.primeColour.name).toEqual('Grey');
+                    expect(colourCollection.models.length).toEqual(3);
+
+                });
+
+            });
+
+            describe('Many-to-Many', function() {
+
+                it('Should be able to fetch the models from a relationship;', function() {
+                    expect(models.seventh.colours).toBeDefined();
+                    expect(models.seventh.colours.length).toEqual(2);
+                    expect(models.seventh.colours[0]).toEqual(colourModels.first);
+                    expect(models.seventh.colours[0].name).toEqual('Black');
+                    expect(models.seventh.colours[1]).toEqual(colourModels.second);
+                    expect(models.seventh.colours[1].name).toEqual('White');
+                });
+
+                it('Should be able to modify the relationship and return the new models;', function() {
+                    var model = collection.updateModel(models.seventh, { colours: ['White'] });
+                    expect(model === models.seventh).toBeTruthy();
+                    expect(models.seventh.colours.length).toEqual(1);
+                    expect(models.seventh.colours[0]).toEqual(colourModels.second);
+                    expect(models.seventh.colours[0].name).toEqual('White');
+                });
+
+                it('Should be able to fetch the models that are currently unloaded;', function() {
+
+                    catwalk.on('read', function(collectionName, model, promise) {
+                        expect(model.hasOwnProperty('name')).toBeTruthy();
+                        promise.resolve({ name: model.name });
+                    });
+
+                    var model = collection.updateModel(models.seventh, { colours: ['White', 'Grey', 'Ginger'] });
+                    expect(model === models.seventh).toBeTruthy();
+                    expect(models.seventh.colours.length).toEqual(3);
+                    expect(models.seventh.colours[0]).toEqual(colourModels.second);
+                    expect(models.seventh.colours[0].name).toEqual('White');
+                    expect(models.seventh.colours[1].name).toEqual('Grey');
+                    expect(models.seventh.colours[2].name).toEqual('Ginger');
+
+                });
 
             });
 
