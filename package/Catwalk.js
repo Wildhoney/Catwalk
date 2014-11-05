@@ -176,7 +176,7 @@
         /**
          * @method deleteModel
          * @param model {Object}
-         * @return {void}
+         * @return {Object}
          */
         deleteModel(model) {
 
@@ -193,18 +193,31 @@
 
             };
 
+            /**
+             * Determines whether the model was successfully deleted with finding the model by reference.
+             *
+             * @property didDeleteViaReference
+             * @type {Boolean}
+             */
+            var didDeleteViaReference = false;
+
             (() => {
 
                 // Try to find the model by reference.
                 var index = this.models.indexOf(model);
 
                 if (index !== -1) {
+                    didDeleteViaReference = true;
                     remove(this.models[index], index);
                 }
 
             })();
 
             (() => {
+
+                if (didDeleteViaReference) {
+                    return;
+                }
 
                 var index = 0;
 
@@ -283,18 +296,15 @@
 
         /**
          * @method resolvePromise
-         * @param eventName {String}
+         * @param eventName {String} - Event name is actually not required, because we can deduce the subsequent action
+         *                             from the state of the `currentModel` and `previousModel`, but we add it to add
+         *                             clarification to our logical steps.
          * @param currentModel {Object}
          * @param previousModel {Object}
          * @return {Function}
          */
         resolvePromise(eventName, currentModel, previousModel) {
 
-            // Currently unused properties.
-            void(previousModel);
-
-            // When we're in the process of deleting a model, the `currentModel` is unset; instead the
-            // `previousModel` will be defined.
             if (currentModel && eventName === 'create') {
 
                 // Model has been successfully persisted!
@@ -302,6 +312,8 @@
 
             }
 
+            // When we're in the process of deleting a model, the `currentModel` is unset; instead the
+            // `previousModel` will be defined.
             if ((currentModel === null && previousModel) && eventName === 'delete') {
 
                 // Model has been successfully deleted!
@@ -336,9 +348,7 @@
 
         /**
          * @method rejectPromise
-         * @param eventName {String} - Event name is actually not required, because we can deduce the subsequent action
-         *                             from the state of the `currentModel` and `previousModel`, but we add it to add
-         *                             clarification to our logical steps.
+         * @param eventName {String}
          * @param currentModel {Object}
          * @param previousModel {Object}
          * @return {Function}
@@ -413,8 +423,6 @@
                     this.updateModel(currentModel, previousModel);
 
                 });
-
-                return rejectWith;
 
             }
 
@@ -552,7 +560,6 @@
         iterateBlueprint(model) {
 
             Object.keys(this.model).forEach(property => {
-
 
                 if (typeof model[property] === 'undefined') {
 
