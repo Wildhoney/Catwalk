@@ -591,6 +591,17 @@
     class Typecast {
 
         /**
+         * @method returnValue
+         * @param typecastConstructor {Function}
+         * @param value {*}
+         * @param defaultValue {*}
+         * @return {*}
+         */
+        returnValue(typecastConstructor, value, defaultValue) {
+            return typecastConstructor(typeof value !== 'undefined' ? value : defaultValue);
+        }
+
+        /**
          * @method string
          * @param defaultValue {String}
          * @return {Function}
@@ -598,7 +609,20 @@
         string(defaultValue = '') {
 
             return (value) => {
-                return String(value || defaultValue);
+                return this.returnValue(String, value, defaultValue);
+            };
+
+        }
+
+        /**
+         * @method boolean
+         * @param defaultValue {Boolean}
+         * @return {Function}
+         */
+        boolean(defaultValue = true) {
+
+            return (value) => {
+                return this.returnValue(Boolean, value, defaultValue);
             };
 
         }
@@ -611,7 +635,7 @@
         number(defaultValue = 0) {
 
             return (value) => {
-                return Number(value || defaultValue);
+                return this.returnValue(Number, value, defaultValue);
             };
 
         }

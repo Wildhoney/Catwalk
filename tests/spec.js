@@ -110,14 +110,16 @@
 
                     dogCollection = catwalk.createCollection('dogs', {
                         name: catwalk.typecast.string('None'),
-                        age: catwalk.typecast.number(5)
+                        age: catwalk.typecast.number(5),
+                        hasOwner: catwalk.typecast.boolean(true)
                     });
 
                 });
 
-                it('Should be able to add to typecast a model;', function() {
+                it('Should be able to typecast a model from number to string;', function() {
                     var model = dogCollection.createModel({ name: 7 });
                     expect(model.name).toEqual('7');
+                    expect(model.hasOwner).toEqual(true);
                 });
 
                 it('Should be able to add a model and fill in the defaults;', function() {
@@ -127,9 +129,10 @@
                 });
 
                 it('Should be able to add a model and fill in the missing defaults;', function() {
-                    var model = dogCollection.createModel({ name: 'Rex' });
+                    var model = dogCollection.createModel({ name: 'Rex', hasOwner: false });
                     expect(model.name).toEqual('Rex');
                     expect(model.age).toEqual(5);
+                    expect(model.hasOwner).toEqual(false);
                 });
 
             });
