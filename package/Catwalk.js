@@ -168,8 +168,9 @@
             }
             catch (e) {}
 
-            model = this.blueprint.iterateProperties(model);
-            console.log(model);
+            // Update the model with that of typecast model so no references are broken.
+            var typecastModel = this.blueprint.iterateProperties(model);
+            Object.keys(typecastModel).forEach(property => model[property] = typecastModel[property]);
 
             this.issuePromise('update', model, previousModel);
             return model;

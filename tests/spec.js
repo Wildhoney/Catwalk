@@ -371,7 +371,7 @@
 
                     });
 
-                    iit('Should be able to typecast any updated properties;', function() {
+                    it('Should be able to typecast any updated properties;', function() {
 
                         var dogCollection = catwalk.createCollection('dogs', {
                             name: catwalk.typecast.string()
