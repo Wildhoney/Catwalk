@@ -644,6 +644,15 @@
 
         }
 
+        /**
+         * @method custom
+         * @param typecastFn {Function}
+         * @return {Function}
+         */
+        custom(typecastFn) {
+            return typecastFn;
+        }
+
     }
 
     /**

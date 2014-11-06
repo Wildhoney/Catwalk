@@ -110,6 +110,9 @@
 
                     dogCollection = catwalk.createCollection('dogs', {
                         name: catwalk.typecast.string('None'),
+                        ident: catwalk.typecast.custom(function(value) {
+                            return (value || '').replace(/\s+/ig, '-').toLowerCase();
+                        }),
                         age: catwalk.typecast.number(5),
                         hasOwner: catwalk.typecast.boolean(true)
                     });
@@ -133,6 +136,11 @@
                     expect(model.name).toEqual('Rex');
                     expect(model.age).toEqual(5);
                     expect(model.hasOwner).toEqual(false);
+                });
+
+                it('Should be able to define its own custom typecast method;', function() {
+                    var model = dogCollection.createModel({ ident: 'Snow White' });
+                    expect(model.ident).toEqual('snow-white');
                 });
 
             });
