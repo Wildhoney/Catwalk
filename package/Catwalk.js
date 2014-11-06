@@ -520,7 +520,7 @@
             Object.keys(properties).forEach(property => {
 
                 var value           = properties[property],
-                    propertyHandler = this.model[property];;
+                    propertyHandler = this.model[property];
 
                 if (typeof propertyHandler === 'undefined') {
 
@@ -770,7 +770,7 @@
              * @returns {*}
              */
             var arrayDiff = (firstArray, secondArray) => {
-                return firstArray.filter((index) => secondArray.indexOf(i) < 0);
+                return firstArray.filter((index) => secondArray.indexOf(index) < 0)
             };
 
             var foreignCollection = catwalk.collection(this.target.collection),
