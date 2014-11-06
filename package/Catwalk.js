@@ -168,6 +168,9 @@
             }
             catch (e) {}
 
+            model = this.blueprint.iterateProperties(model);
+            console.log(model);
+
             this.issuePromise('update', model, previousModel);
             return model;
 
@@ -516,7 +519,7 @@
             Object.keys(properties).forEach(property => {
 
                 var value           = properties[property],
-                    propertyHandler = this.model[property];
+                    propertyHandler = this.model[property];;
 
                 if (typeof propertyHandler === 'undefined') {
 

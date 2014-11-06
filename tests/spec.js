@@ -371,6 +371,20 @@
 
                     });
 
+                    iit('Should be able to typecast any updated properties;', function() {
+
+                        var dogCollection = catwalk.createCollection('dogs', {
+                            name: catwalk.typecast.string()
+                        });
+
+                        var model = dogCollection.createModel({ name: 'Terrance' });
+                        expect(model.name).toEqual('Terrance');
+
+                        model = dogCollection.updateModel(models.sixth, { name: 7 });
+                        expect(model.name).toEqual('7');
+
+                    });
+
                 });
 
                 describe('Delete', function() {
