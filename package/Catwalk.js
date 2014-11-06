@@ -763,8 +763,14 @@
 
             };
 
+            /**
+             * @method arrayDiff
+             * @param firstArray {Array}
+             * @param secondArray {Array}
+             * @returns {*}
+             */
             var arrayDiff = (firstArray, secondArray) => {
-                return firstArray.filter(function(i) {return secondArray.indexOf(i) < 0;});
+                return firstArray.filter((index) => secondArray.indexOf(i) < 0);
             };
 
             var foreignCollection = catwalk.collection(this.target.collection),
