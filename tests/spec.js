@@ -160,6 +160,20 @@
                     expect(model.ident).toEqual('snow-white');
                 });
 
+                it('Should be able to reverse the typecast for persisting the model;', function() {
+
+                    catwalk.on('create', function(collectionName, model, promise) {
+                        expect(model.name).toEqual(11);
+                        expect(model.age).toEqual('5');
+                        promise.resolve();
+                    });
+
+                    var model = dogCollection.createModel({ name: 11, age: '5' });
+                    expect(model.name).toEqual('11');
+                    expect(model.age).toEqual(5);
+
+                });
+
             });
 
             describe('CRUD Methods', function() {
