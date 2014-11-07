@@ -462,68 +462,88 @@
 
             });
 
-            describe('One-to-One', function() {
+            it('Should be able to reverse the relationships when invoking the callbacks;', function() {
 
-                it('Should be able to fetch the model from a relationship;', function() {
-                    expect(models.seventh.primeColour).toBeDefined();
-                    expect(models.seventh.primeColour).toEqual(colourModels.second);
-                    expect(models.seventh.primeColour.name).toEqual('White');
+                catwalk.on('update', function(collectionName, model, promise) {
+                    expect(model.colours[0]).toEqual('Black');
+                    expect(model.colours[1]).toEqual('White');
+                    promise.resolve();
                 });
 
-                it('Should be able to modify the relationship and return the new model;', function() {
-                    var model = collection.updateModel(models.seventh, { primeColour: 'Black' });
-                    expect(model.primeColour.name).toEqual('Black');
-                });
 
-                it('Should be able to fetch a model that is currently unloaded;', function() {
-
-                    catwalk.on('read', function(collectionName, model, promise) {
-                        expect(model.hasOwnProperty('name')).toBeTruthy();
-                        promise.resolve({ name: 'Grey' });
-                    });
-
-                    expect(colourCollection.models.length).toEqual(2);
-                    var model = collection.updateModel(models.seventh, { primeColour: 'Grey' });
-                    expect(model.primeColour.name).toEqual('Grey');
-                    expect(colourCollection.models.length).toEqual(3);
-
-                });
+                var model = collection.updateModel(models.seventh, { name: 'Ellis' });
+                expect(model.colours.length).toEqual(2);
+                expect(model.colours[0] === colourModels.first).toBeTruthy();
+                expect(model.colours[1] === colourModels.second).toBeTruthy();
 
             });
 
-            describe('Many-to-Many', function() {
+            describe('Types', function() {
 
-                it('Should be able to fetch the models from a relationship;', function() {
-                    expect(models.seventh.colours).toBeDefined();
-                    expect(models.seventh.colours.length).toEqual(2);
-                    expect(models.seventh.colours[0]).toEqual(colourModels.first);
-                    expect(models.seventh.colours[0].name).toEqual('Black');
-                    expect(models.seventh.colours[1]).toEqual(colourModels.second);
-                    expect(models.seventh.colours[1].name).toEqual('White');
-                });
+                describe('One-to-One', function() {
 
-                it('Should be able to modify the relationship and return the new models;', function() {
-                    var model = collection.updateModel(models.seventh, { colours: ['White'] });
-                    expect(model === models.seventh).toBeTruthy();
-                    expect(models.seventh.colours.length).toEqual(1);
-                    expect(models.seventh.colours[0]).toEqual(colourModels.second);
-                    expect(models.seventh.colours[0].name).toEqual('White');
-                });
-
-                it('Should be able to fetch the models that are currently unloaded;', function() {
-
-                    catwalk.on('read', function(collectionName, model, promise) {
-                        expect(model.hasOwnProperty('name')).toBeTruthy();
-                        promise.resolve({ name: model.name });
+                    it('Should be able to fetch the model from a relationship;', function() {
+                        expect(models.seventh.primeColour).toBeDefined();
+                        expect(models.seventh.primeColour).toEqual(colourModels.second);
+                        expect(models.seventh.primeColour.name).toEqual('White');
                     });
 
-                    var model = collection.updateModel(models.seventh, { colours: ['White', 'Grey', 'Ginger'] });
-                    expect(model === models.seventh).toBeTruthy();
-                    expect(models.seventh.colours.length).toEqual(3);
-                    expect(models.seventh.colours[0]).toEqual(colourModels.second);
-                    expect(models.seventh.colours[0].name).toEqual('White');
-                    expect(models.seventh.colours[1].name).toEqual('Grey');
-                    expect(models.seventh.colours[2].name).toEqual('Ginger');
+                    it('Should be able to modify the relationship and return the new model;', function() {
+                        var model = collection.updateModel(models.seventh, { primeColour: 'Black' });
+                        expect(model.primeColour.name).toEqual('Black');
+                    });
+
+                    it('Should be able to fetch a model that is currently unloaded;', function() {
+
+                        catwalk.on('read', function(collectionName, model, promise) {
+                            expect(model.hasOwnProperty('name')).toBeTruthy();
+                            promise.resolve({ name: 'Grey' });
+                        });
+
+                        expect(colourCollection.models.length).toEqual(2);
+                        var model = collection.updateModel(models.seventh, { primeColour: 'Grey' });
+                        expect(model.primeColour.name).toEqual('Grey');
+                        expect(colourCollection.models.length).toEqual(3);
+
+                    });
+
+                });
+
+                describe('Many-to-Many', function() {
+
+                    it('Should be able to fetch the models from a relationship;', function() {
+                        expect(models.seventh.colours).toBeDefined();
+                        expect(models.seventh.colours.length).toEqual(2);
+                        expect(models.seventh.colours[0]).toEqual(colourModels.first);
+                        expect(models.seventh.colours[0].name).toEqual('Black');
+                        expect(models.seventh.colours[1]).toEqual(colourModels.second);
+                        expect(models.seventh.colours[1].name).toEqual('White');
+                    });
+
+                    it('Should be able to modify the relationship and return the new models;', function() {
+                        var model = collection.updateModel(models.seventh, { colours: ['White'] });
+                        expect(model === models.seventh).toBeTruthy();
+                        expect(models.seventh.colours.length).toEqual(1);
+                        expect(models.seventh.colours[0]).toEqual(colourModels.second);
+                        expect(models.seventh.colours[0].name).toEqual('White');
+                    });
+
+                    it('Should be able to fetch the models that are currently unloaded;', function() {
+
+                        catwalk.on('read', function(collectionName, model, promise) {
+                            expect(model.hasOwnProperty('name')).toBeTruthy();
+                            promise.resolve({ name: model.name });
+                        });
+
+                        var model = collection.updateModel(models.seventh, { colours: ['White', 'Grey', 'Ginger'] });
+                        expect(model === models.seventh).toBeTruthy();
+                        expect(models.seventh.colours.length).toEqual(3);
+                        expect(models.seventh.colours[0]).toEqual(colourModels.second);
+                        expect(models.seventh.colours[0].name).toEqual('White');
+                        expect(models.seventh.colours[1].name).toEqual('Grey');
+                        expect(models.seventh.colours[2].name).toEqual('Ginger');
+
+                    });
 
                 });
 

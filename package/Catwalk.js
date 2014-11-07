@@ -125,10 +125,11 @@
          */
         createModel(properties = {}) {
 
+            this.injectMeta(properties);
+
             // Ensure the model conforms to the blueprint.
             var model = this.blueprint.iterateAll(properties);
 
-            this.injectMeta(model);
             Object.seal(model);
             this.models.push(model);
             this.issuePromise('create', model, null);
@@ -168,9 +169,19 @@
             }
             catch (e) {}
 
-            // Update the model with that of typecast model so no references are broken.
-            var typecastModel = this.blueprint.iterateProperties(model);
-            Object.keys(typecastModel).forEach(property => model[property] = typecastModel[property]);
+
+            // Typecast the updated model and copy across its properties to the current model, so as we
+            // don't break any references.
+            var typecastModel = this.blueprint.reiterateProperties(model);
+            Object.keys(typecastModel).forEach((property) => {
+
+                if (this.blueprint.model[property] instanceof RelationshipAbstract) {
+                    return;
+                }
+
+                model[property] = typecastModel[property]
+
+            });
 
             this.issuePromise('update', model, previousModel);
             return model;
@@ -251,7 +262,8 @@
 
             model[CATWALK_META_PROPERTY] = {
                 id: ++this.id,
-                status: CATWALK_STATES_PROPERTIES.NEW
+                status: CATWALK_STATES_PROPERTIES.NEW,
+                relationshipValues: {}
             }
 
         }
@@ -462,7 +474,21 @@
 
                 if (property === CATWALK_META_PROPERTY) {
 
-                    // Catwalk meta data should never be persisted.
+                    // Catwalk meta data should never be persisted to the back-end.
+                    return;
+
+                }
+
+                // Determine if the property is actually a relationship, which we need to resolve to
+                // its primitive values.
+                if (this.blueprint.model[property] instanceof RelationshipAbstract) {
+
+                    var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
+
+                    if (relationshipFunction) {
+                        cleanedModel[property] = relationshipFunction();
+                    }
+
                     return;
 
                 }
@@ -522,7 +548,7 @@
                 var value           = properties[property],
                     propertyHandler = this.model[property];
 
-                if (typeof propertyHandler === 'undefined') {
+                if (property !== CATWALK_META_PROPERTY && typeof propertyHandler === 'undefined') {
 
                     // Property doesn't belong in the model because it's not in the blueprint.
                     return;
@@ -534,6 +560,15 @@
                     // Property is actually a relationship to another collection.
                     Object.defineProperty(model, property, propertyHandler.defineRelationship(this.name, property));
                     propertyHandler.setValues(properties[property]);
+
+                    if (properties[CATWALK_META_PROPERTY]) {
+
+                        // Store the original value of the relationship to resolve when cleaning the model.
+                        properties[CATWALK_META_PROPERTY].relationshipValues[property] = () => {
+                            return propertyHandler.values;
+                        };
+
+                    }
 
                 }
 
@@ -579,6 +614,32 @@
 
                     }
 
+                }
+
+            });
+
+            return model;
+
+        }
+
+        /**
+         * Responsible for reiterating over the model to once again typecast the values; which is
+         * especially useful for when the model has been updated, but relationships need to be left
+         * alone. Since the model is sealed we can also guarantee that no other properties have been
+         * added into the model.
+         *
+         * @method reiterateProperties
+         * @param model {Object}
+         * @return {Object}
+         */
+        reiterateProperties(model) {
+
+            Object.keys(model).forEach((property) => {
+
+                var propertyHandler = this.model[property];
+
+                if (typeof propertyHandler === 'function') {
+                    model[property] = propertyHandler(model[property]);
                 }
 
             });
@@ -704,7 +765,7 @@
 
         /**
          * @method setValues
-         * @param model {Object}
+         * @param values {Object}
          * @return {void}
          */
         setValues(values) {
@@ -727,7 +788,8 @@
 
             return {
                 get: accessorFunctions.get,
-                set: accessorFunctions.set
+                set: accessorFunctions.set,
+                enumerable: true
             }
 
         }
