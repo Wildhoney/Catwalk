@@ -624,6 +624,10 @@
                 colourCollection.updateModel(yellowModel, { name: 'Orange' });
                 expect(bananaModel.colours.length).toEqual(0);
 
+                expect(greenModel.name).toEqual('Green');
+                colourCollection.updateModel(greenModel, { name: 'green' });
+                expect(appleModel.colours.length).toEqual(0);
+
             });
 
         });
