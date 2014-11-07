@@ -969,6 +969,7 @@
     }
 
     // Instantiate the Catwalk class.
-    $window.catwalk = new Catwalk();
+    $window.catwalk        = new Catwalk();
+    $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
 
 })(window);

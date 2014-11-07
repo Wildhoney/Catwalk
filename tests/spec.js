@@ -92,6 +92,15 @@
 
         });
 
+        it('Should be able to expose the `STATES` constant on the `catwalk` object;', function() {
+            expect(catwalk.STATES).toBeDefined();
+            expect(typeof catwalk.STATES).toBe('object');
+            expect(catwalk.STATES.NEW).toEqual(1);
+            expect(catwalk.STATES.DIRTY).toEqual(2);
+            expect(catwalk.STATES.SAVED).toEqual(4);
+            expect(catwalk.STATES.DELETED).toEqual(8);
+        });
+
         describe('Collection', function() {
 
             it('Should be able to return the collection using the factory method;', function() {
