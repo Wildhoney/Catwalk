@@ -557,6 +557,15 @@
 
                 if (propertyHandler instanceof RelationshipAbstract) {
 
+                    var instantiateProperties = [propertyHandler.target.key, propertyHandler.target.collection];
+
+                    // Instantiate a new relationship per model.
+                    if (propertyHandler instanceof RelationshipHasMany) {
+                        propertyHandler = new RelationshipHasMany(...instantiateProperties);
+                    } else if (propertyHandler instanceof RelationshipHasOne) {
+                        propertyHandler = new RelationshipHasOne(...instantiateProperties);
+                    }
+
                     // Property is actually a relationship to another collection.
                     Object.defineProperty(model, property, propertyHandler.defineRelationship(this.name, property));
                     propertyHandler.setValues(properties[property]);
@@ -701,6 +710,19 @@
 
             return (value) => {
                 return this.returnValue(Number, value, defaultValue);
+            };
+
+        }
+
+        /**
+         * method autoIncrement
+         * @param initialValue {Number}
+         * @return {Function}
+         */
+        autoIncrement(initialValue = 1) {
+
+            return () => {
+                return Number(initialValue++);
             };
 
         }
