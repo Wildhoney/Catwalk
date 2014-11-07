@@ -109,6 +109,7 @@
                 beforeEach(function() {
 
                     dogCollection = catwalk.createCollection('dogs', {
+                        id: catwalk.typecast.autoIncrement(),
                         name: catwalk.typecast.string('None'),
                         ident: catwalk.typecast.custom(function(value) {
                             return (value || '').replace(/\s+/ig, '-').toLowerCase();
@@ -129,6 +130,13 @@
                     var model = dogCollection.createModel();
                     expect(model.name).toEqual('None');
                     expect(model.age).toEqual(5);
+                });
+
+                it('Should be able a model and typecast as an autoIncrement', function() {
+                    var firstModel = dogCollection.createModel();
+                    expect(firstModel.id).toEqual(1);
+                    var secondModel = dogCollection.createModel();
+                    expect(secondModel.id).toEqual(2);
                 });
 
                 it('Should be able to add a model and fill in the missing defaults;', function() {

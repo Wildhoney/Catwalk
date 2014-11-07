@@ -715,6 +715,19 @@
         }
 
         /**
+         * method autoIncrement
+         * @param initialValue {Number}
+         * @return {Function}
+         */
+        autoIncrement(initialValue = 1) {
+
+            return () => {
+                return Number(initialValue++);
+            };
+
+        }
+
+        /**
          * @method custom
          * @param typecastFn {Function}
          * @return {Function}
