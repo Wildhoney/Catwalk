@@ -263,6 +263,7 @@
             model[CATWALK_META_PROPERTY] = {
                 id: ++this.id,
                 status: CATWALK_STATES_PROPERTIES.NEW,
+                originalValues: {},
                 relationshipValues: {}
             }
 
@@ -480,7 +481,7 @@
                 }
 
                 // Determine if the property is actually a relationship, which we need to resolve to
-                // its primitive values.
+                // its primitive value(s).
                 if (this.blueprint.model[property] instanceof RelationshipAbstract) {
 
                     var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
@@ -490,6 +491,19 @@
                     }
 
                     return;
+
+                }
+
+                if (typeof this.blueprint.model[property] === 'function') {
+
+                    if (model[CATWALK_META_PROPERTY] && model[CATWALK_META_PROPERTY].originalValues[property]) {
+
+                        // We have discovered a typecasted property that needs to be reverted to its original
+                        // value before invoking the callback.
+                        cleanedModel[property] = model[CATWALK_META_PROPERTY].originalValues[property];
+                        return;
+
+                    }
 
                 }
 
@@ -584,7 +598,16 @@
                 if (typeof propertyHandler === 'function') {
 
                     // Typecast property to the defined type.
+                    var originalValue = value;
                     value = propertyHandler(value);
+
+                    if (originalValue !== value) {
+
+                        // Store the original value so that we can revert it for when invoking the callback
+                        // with the `cleanModel` method.
+                        properties[CATWALK_META_PROPERTY].originalValues[property] = originalValue;
+
+                    }
 
                 }
 
@@ -860,7 +883,7 @@
              * @method arrayDiff
              * @param firstArray {Array}
              * @param secondArray {Array}
-             * @returns {*}
+             * @return {*}
              */
             var arrayDiff = (firstArray, secondArray) => {
                 return firstArray.filter((index) => secondArray.indexOf(index) < 0)
@@ -925,7 +948,7 @@
 
         /**
          * @method getModel
-         * @return {Array}
+         * @return {Object}
          */
         getModel() {
 
@@ -969,6 +992,7 @@
     }
 
     // Instantiate the Catwalk class.
-    $window.catwalk = new Catwalk();
+    $window.catwalk        = new Catwalk();
+    $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
 
 })(window);
