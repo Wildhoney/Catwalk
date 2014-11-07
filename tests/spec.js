@@ -551,6 +551,52 @@
 
         });
 
+        describe('Strategies', function() {
+
+            var fruitCollection, colourCollection;
+
+            beforeEach(function() {
+
+                // Create the fruit collection.
+                fruitCollection = catwalk.createCollection('fruit', {
+                    name: catwalk.typecast.string(),
+                    colours: catwalk.relationship.hasMany('name', 'colour')
+                });
+
+                // ...And create the colour collection.
+                colourCollection = catwalk.createCollection('colour', {
+                    id: catwalk.typecast.number(),
+                    name: catwalk.typecast.string()
+                });
+
+            });
+
+            it('Should be able to create, update, and delete, as well as modify relationships;', function() {
+
+                var appleModel  = fruitCollection.createModel({ name: 'Apple', colours: ['Green', 'Red'] }),
+                    bananaModel = fruitCollection.createModel({ name: 'Banana', colours: ['Yellow'] }),
+                    greenModel  = colourCollection.createModel({ id: 1, name: 'Green' }),
+                    redModel    = colourCollection.createModel({ id: 2, name: 'Red' }),
+                    yellowModel = colourCollection.createModel({ id: 3, name: 'Yellow' });
+
+                expect(appleModel.name).toEqual('Apple');
+                expect(bananaModel.colours[0].name).toEqual('Yellow');
+                expect(appleModel.colours[0].name).toEqual('Green');
+                expect(appleModel.colours.length).toEqual(2);
+
+                colourCollection.deleteModel(redModel);
+                expect(appleModel.colours.length).toEqual(1);
+                expect(redModel[catwalkMeta].status).toEqual(1);
+
+                colourCollection.updateModel(yellowModel, { id: 4 });
+                expect(bananaModel.colours.length).toEqual(1);
+                colourCollection.updateModel(yellowModel, { name: 'Orange' });
+                expect(bananaModel.colours.length).toEqual(0);
+
+            });
+
+        });
+
     });
 
 })(window, window.catwalk);
