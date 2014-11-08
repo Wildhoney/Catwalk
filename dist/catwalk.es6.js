@@ -854,7 +854,7 @@
          */
         defineRelationship(collectionName, localKey) {
 
-            return super(collectionName, localKey, {
+            return super.defineRelationship(collectionName, localKey, {
                 get: this.getModels.bind(this),
                 set: this.setModels.bind(this)
             });
