@@ -254,6 +254,53 @@
         }
 
         /**
+         * @method addAssociation
+         * @param model {Object}
+         * @param property {String}
+         * @param properties {Array}
+         * @return {Object}
+         */
+        addAssociation(model, property, properties) {
+
+            if (!(this.blueprint.model[property] instanceof RelationshipHasMany)) {
+                catwalk.throwException('Using `addAssociation` requires a hasMany relationship');
+            }
+
+            var currentProperties = model[CATWALK_META_PROPERTY].relationshipValues[property]();
+            currentProperties     = currentProperties.concat(properties);
+            var updateData        = {};
+            updateData[property]  = currentProperties;
+            return this.updateModel(model, updateData);
+
+        }
+
+        /**
+         * @method removeAssociation
+         * @param model {Object}
+         * @param property {String}
+         * @param properties {Array}
+         * @return {Object}
+         */
+        removeAssociation(model, property, properties) {
+
+            if (!(this.blueprint.model[property] instanceof RelationshipHasMany)) {
+                catwalk.throwException('Using `removeAssociation` requires a hasMany relationship');
+            }
+
+            var currentProperties = model[CATWALK_META_PROPERTY].relationshipValues[property]();
+
+            properties.forEach((property) => {
+                var index = currentProperties.indexOf(property);
+                currentProperties.splice(index, 1);
+            });
+
+            var updateData        = {};
+            updateData[property]  = currentProperties;
+            return this.updateModel(model, updateData);
+
+        }
+
+        /**
          * @method injectMeta
          * @param model {Object}
          * @return {Object}

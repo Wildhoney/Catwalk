@@ -509,6 +509,37 @@
 
             });
 
+            it('Should be able to add items to the hasMany relationship using `addAssociation`;', function() {
+
+                var model = collection.createModel({ colours: ['Black'] });
+                expect(model.colours.length).toEqual(1);
+
+                expect(function() {
+                    collection.addAssociation(model, 'name', ['White']);
+                }).toThrow('Catwalk: Using `addAssociation` requires a hasMany relationship.');
+
+                expect(model.colours.length).toEqual(1);
+                collection.addAssociation(model, 'colours', ['White']);
+                expect(model.colours.length).toEqual(2);
+
+            });
+
+            it('Should be able to add items to the hasMany relationship using `removeAssociation`;', function() {
+
+                var model = collection.createModel({ colours: ['Black', 'White'] });
+                expect(model.colours.length).toEqual(2);
+
+                expect(function() {
+                    collection.removeAssociation(model, 'name', ['White']);
+                }).toThrow('Catwalk: Using `removeAssociation` requires a hasMany relationship.');
+
+                expect(model.colours.length).toEqual(2);
+                collection.removeAssociation(model, 'colours', ['Black']);
+                expect(model.colours.length).toEqual(1);
+                expect(model.colours[0].name).toEqual('White');
+
+            });
+
             describe('Types', function() {
 
                 describe('One-to-One', function() {
