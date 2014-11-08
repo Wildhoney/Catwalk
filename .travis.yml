@@ -13,3 +13,14 @@ script:
   - bower install
   - gulp test
   - gulp build
+
+deploy:
+  provider: heroku
+  strategy: api
+  all_branches: true
+  skip_cleanup: true
+  api_key:
+    secure: Ke+/a8HgRH0meV9QRCeIoTeXZgW0MKbZ/ZuiHSimSwdNsAeppV9lzDCL+SgcdR7RrQ2d2yo7ogvzdQvWBtfNqUtRNiNDsra3uu+gmuRoAgFccv1hg8MMOLMbQAPQ5167FJHDkU5qRQ2AejCqsHml834fW8JWYRVyx5QAbdYYvrM=
+  app: catwalk
+  on:
+    repo: Wildhoney/Catwalk.js
