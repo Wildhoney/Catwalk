@@ -184,6 +184,23 @@
         }
 
         /**
+         * @method addModels
+         * @param propertiesList {Object}
+         * @return {Array}
+         */
+        addModels(propertiesList = []) {
+
+            var models = [];
+
+            propertiesList.forEach((properties) => {
+                models.push(this.addModel(properties));
+            });
+
+            return models;
+
+        }
+
+        /**
          * @method createModel
          * @param [properties={}] {Object}
          * @return {Object}
