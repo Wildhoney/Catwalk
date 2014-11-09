@@ -736,18 +736,16 @@
 
         describe('Transactions', function() {
 
-            iit('Should be able to add promises to a transaction and resolve in one fell swoop;', function() {
+            it('Should be able to add promises to a transaction and resolve in one fell swoop;', function() {
 
                 var transaction = catwalk.createTransaction();
                 spyOn(transaction, 'resolve').andCallThrough();
+
                 transaction.resolve(function(models) {
-
                     expect(models.length).toEqual(3);
-
                     models.forEach(function(model) {
                         model.promise.resolve();
                     });
-
                 });
 
                 catwalk.on('create', function(model, promise) {
