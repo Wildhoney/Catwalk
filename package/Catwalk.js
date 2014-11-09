@@ -24,10 +24,11 @@
          * @return {Catwalk}
          */
         constructor() {
-            this.events       = {};
-            this.collections  = {};
-            this.relationship = new Relationship();
-            this.typecast     = new Typecast();
+            this.events         = {};
+            this.collections    = {};
+            this.relationship   = new Relationship();
+            this.typecast       = new Typecast();
+            this.revertTypecast = true;
         }
 
         /**
@@ -55,6 +56,15 @@
 
             return this.collections[name];
 
+        }
+
+        /**
+         * @method revertCallbackTypecast
+         * @param setting {Boolean}
+         * @return {void}
+         */
+        revertCallbackTypecast(setting) {
+            this.revertTypecast = !!setting;
         }
 
         /**
@@ -639,7 +649,7 @@
                     var originalValue = value;
                     value = propertyHandler(value);
 
-                    if (originalValue !== value) {
+                    if (catwalk.revertTypecast && originalValue !== value) {
 
                         // Store the original value so that we can revert it for when invoking the callback
                         // with the `cleanModel` method.

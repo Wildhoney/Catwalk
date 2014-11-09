@@ -177,6 +177,37 @@
 
                 });
 
+                it('Should be able to reverse custom typecasts on callback invocation unless option defined;', function() {
+
+                    catwalk.on('create', function(collectionName, model, promise) {
+                        expect(model.name).toEqual('Lindsey');
+                        expect(model.age).toEqual(7);
+                        expect(model.ident).toEqual('Lindsey');
+                        promise.resolve();
+                    });
+
+                    var model = dogCollection.createModel({ name: 'Lindsey', ident: 'Lindsey', age: 7 });
+                    expect(model.name).toEqual('Lindsey');
+                    expect(model.age).toEqual(7);
+                    expect(model.ident).toEqual('lindsey');
+
+                    // Disable the inverse-typecasting of properties!
+                    catwalk.revertCallbackTypecast(false);
+
+                    catwalk.on('create', function(collectionName, model, promise) {
+                        expect(model.name).toEqual('Lindsey');
+                        expect(model.age).toEqual(7);
+                        expect(model.ident).toEqual('lindsey');
+                        promise.resolve();
+                    });
+
+                    model = dogCollection.createModel({ name: 'Lindsey', ident: 'Lindsey', age: 7 });
+                    expect(model.name).toEqual('Lindsey');
+                    expect(model.age).toEqual(7);
+                    expect(model.ident).toEqual('lindsey');
+
+                });
+
             });
 
             describe('CRUD Methods', function() {

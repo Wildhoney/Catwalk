@@ -529,28 +529,28 @@
 
                 // Determine if the property is actually a relationship, which we need to resolve to
                 // its primitive value(s).
-                if (this.blueprint.model[property] instanceof RelationshipAbstract) {
-
-                    var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
-
-                    if (relationshipFunction) {
-                        cleanedModel[property] = relationshipFunction();
-                    }
-
-                    return;
-
-                }
+                //if (this.blueprint.model[property] instanceof RelationshipAbstract) {
+                //
+                //    var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
+                //
+                //    if (relationshipFunction) {
+                //        cleanedModel[property] = relationshipFunction();
+                //    }
+                //
+                //    return;
+                //
+                //}
 
                 if (typeof this.blueprint.model[property] === 'function') {
 
-                    if (model[CATWALK_META_PROPERTY] && model[CATWALK_META_PROPERTY].originalValues[property]) {
-
-                        // We have discovered a typecasted property that needs to be reverted to its original
-                        // value before invoking the callback.
-                        cleanedModel[property] = model[CATWALK_META_PROPERTY].originalValues[property];
-                        return;
-
-                    }
+                    //if (model[CATWALK_META_PROPERTY] && model[CATWALK_META_PROPERTY].originalValues[property]) {
+                    //
+                    //    // We have discovered a typecasted property that needs to be reverted to its original
+                    //    // value before invoking the callback.
+                    //    cleanedModel[property] = model[CATWALK_META_PROPERTY].originalValues[property];
+                    //    return;
+                    //
+                    //}
 
                 }
 
