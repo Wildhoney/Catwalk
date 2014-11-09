@@ -253,6 +253,13 @@
                     expect(callback.create).not.toHaveBeenCalled();
                     expect(collection.models.length).toEqual(7);
 
+                    var models = collection.addModels([{ name: 'George' }, { name: 'Elixir' }]);
+                    expect(models.length).toEqual(2);
+                    expect(callback.create).not.toHaveBeenCalled();
+                    expect(collection.models.length).toEqual(9);
+                    expect(models[0].name).toEqual('George');
+                    expect(models[1].name).toEqual('Elixir');
+
                 });
 
                 describe('Create', function() {
