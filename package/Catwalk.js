@@ -33,9 +33,15 @@
 
         /**
          * @method createCollection
+         * @param name {String}
+         * @param [properties={}] {Object}
          * @return {Collection}
          */
-        createCollection(name, properties) {
+        createCollection(name, properties = {}) {
+
+            if (Object.keys(properties).length === 0) {
+                this.throwException(`Collection "${name}" must define its blueprint`);
+            }
 
             var collection = new Collection(name, properties);
             this.collections[name] = collection;

@@ -124,6 +124,18 @@
                 }).toThrow('Catwalk: Unable to find collection "transient".');
             });
 
+            it('Should be able to reject collections without any blueprint properties;', function() {
+
+                expect(function() {
+                    catwalk.createCollection('no-properties');
+                }).toThrow('Catwalk: Collection "no-properties" must define its blueprint.');
+
+                expect(function() {
+                    catwalk.collection('no-properties');
+                }).toThrow('Catwalk: Unable to find collection "no-properties".');
+
+            });
+
             describe('Typecast', function() {
 
                 var dogCollection;
