@@ -39,6 +39,12 @@
          */
         createCollection(name, properties = {}) {
 
+            name = String(name);
+
+            if (name.length === 0) {
+                this.throwException('Collection must have an associated name');
+            }
+
             if (Object.keys(properties).length === 0) {
                 this.throwException(`Collection "${name}" must define its blueprint`);
             }

@@ -124,6 +124,14 @@
                 }).toThrow('Catwalk: Unable to find collection "transient".');
             });
 
+            it('Should be able to reject collections that do not specify a name;', function() {
+
+                expect(function() {
+                    catwalk.createCollection('', { name: '' });
+                }).toThrow('Catwalk: Collection must have an associated name.');
+
+            });
+
             it('Should be able to reject collections without any blueprint properties;', function() {
 
                 expect(function() {
