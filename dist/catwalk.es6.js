@@ -167,6 +167,23 @@
         }
 
         /**
+         * @method addModel
+         * @param properties {Object}
+         * @return {Object}
+         */
+        addModel(properties = {}) {
+
+            var model = {};
+
+            this.silently(() => {
+                model = this.createModel(properties);
+            });
+
+            return model;
+
+        }
+
+        /**
          * @method createModel
          * @param [properties={}] {Object}
          * @return {Object}
