@@ -1,7 +1,7 @@
 {
   "name": "catwalk.js",
   "version": "0.5.4",
-  "description": "",
+  "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects written in ES6.",
   "main": "dist/catwalk.es5.min.js",
   "directories": {
     "example": "example",
