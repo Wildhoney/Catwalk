@@ -15,6 +15,9 @@
             primeColour: catwalk.relationship.hasOne('name', 'colours')
         });
 
+        // Create mock colour collection.
+        catwalk.createCollection('colours', {});
+
         models.first  = collection.createModel({ name: 'Kipper' });
         models.second = collection.createModel({ name: 'Splodge' });
         models.third  = collection.createModel({ name: 'Mango' });
@@ -538,6 +541,12 @@
                 expect(model.colours.length).toEqual(1);
                 expect(model.colours[0].name).toEqual('White');
 
+            });
+
+            it('Should be able to define hasMany relationships as an array if unset in createModel;', function() {
+                var model = collection.createModel({ name: 'Maria' });
+                expect(Array.isArray(model.colours)).toBeTruthy();
+                expect(model.colours.length).toEqual(0);
             });
 
             describe('Types', function() {
