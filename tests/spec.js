@@ -165,7 +165,7 @@
 
                 it('Should be able to reverse the typecast for persisting the model;', function() {
 
-                    catwalk.on('create', function(collectionName, model, promise) {
+                    catwalk.on('create', function(model, promise) {
                         expect(model.name).toEqual(11);
                         expect(model.age).toEqual('5');
                         promise.resolve();
@@ -179,7 +179,7 @@
 
                 it('Should be able to reverse custom typecasts on callback invocation unless option defined;', function() {
 
-                    catwalk.on('create', function(collectionName, model, promise) {
+                    catwalk.on('create', function(model, promise) {
                         expect(model.name).toEqual('Lindsey');
                         expect(model.age).toEqual(7);
                         expect(model.ident).toEqual('Lindsey');
@@ -194,7 +194,7 @@
                     // Disable the inverse-typecasting of properties!
                     catwalk.revertCallbackTypecast(false);
 
-                    catwalk.on('create', function(collectionName, model, promise) {
+                    catwalk.on('create', function(model, promise) {
                         expect(model.name).toEqual('Lindsey');
                         expect(model.age).toEqual(7);
                         expect(model.ident).toEqual('lindsey');
@@ -260,8 +260,8 @@
 
                     it('Should be able to add a model and resolve the promise;', function() {
 
-                        catwalk.on('create', function(collectionName, model, promise) {
-                            expect(collectionName).toEqual('cats');
+                        catwalk.on('create', function(model, promise) {
+                            expect(this.name).toEqual('cats');
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.resolve();
                         });
@@ -274,8 +274,8 @@
 
                     it('Should be able to add a model and resolve the promise and modify the properties;', function() {
 
-                        catwalk.on('create', function(collectionName, model, promise) {
-                            expect(collectionName).toEqual('cats');
+                        catwalk.on('create', function(model, promise) {
+                            expect(this.name).toEqual('cats');
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.resolve({ id: 6, age: 9 });
                         });
@@ -291,7 +291,7 @@
 
                     it('Should be able to add a model and reject the promise;', function() {
 
-                        catwalk.on('create', function(collectionName, model, promise) {
+                        catwalk.on('create', function(model, promise) {
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.reject();
                         });
@@ -311,7 +311,7 @@
 
                     it('Should be able to add a model and reject the promise in favour of a duplicate model;', function() {
 
-                        catwalk.on('create', function(collectionName, model, promise) {
+                        catwalk.on('create', function(model, promise) {
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.reject(models.first);
                         });
@@ -339,7 +339,7 @@
 
                     it('Should be able to load a model into the collection by promise resolution;', function() {
 
-                        catwalk.on('read', function(collectionName, model, promise) {
+                        catwalk.on('read', function(model, promise) {
                             promise.resolve({ id: 10, name: 'Ellie' });
                         });
 
@@ -352,7 +352,7 @@
 
                     it('Should be able to load a model into the collection by promise rejection;', function() {
 
-                        catwalk.on('read', function(collectionName, model, promise) {
+                        catwalk.on('read', function(model, promise) {
                             promise.reject();
                         });
 
@@ -379,7 +379,7 @@
 
                     it('Should be able to update a model and then resolve the promise;', function() {
 
-                        catwalk.on('update', function(collectionName, model, promise) {
+                        catwalk.on('update', function(model, promise) {
                             promise.resolve();
                         });
 
@@ -394,7 +394,7 @@
 
                     it('Should be able to update a model and then resolve the promise with additional properties;', function() {
 
-                        catwalk.on('update', function(collectionName, model, promise) {
+                        catwalk.on('update', function(model, promise) {
                             promise.resolve({ id: 25, name: 'Lara' });
                         });
 
@@ -410,7 +410,7 @@
 
                     it('Should be able to update a model and then reject the promise;', function() {
 
-                        catwalk.on('update', function(collectionName, model, promise) {
+                        catwalk.on('update', function(model, promise) {
                             promise.reject();
                         });
 
@@ -431,7 +431,7 @@
 
                     it('Should be able to update a model and then reject the promise in favour of a duplicate model;', function() {
 
-                        catwalk.on('update', function(collectionName, model, promise) {
+                        catwalk.on('update', function(model, promise) {
                             promise.reject(models.second);
                         });
 
@@ -474,8 +474,8 @@
 
                     it('Should be able to delete a model and resolve the promise;', function() {
 
-                        catwalk.on('delete', function(collectionName, model, promise) {
-                            expect(collectionName).toEqual('cats');
+                        catwalk.on('delete', function(model, promise) {
+                            expect(this.name).toEqual('cats');
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.resolve();
                         });
@@ -488,8 +488,8 @@
 
                     it('Should be able to delete a model and reject the promise;', function() {
 
-                        catwalk.on('delete', function(collectionName, model, promise) {
-                            expect(collectionName).toEqual('cats');
+                        catwalk.on('delete', function(model, promise) {
+                            expect(this.name).toEqual('cats');
                             expect(model[catwalkMeta]).toBeUndefined();
                             promise.reject();
                         });
@@ -529,7 +529,7 @@
 
             it('Should be able to reverse the relationships when invoking the callbacks;', function() {
 
-                catwalk.on('update', function(collectionName, model, promise) {
+                catwalk.on('update', function(model, promise) {
                     expect(model.colours[0]).toEqual('Black');
                     expect(model.colours[1]).toEqual('White');
                     promise.resolve();
@@ -597,7 +597,7 @@
 
                     it('Should be able to fetch a model that is currently unloaded;', function() {
 
-                        catwalk.on('read', function(collectionName, model, promise) {
+                        catwalk.on('read', function(model, promise) {
                             expect(model.hasOwnProperty('name')).toBeTruthy();
                             promise.resolve({ name: 'Grey' });
                         });
@@ -632,7 +632,7 @@
 
                     it('Should be able to fetch the models that are currently unloaded;', function() {
 
-                        catwalk.on('read', function(collectionName, model, promise) {
+                        catwalk.on('read', function(model, promise) {
                             expect(model.hasOwnProperty('name')).toBeTruthy();
                             promise.resolve({ name: model.name });
                         });

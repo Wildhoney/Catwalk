@@ -350,7 +350,7 @@
             new Promise((resolve, reject) => {
 
                 // Issue the promise for back-end persistence of the model.
-                catwalk.events[eventName](this.name, this.cleanModel(currentModel || previousModel), {
+                catwalk.events[eventName].call(this, this.cleanModel(currentModel || previousModel), {
                     resolve: resolve, reject: reject
                 });
 
@@ -699,7 +699,7 @@
 
                         // Determine if the property has a property handler method which would be responsible
                         // for typecasting, and determining the default value.
-                        model[property]     = propertyHandler();
+                        model[property] = propertyHandler();
 
                     }
 
