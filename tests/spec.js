@@ -16,7 +16,7 @@
         });
 
         // Create mock colour collection.
-        catwalk.createCollection('colours', {});
+        catwalk.createCollection('colours', { name: '' });
 
         models.first  = collection.createModel({ name: 'Kipper' });
         models.second = collection.createModel({ name: 'Splodge' });
