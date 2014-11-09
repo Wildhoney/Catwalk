@@ -190,6 +190,10 @@
          */
         addModels(propertiesList = []) {
 
+            if (!Array.isArray(propertiesList)) {
+                catwalk.throwException('Argument for `addModels` must be an array of properties');
+            }
+
             var models = [];
 
             propertiesList.forEach((properties) => {
