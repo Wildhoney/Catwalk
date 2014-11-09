@@ -114,6 +114,16 @@
                 expect(function() { catwalk.collection('dogs'); }).toThrow('Catwalk: Unable to find collection "dogs".');
             });
 
+            it('Should be able to delete existing collections;', function() {
+                var transientCollection = catwalk.createCollection('transient', { name: '' });
+                expect(typeof transientCollection).toBe('object');
+                expect(typeof catwalk.collection('transient')).toBe('object');
+                catwalk.deleteCollection('transient');
+                expect(function() {
+                    catwalk.collection('transient');
+                }).toThrow('Catwalk: Unable to find collection "transient".');
+            });
+
             describe('Typecast', function() {
 
                 var dogCollection;

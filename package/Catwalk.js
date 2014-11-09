@@ -44,6 +44,19 @@
         }
 
         /**
+         * @method deleteCollection
+         * @param name {String}
+         * @return {void}
+         */
+        deleteCollection(name) {
+
+            if (this.collections[name]) {
+                delete this.collections[name];
+            }
+
+        }
+
+        /**
          * @method collection
          * @param name {String}
          * @return {Collection}
