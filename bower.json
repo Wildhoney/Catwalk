@@ -1,6 +1,6 @@
 {
   "name": "catwalk",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Intuitive and fast relational CRUD interface for modelling relationships using vanilla objects written in ES6.",
   "homepage": "https://github.com/Wildhoney/Catwalk.js",
   "authors": [
