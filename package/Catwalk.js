@@ -263,26 +263,26 @@
 
             })();
 
-            (() => {
+            if (!didDeleteViaReference) {
 
-                if (didDeleteViaReference) {
-                    return;
-                }
+                (() => {
 
-                var index = 0;
+                    var index = 0;
 
-                // Try to find the model by its internal Catwalk ID.
-                this.models.forEach((currentModel) => {
+                    // Try to find the model by its internal Catwalk ID.
+                    this.models.forEach((currentModel) => {
 
-                    if (currentModel[CATWALK_META_PROPERTY].id === model[CATWALK_META_PROPERTY].id) {
-                        remove(currentModel, index);
-                    }
+                        if (currentModel[CATWALK_META_PROPERTY].id === model[CATWALK_META_PROPERTY].id) {
+                            remove(currentModel, index);
+                        }
 
-                    index++;
+                        index++;
 
-                });
+                    });
 
-            })();
+                })();
+
+            }
 
             return model;
 
