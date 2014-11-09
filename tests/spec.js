@@ -260,6 +260,10 @@
                     expect(models[0].name).toEqual('George');
                     expect(models[1].name).toEqual('Elixir');
 
+                    expect(function() {
+                        collection.addModels({ name: 'Elizabeth' });
+                    }).toThrow('Catwalk: Argument for `addModels` must be an array of properties.');
+
                 });
 
                 describe('Create', function() {
