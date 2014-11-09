@@ -237,10 +237,8 @@
              * @return {Object}
              */
             var remove = (model, index) => {
-
                 this.issuePromise('delete', null, model);
                 this.models.splice(index, 1);
-
             };
 
             /**
@@ -1096,5 +1094,6 @@
     // Instantiate the Catwalk class.
     $window.catwalk        = new Catwalk();
     $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
+    $window.catwalk.META   = CATWALK_META_PROPERTY;
 
 })(window);

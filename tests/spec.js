@@ -2,7 +2,7 @@
 
     var collection  = {},
         models      = {},
-        catwalkMeta = '__catwalk';
+        catwalkMeta = catwalk.META;
 
     beforeEach(function beforeEach() {
 
