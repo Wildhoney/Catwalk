@@ -254,6 +254,53 @@
         }
 
         /**
+         * @method addAssociation
+         * @param model {Object}
+         * @param property {String}
+         * @param properties {Array}
+         * @return {Object}
+         */
+        addAssociation(model, property, properties) {
+
+            if (!(this.blueprint.model[property] instanceof RelationshipHasMany)) {
+                catwalk.throwException('Using `addAssociation` requires a hasMany relationship');
+            }
+
+            var currentProperties = model[CATWALK_META_PROPERTY].relationshipValues[property]();
+            currentProperties     = currentProperties.concat(properties);
+            var updateData        = {};
+            updateData[property]  = currentProperties;
+            return this.updateModel(model, updateData);
+
+        }
+
+        /**
+         * @method removeAssociation
+         * @param model {Object}
+         * @param property {String}
+         * @param properties {Array}
+         * @return {Object}
+         */
+        removeAssociation(model, property, properties) {
+
+            if (!(this.blueprint.model[property] instanceof RelationshipHasMany)) {
+                catwalk.throwException('Using `removeAssociation` requires a hasMany relationship');
+            }
+
+            var currentProperties = model[CATWALK_META_PROPERTY].relationshipValues[property]();
+
+            properties.forEach((property) => {
+                var index = currentProperties.indexOf(property);
+                currentProperties.splice(index, 1);
+            });
+
+            var updateData        = {};
+            updateData[property]  = currentProperties;
+            return this.updateModel(model, updateData);
+
+        }
+
+        /**
          * @method injectMeta
          * @param model {Object}
          * @return {Object}
@@ -571,16 +618,7 @@
 
                 if (propertyHandler instanceof RelationshipAbstract) {
 
-                    var instantiateProperties = [propertyHandler.target.key, propertyHandler.target.collection];
-
-                    // Instantiate a new relationship per model.
-                    if (propertyHandler instanceof RelationshipHasMany) {
-                        propertyHandler = new RelationshipHasMany(...instantiateProperties);
-                    } else if (propertyHandler instanceof RelationshipHasOne) {
-                        propertyHandler = new RelationshipHasOne(...instantiateProperties);
-                    }
-
-                    // Property is actually a relationship to another collection.
+                    propertyHandler = this.relationshipHandler(propertyHandler);
                     Object.defineProperty(model, property, propertyHandler.defineRelationship(this.name, property));
                     propertyHandler.setValues(properties[property]);
 
@@ -635,13 +673,22 @@
                 if (typeof model[property] === 'undefined') {
 
                     // Ensure that it is defined.
-                    model[property] = this.model[property];
+                    model[property]     = this.model[property];
+                    var propertyHandler = this.model[property];
+
+                    if (propertyHandler instanceof RelationshipAbstract) {
+
+                        propertyHandler = this.relationshipHandler(propertyHandler);
+                        Object.defineProperty(model, property, propertyHandler.defineRelationship(this.name, property));
+                        propertyHandler.setValues([]);
+                        return;
+
+                    }
 
                     if (typeof this.model[property] === 'function') {
 
                         // Determine if the property has a property handler method which would be responsible
                         // for typecasting, and determining the default value.
-                        let propertyHandler = this.model[property];
                         model[property]     = propertyHandler();
 
                     }
@@ -677,6 +724,26 @@
             });
 
             return model;
+
+        }
+
+        /**
+         * @method relationshipHandler
+         * @param propertyHandler {RelationshipAbstract}
+         * @return {RelationshipAbstract}
+         */
+        relationshipHandler(propertyHandler) {
+
+            var instantiateProperties = [propertyHandler.target.key, propertyHandler.target.collection];
+
+            // Instantiate a new relationship per model.
+            if (propertyHandler instanceof RelationshipHasMany) {
+                propertyHandler = new RelationshipHasMany(...instantiateProperties);
+            } else if (propertyHandler instanceof RelationshipHasOne) {
+                propertyHandler = new RelationshipHasOne(...instantiateProperties);
+            }
+
+            return propertyHandler;
 
         }
 
