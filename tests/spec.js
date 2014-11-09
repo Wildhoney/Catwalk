@@ -242,6 +242,19 @@
 
             describe('CRUD Methods', function() {
 
+                it('Should be able to add models without invoking any callback;', function() {
+
+                    var callback = { create: function() {} };
+                    spyOn(callback, 'create');
+                    catwalk.on('create', callback.create);
+
+                    var model = collection.addModel({ name: 'Fiona' });
+                    expect(model.name).toEqual('Fiona');
+                    expect(callback.create).not.toHaveBeenCalled();
+                    expect(collection.models.length).toEqual(7);
+
+                });
+
                 describe('Create', function() {
 
                     beforeEach(function() {
