@@ -1,4 +1,9 @@
-(function($window) {
+/**
+ * @module Catwalk
+ * @author Adam Timberlake
+ * @link https://github.com/Wildhoney/Catwalk.js
+ */
+(function main($window) {
 
     "use strict";
 
@@ -81,6 +86,14 @@
 
             return this.collections[name];
 
+        }
+
+        /**
+         * @method createTransaction
+         * @return {Transaction}
+         */
+        createTransaction() {
+            return new Transaction();
         }
 
         /**
@@ -202,8 +215,7 @@
                 Object.keys(properties).forEach(property => model[property] = properties[property]);
 
             }
-            catch (e) {}
-
+            catch (exception) {}
 
             // Typecast the updated model and copy across its properties to the current model, so as we
             // don't break any references.
@@ -761,7 +773,10 @@
         }
 
         /**
+         * Responsible for instantiating a new relationship per model.
+         *
          * @method relationshipHandler
+         * @throws Exception
          * @param propertyHandler {RelationshipAbstract}
          * @return {RelationshipAbstract}
          */
@@ -769,14 +784,16 @@
 
             var instantiateProperties = [propertyHandler.target.key, propertyHandler.target.collection];
 
-            // Instantiate a new relationship per model.
             if (propertyHandler instanceof RelationshipHasMany) {
-                propertyHandler = new RelationshipHasMany(...instantiateProperties);
-            } else if (propertyHandler instanceof RelationshipHasOne) {
-                propertyHandler = new RelationshipHasOne(...instantiateProperties);
+                return new RelationshipHasMany(...instantiateProperties);
             }
 
-            return propertyHandler;
+            if (propertyHandler instanceof RelationshipHasOne) {
+                return new RelationshipHasOne(...instantiateProperties);
+            }
+
+            // Should be unreachable...
+            catwalk.throwException('Invalid relationship type');
 
         }
 
@@ -1091,9 +1108,57 @@
 
     }
 
+    /**
+     * @class Transaction
+     */
+    class Transaction {
+
+        /**
+         * @constructor
+         * @return {Transaction}
+         */
+        constructor() {
+
+            this.models    = [];
+            this.resolveFn = () => {};
+
+            // Flush the promises in the subsequent run-loop.
+            setTimeout(() => this.flush, 1);
+
+        }
+
+        /**
+         * @method add
+         * @param model {Object}
+         * @param promise {Object}
+         * @return {void}
+         */
+        add(model, promise) {
+            this.models.push({ model: model, promise: promise });
+        }
+
+        /**
+         * @method resolve
+         * @param resolveFn {Function}
+         * @return {void}
+         */
+        resolve(resolveFn) {
+            this.resolveFn = resolveFn;
+        }
+
+        /**
+         * @method flush
+         * @return {void}
+         */
+        flush() {
+            this.resolveFn(this.models);
+        }
+
+    }
+
     // Instantiate the Catwalk class.
     $window.catwalk        = new Catwalk();
-    $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
     $window.catwalk.META   = CATWALK_META_PROPERTY;
+    $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
 
 })(window);

@@ -734,6 +734,38 @@
 
         });
 
+        describe('Transactions', function() {
+
+            iit('Should be able to add promises to a transaction and resolve in one fell swoop;', function() {
+
+                var transaction = catwalk.createTransaction();
+                spyOn(transaction, 'resolve').andCallThrough();
+                transaction.resolve(function(models) {
+
+                    expect(models.length).toEqual(3);
+
+                    models.forEach(function(model) {
+                        model.promise.resolve();
+                    });
+
+                });
+
+                catwalk.on('create', function(model, promise) {
+                    transaction.add(model, promise);
+                });
+
+                collection.createModel({ name: 'Alison' });
+                collection.createModel({ name: 'Sophie' });
+                collection.createModel({ name: 'Lima' });
+
+                expect(transaction.models.length).toEqual(3);
+                transaction.flush();
+                expect(transaction.resolve).toHaveBeenCalled();
+
+            });
+
+        });
+
     });
 
 })(window, window.catwalk);
