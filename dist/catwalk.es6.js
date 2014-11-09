@@ -24,10 +24,11 @@
          * @return {Catwalk}
          */
         constructor() {
-            this.events       = {};
-            this.collections  = {};
-            this.relationship = new Relationship();
-            this.typecast     = new Typecast();
+            this.events         = {};
+            this.collections    = {};
+            this.relationship   = new Relationship();
+            this.typecast       = new Typecast();
+            this.revertTypecast = true;
         }
 
         /**
@@ -55,6 +56,15 @@
 
             return this.collections[name];
 
+        }
+
+        /**
+         * @method revertCallbackTypecast
+         * @param setting {Boolean}
+         * @return {void}
+         */
+        revertCallbackTypecast(setting) {
+            this.revertTypecast = !!setting;
         }
 
         /**
@@ -529,28 +539,28 @@
 
                 // Determine if the property is actually a relationship, which we need to resolve to
                 // its primitive value(s).
-                //if (this.blueprint.model[property] instanceof RelationshipAbstract) {
-                //
-                //    var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
-                //
-                //    if (relationshipFunction) {
-                //        cleanedModel[property] = relationshipFunction();
-                //    }
-                //
-                //    return;
-                //
-                //}
+                if (this.blueprint.model[property] instanceof RelationshipAbstract) {
+
+                    var relationshipFunction = model[CATWALK_META_PROPERTY].relationshipValues[property];
+
+                    if (relationshipFunction) {
+                        cleanedModel[property] = relationshipFunction();
+                    }
+
+                    return;
+
+                }
 
                 if (typeof this.blueprint.model[property] === 'function') {
 
-                    //if (model[CATWALK_META_PROPERTY] && model[CATWALK_META_PROPERTY].originalValues[property]) {
-                    //
-                    //    // We have discovered a typecasted property that needs to be reverted to its original
-                    //    // value before invoking the callback.
-                    //    cleanedModel[property] = model[CATWALK_META_PROPERTY].originalValues[property];
-                    //    return;
-                    //
-                    //}
+                    if (model[CATWALK_META_PROPERTY] && model[CATWALK_META_PROPERTY].originalValues[property]) {
+
+                        // We have discovered a typecasted property that needs to be reverted to its original
+                        // value before invoking the callback.
+                        cleanedModel[property] = model[CATWALK_META_PROPERTY].originalValues[property];
+                        return;
+
+                    }
 
                 }
 
@@ -639,7 +649,7 @@
                     var originalValue = value;
                     value = propertyHandler(value);
 
-                    if (originalValue !== value) {
+                    if (catwalk.revertTypecast && originalValue !== value) {
 
                         // Store the original value so that we can revert it for when invoking the callback
                         // with the `cleanModel` method.
