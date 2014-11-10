@@ -903,6 +903,19 @@
         }
 
         /**
+         * @method array
+         * @param defaultValue {Array}
+         * @return {Function}
+         */
+        array(defaultValue = []) {
+
+            return (value) => {
+                return this.returnValue(Array, value, defaultValue);
+            };
+
+        }
+
+        /**
          * method autoIncrement
          * @param initialValue {Number}
          * @return {Function}

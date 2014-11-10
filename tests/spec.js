@@ -164,9 +164,15 @@
                             return (value || '').replace(/\s+/ig, '-').toLowerCase();
                         }),
                         age: catwalk.typecast.number(5),
-                        hasOwner: catwalk.typecast.boolean(true)
+                        hasOwner: catwalk.typecast.boolean(true),
+                        previousOwners: catwalk.typecast.array()
                     });
 
+                });
+
+                it('Should be able to typecast a property to an array;', function() {
+                    var model = dogCollection.createModel({ previousOwners: 'Lucia' });
+                    expect(Array.isArray(model.previousOwners)).toBeTruthy();
                 });
 
                 it('Should be able to typecast a model from number to string;', function() {
