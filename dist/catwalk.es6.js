@@ -161,9 +161,19 @@
          * @return {void}
          */
         silently(silentFn) {
-            this.silent = true;
+
+            var silentBefore = this.silent;
+            this.silent      = true;
             silentFn.apply(this);
-            this.silent = false;
+
+            if (!silentBefore) {
+
+                // Only remove the silence if it wasn't silent before, which prevents against
+                // nesting the `silently` methods inside one another.
+                this.silent = false;
+
+            }
+
         }
 
         /**
@@ -888,6 +898,19 @@
 
             return (value) => {
                 return this.returnValue(Number, value, defaultValue);
+            };
+
+        }
+
+        /**
+         * @method array
+         * @param defaultValue {Array}
+         * @return {Function}
+         */
+        array(defaultValue = []) {
+
+            return (value) => {
+                return this.returnValue(Array, value, defaultValue);
             };
 
         }
