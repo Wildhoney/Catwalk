@@ -994,6 +994,20 @@
 
         }
 
+        /**
+         * @method assertForeignPropertyExists
+         * @param collection {Collection}
+         * @param localKey {String}
+         * @return {void}
+         */
+        assertForeignPropertyExists(collection, localKey) {
+
+            if (typeof collection.blueprint.model[localKey] === 'undefined') {
+                catwalk.throwException(`Unable to find property "${localKey}" in collection "${collection.name}"`);
+            }
+
+        }
+
     }
 
     /**
@@ -1046,6 +1060,9 @@
 
             var foreignCollection = catwalk.collection(this.target.collection),
                 models            = loadModels();
+
+            // Assert that the foreign property exists in the collection.
+            this.assertForeignPropertyExists(foreignCollection, this.target.key);
 
             // If there is a discrepancy between the counts, then we know all the models haven't been loaded.
             if (models.length !== this.values.length) {
@@ -1119,6 +1136,9 @@
 
             var foreignCollection = catwalk.collection(this.target.collection),
                 model             = loadModel();
+
+            // Assert that the foreign property exists in the collection.
+            this.assertForeignPropertyExists(foreignCollection, this.target.key);
 
             if (!model) {
 

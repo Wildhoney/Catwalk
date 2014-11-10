@@ -634,6 +634,38 @@
                 expect(model.colours.length).toEqual(0);
             });
 
+            it('Should be able to notify the developer when they have entered an invalid collection name;', function() {
+
+                expect(function() {
+
+                    var musicCollection = catwalk.createCollection('music', {
+                        name: '',
+                        genre: catwalk.relationship.hasMany('genreName', 'genres')
+                    });
+
+                    // Should throw an exception when the developer begins to use the `genre` property.
+                    musicCollection.createModel({ name: 'Mogwai', genre: ['Post-Rock'] });
+
+                }).toThrow('Catwalk: Unable to find collection "genres".');
+
+            });
+
+            iit('Should be able to notify the developer when they have entered an invalid property name;', function() {
+
+                expect(function() {
+
+                    var musicCollection = catwalk.createCollection('music', {
+                        name: '',
+                        similarBands: catwalk.relationship.hasMany('allNames', 'music')
+                    });
+
+                    // As above, should throw an exception when the developer begins to use the `genre` property.
+                    musicCollection.createModel({ name: 'Mogwai', similarBands: ['Sigur Ros'] });
+
+                }).toThrow('Catwalk: Unable to find property "allNames" in collection "music".');
+
+            });
+
             describe('Types', function() {
 
                 describe('One-to-One', function() {
