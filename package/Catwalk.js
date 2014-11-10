@@ -1161,7 +1161,7 @@
             this.resolveFn = () => {};
 
             // Flush the promises in the subsequent run-loop.
-            setTimeout(() => this.flush, 1);
+            setTimeout(() => this.flush);
 
         }
 
