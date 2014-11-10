@@ -163,10 +163,9 @@
         silently(silentFn) {
 
             var silentBefore = this.silent;
-
-            this.silent = true;
+            this.silent      = true;
             silentFn.apply(this);
-            
+
             if (!silentBefore) {
 
                 // Only remove the silence if it wasn't silent before, which prevents against

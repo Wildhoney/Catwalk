@@ -124,6 +124,13 @@
                 }).toThrow('Catwalk: Unable to find collection "transient".');
             });
 
+            it('Should be able to add missing properties to the model when the default is a primitive;', function() {
+                var model = collection.createModel();
+                expect(model.id).toEqual(0);
+                expect(model.age).toEqual(0);
+                expect(model.name).toEqual('None');
+            });
+
             it('Should be able to reject collections that do not specify a name;', function() {
 
                 expect(function() {
@@ -650,7 +657,7 @@
 
             });
 
-            iit('Should be able to notify the developer when they have entered an invalid property name;', function() {
+            it('Should be able to notify the developer when they have entered an invalid property name;', function() {
 
                 expect(function() {
 
