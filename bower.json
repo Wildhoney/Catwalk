@@ -14,7 +14,7 @@
     "example",
     "tests"
   ],
-  "devDependencies": {
-    "traceur": "~0.0.72"
+  "dependencies": {
+    "traceur": "~0.0.74"
   }
 }
