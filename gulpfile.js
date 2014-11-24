@@ -66,6 +66,7 @@
         })).on('error', function onError(error) {
             throw error;
         });
+
     });
 
     gulp.task('hint', function gulpHint() {
@@ -76,8 +77,19 @@
 
     });
 
-    gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
-    gulp.task('build', ['build-es5', 'build-es6']);
+    gulp.task('copy', function gulpHint() {
+
+        return gulp.src(files)
+            .pipe(sourcemaps.init())
+            .pipe(traceur(traceurOptions))
+            .pipe(concat('catwalk.es5.js'))
+            .pipe(gulp.dest('example/vendor/catwalk'));
+
+    });
+
+    //gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
+    gulp.task('test', ['build-es5-temp', 'karma']);
+    gulp.task('build', ['build-es5', 'build-es6', 'copy']);
     gulp.task('default', ['test', 'build']);
 
 })();
