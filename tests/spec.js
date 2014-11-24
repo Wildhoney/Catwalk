@@ -110,6 +110,15 @@
                 expect(typeof catwalk.collection('cats')).toBe('object');
             });
 
+            iit('Should be able to extensibly iterate for Angular.js safe iterations;', function() {
+
+                var extensibleModels = collection.extensibleIteration();
+                expect(extensibleModels.length).toEqual(6);
+                expect(Object.isSealed(extensibleModels[0])).toBeFalsy();
+                expect(Object.isFrozen(extensibleModels[3])).toBeFalsy();
+
+            });
+
             it('Should be able to throw an exception when the collection name is invalid;', function() {
                 expect(function() { catwalk.collection('dogs'); }).toThrow('Catwalk: Unable to find collection "dogs".');
             });
