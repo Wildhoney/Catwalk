@@ -4,12 +4,29 @@
 
     <title>Catwalk.js Example</title>
 
+    <!-- Prettication! -->
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+
+    <!-- Dependencies! -->
+    <script type="text/javascript" src="vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="vendor/traceur/traceur.js"></script>
+    <script type="text/javascript" src="vendor/catwalk/catwalk.es5.js"></script>
+
     <!-- Application! -->
-    <script type="text/javascript;version=1.7" src="../package/Catwalk.js"></script>
-    <script type="text/javascript;version=1.7" src="../package/Collection.js"></script>
+    <script type="text/javascript" src="js/Default.js"></script>
 
 </head>
-<body>
+<body ng-app="catwalkApp" ng-controller="CatsController">
+
+{{collection.addModel}}
+    <ul>
+        <li ng-repeat="model in models">
+            {{model.name}}
+
+            <a href ng-click="collection.deleteModel(model)">Delete Model</a>
+
+        </li>
+    </ul>
 
 </body>
 </html>
