@@ -24,7 +24,7 @@
         $scope.models = $scope.collection.extensibleIteration();
 
         $catwalk.on('refresh', function onRefresh() {
-            console.log('Here');
+            $scope.models = $scope.collection.extensibleIteration();
         });
 
     });
