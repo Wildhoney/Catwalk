@@ -177,6 +177,41 @@
         }
 
         /**
+         * Converts each non-extensible model into an extensible model, which is useful for JavaScript frameworks
+         * such as Angular.js which insist on injecting $$hashKey into each object. Pfft!
+         *
+         * Todo: Use a generator instead of a simple return statement.
+         *
+         * @method extensibleIteration
+         * @return {Array}
+         */
+        extensibleIteration() {
+
+            var extensibleModels = [];
+
+            /**
+             * @method makeExtensible
+             * @param model {Object}
+             * @return {Object}
+             */
+            var makeExtensible = (model) => {
+
+                var extensibleModel = {};
+
+                // Copy across the model into an extensible object.
+                Object.keys(model).forEach(key => extensibleModel[key] = model[key]);
+
+                return extensibleModel;
+
+            };
+
+            this.models.forEach(model => extensibleModels.push(makeExtensible(model)));
+
+            return extensibleModels;
+
+        }
+
+        /**
          * @method addModel
          * @param properties {Object}
          * @return {Object}
