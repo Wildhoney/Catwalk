@@ -87,8 +87,7 @@
 
     });
 
-    //gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
-    gulp.task('test', ['build-es5-temp', 'karma']);
+    gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
     gulp.task('build', ['build-es5', 'build-es6', 'copy']);
     gulp.task('default', ['test', 'build']);
 
