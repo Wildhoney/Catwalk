@@ -474,15 +474,15 @@
 
             }).then((resolutionParams) => {
 
-                // Promise has been resolved!
-                this.resolvePromise(eventName, currentModel, previousModel)(resolutionParams);
+                    // Promise has been resolved!
+                    this.resolvePromise(eventName, currentModel, previousModel)(resolutionParams);
 
-            }, (resolutionParams) => {
+                }, (resolutionParams) => {
 
-                // Promise has been rejected!
-                this.rejectPromise(eventName, currentModel, previousModel)(resolutionParams);
+                    // Promise has been rejected!
+                    this.rejectPromise(eventName, currentModel, previousModel)(resolutionParams);
 
-            });
+                });
 
         }
 
@@ -1189,7 +1189,7 @@
             var loadModel = () => {
                 return foreignCollection.models.find((foreignModel) => {
                     return this.value === foreignModel[this.target.key];
-                });  
+                });
             };
 
             var foreignCollection = catwalk.collection(this.target.collection),
