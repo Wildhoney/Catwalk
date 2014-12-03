@@ -3,3 +3,43 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body {
+    background-color: rgba(0, 0, 0, .05);
+    padding: 25px;
+}
+
+h1 {
+    font-family: Lato, Arial, Tahoma Helvetica, sans-serif;
+    margin-bottom: 15px;
+}
+
+ul.beers {
+    list-style-type: none;
+    max-width: 350px;
+}
+
+ul.beers li {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    padding: 6px 10px;
+    font-family: Lato, Arial, Tahoma Helvetica, sans-serif;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+ul.beers li:last-of-type {
+    border-bottom: 0;
+}
+
+ul.beers li a.delete {
+    color: rgba(0, 0, 0, .45);
+    text-decoration: none;
+    padding-right: 10px;
+    transition: all .25s;
+}
+
+ul.beers li a.delete:hover {
+    color: black;
+}

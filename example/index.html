@@ -6,6 +6,7 @@
 
     <!-- Prettication! -->
     <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic" rel="stylesheet" type="text/css" />
 
     <!-- Dependencies! -->
     <script type="text/javascript" src="vendor/angular/angular.js"></script>
@@ -16,16 +17,19 @@
     <script type="text/javascript" src="js/Default.js"></script>
 
 </head>
-<body ng-app="catwalkApp" ng-controller="CatsController">
+<body ng-app="catwalkApp" ng-controller="BeersController">
 
-{{collection.addModel}}
-    <ul>
-        <li ng-repeat="model in models">
-            {{model.name}}
+    <h1>Beers ({{models.length}})</h1>
 
-            <a href ng-click="collection.deleteModel(model)">Delete Model</a>
+    <ul class="beers">
+
+        <li class="beer" ng-repeat="model in models">
+
+            <a class="delete" href ng-click="collection.deleteModel(model)">Delete</a>
+            <label class="name">{{model.name}}</label>
 
         </li>
+
     </ul>
 
 </body>
