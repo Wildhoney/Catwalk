@@ -224,6 +224,10 @@
                 model = this.createModel(properties);
             });
 
+            if (!this.silent) {
+                this.conditionallyEmitEvent();
+            }
+
             return model;
 
         }
@@ -241,10 +245,15 @@
 
             var models = [];
 
-            propertiesList.forEach((properties) => {
-                models.push(this.addModel(properties));
+            this.silently(function silently() {
+
+                propertiesList.forEach((properties) => {
+                    models.push(this.addModel(properties));
+                });
+
             });
 
+            this.conditionallyEmitEvent();
             return models;
 
         }
