@@ -8,3 +8,5 @@ Catwalk
 ![License MIT](http://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)
 
 * **Bower:** `bower install catwalk`
+
+<img src="http://images.clipartpanda.com/dog-and-cat-silhouette-KijXz8yiq.jpeg" style="width: 300px;" />
