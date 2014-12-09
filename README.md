@@ -9,4 +9,4 @@ Catwalk
 
 * **Bower:** `bower install catwalk`
 
-<img src="http://i.imgur.com/2mGwX42.jpg" style="width: 300px;" />
+<img src="http://i.imgur.com/2mGwX42.jpg" width="300" />
