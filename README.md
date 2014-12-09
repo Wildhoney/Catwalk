@@ -9,4 +9,4 @@ Catwalk
 
 * **Bower:** `bower install catwalk`
 
-<img src="http://images.clipartpanda.com/dog-and-cat-silhouette-KijXz8yiq.jpeg" style="width: 300px;" />
+<img src="http://i.imgur.com/2mGwX42.jpg" style="width: 300px;" />
