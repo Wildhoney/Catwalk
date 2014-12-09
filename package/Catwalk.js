@@ -118,11 +118,15 @@
         /**
          * @method on
          * @param name {String}
-         * @param eventFn {Function}
+         * @param [eventFn=()=>{}] {Function}
          * @return {void}
          */
-        on(name, eventFn) {
-            this.events[name] = eventFn;
+        on(name, eventFn = () => {}) {
+
+            (name || '').split(/\s+/g).forEach(hookName => {
+                this.events[hookName] = eventFn;
+            });
+
         }
 
         /**
@@ -131,7 +135,11 @@
          * @return {void}
          */
         off(name) {
-            delete this.events[name];
+
+            (name || '').split(/\s+/g).forEach(hookName => {
+                delete this.events[hookName];
+            });
+
         }
 
     }

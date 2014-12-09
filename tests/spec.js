@@ -95,6 +95,36 @@
 
         });
 
+        iit('Should be able to add multiple events in one go;', function() {
+
+            var testAllEvents = function testAllEvents(method) {
+                expect(catwalk.events.create)[method]();
+                expect(catwalk.events.delete)[method]();
+                expect(catwalk.events.update)[method]();
+                expect(catwalk.events.read)[method]();
+            };
+
+            testAllEvents('toBeUndefined');
+            catwalk.on('create delete update read', function() {});
+            testAllEvents('toBeDefined');
+
+            catwalk.off('delete');
+            expect(catwalk.events.delete).toBeUndefined();
+            expect(catwalk.events.create).toBeDefined();
+            expect(catwalk.events.update).toBeDefined();
+            expect(catwalk.events.read).toBeDefined();
+
+            catwalk.on('delete');
+            expect(catwalk.events.create).toBeDefined();
+            expect(catwalk.events.delete).toBeDefined();
+            expect(catwalk.events.update).toBeDefined();
+            expect(catwalk.events.read).toBeDefined();
+
+            catwalk.off('create delete update read');
+            testAllEvents('toBeUndefined');
+
+        });
+
         it('Should be able to expose the `STATES` constant on the `catwalk` object;', function() {
             expect(catwalk.STATES).toBeDefined();
             expect(typeof catwalk.STATES).toBe('object');
@@ -110,7 +140,7 @@
                 expect(typeof catwalk.collection('cats')).toBe('object');
             });
 
-            iit('Should be able to extensibly iterate for Angular.js safe iterations;', function() {
+            it('Should be able to extensibly iterate for Angular.js safe iterations;', function() {
 
                 var extensibleModels = collection.extensibleIteration();
                 expect(extensibleModels.length).toEqual(6);
