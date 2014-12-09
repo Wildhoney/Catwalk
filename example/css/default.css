@@ -4,9 +4,19 @@
     box-sizing: border-box;
 }
 
+body, html {
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+html {
+    font-size: 10px;
+}
+
 body {
-    background-color: rgba(0, 0, 0, .05);
     padding: 25px;
+    background-color: rgb(171, 132, 170);
 }
 
 h1 {
@@ -16,30 +26,96 @@ h1 {
 
 ul.beers {
     list-style-type: none;
-    max-width: 350px;
+    max-width: 1000px;
 }
 
-ul.beers li {
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
-    padding: 6px 10px;
+ul.beers li.beer {
+    float: left;
+    overflow: hidden;
+    padding: 10px;
+    cursor: pointer;
+    width: 25%;
+    height: 140px;
+    position: relative;
+    border: 3px solid rgba(255, 255, 255, .0);
+    transition: all .65s;
+}
+
+ul.beers li.beer:hover {
+    border: 3px solid rgba(255, 255, 255, .15);
+}
+
+ul.beers li.beer section.beer-container {
+    padding: 10px;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0);
+    transition: border .65s;
+}
+
+ul.beers li.beer:hover section.beer-container {
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
+ul.beers li.beer:nth-of-type(4n+4) {
+    margin-right: 0;
+    width: 25%;
+}
+
+ul.beers li.beer h2 {
     font-family: Lato, Arial, Tahoma Helvetica, sans-serif;
-    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1.2rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 80%;
 }
 
-ul.beers li:last-of-type {
-    border-bottom: 0;
-}
-
-ul.beers li a.delete {
-    color: rgba(0, 0, 0, .45);
-    text-decoration: none;
+ul.beers li.beer label.abv {
+    position: absolute;
     padding-right: 10px;
-    transition: all .25s;
+    font-family: Times New Roman, Times, serif;
+    top: 20px;
+    color: rgba(255, 255, 255, .5);
+    right: 10px;
+    text-align: right;
+    width: 20%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
-ul.beers li a.delete:hover {
-    color: black;
+ul.beers li.beer p.description {
+    padding-top: 5px;
+    width: 100%;
+    color: rgba(255, 255, 255, .45);
+    font-family: Times New Roman, Times, serif;
+    font-size: 0.75rem;
+    text-align: justify;
+    text-overflow: ellipsis;
+}
+
+ul.beers li.beer ul.actions {
+    list-style-type: none;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+}
+
+ul.beers li.beer ul.actions li {
+    float: left;
+    overflow: hidden;
+    padding: 8px 10px;
+    font-family: Lato, Arial, Tahoma Helvetica, sans-serif;
+    text-transform: uppercase;
+    transition: background-color .65s;
+}
+
+ul.beers li.beer:hover ul.actions li {
+    background-color: rgba(0, 0, 0, .15);
+}
+
+ul.beers li.beer:hover ul.actions li:hover {
+    background-color: rgb(0, 0, 0);
 }

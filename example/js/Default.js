@@ -13,11 +13,21 @@
             abv:         $catwalk.typecast.number()
         });
 
+        $catwalk.on('delete', function onDelete(model, promise) {
+            promise.resolve();
+        });
+
         // Fetch all of the models from the collection.
         $scope.models = $scope.collection.extensibleIteration();
 
         $catwalk.on('refresh', function onRefresh() {
+            
             $scope.models = $scope.collection.extensibleIteration();
+
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+
         });
 
         // Fetch a list of all the beers.

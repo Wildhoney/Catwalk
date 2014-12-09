@@ -12,13 +12,14 @@
     <script type="text/javascript" src="vendor/angular/angular.js"></script>
     <script type="text/javascript" src="vendor/traceur/traceur.js"></script>
     <script type="text/javascript" src="vendor/catwalk/catwalk.es5.js"></script>
-    <script type="text/javascript" src="vendor/famous-angular/famous-angular.js"></script>
 
     <!-- Application! -->
     <script type="text/javascript" src="js/Default.js"></script>
 
 </head>
-<body fa-app="catwalkApp" ng-controller="BeersController">
+<body ng-app="catwalkApp" ng-controller="BeersController">
+
+    <section class="background"></section>
 
     <h1>Beers ({{models.length}})</h1>
 
@@ -26,8 +27,17 @@
 
         <li class="beer" ng-repeat="model in models">
 
-            <a class="delete" href ng-click="collection.deleteModel(model)">Delete</a>
-            <label class="name">{{model.name}}</label>
+            <section class="beer-container">
+
+                <h2>{{model.name}}</h2>
+                <label class="abv">{{model.abv}}</label>
+                <p class="description">{{model.description | limitTo: 100}}&hellip;</p>
+
+                <ul class="actions">
+                    <li class="delete button" ng-click="collection.deleteModel(model)">Delete</li>
+                </ul>
+
+            </section>
 
         </li>
 
