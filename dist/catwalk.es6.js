@@ -336,6 +336,19 @@
         }
 
         /**
+         * @method getModelById
+         * @param id {Number}
+         * @return {Object|null}
+         */
+        getModelById(id) {
+
+            return this.models.find((model) => {
+                return model[CATWALK_META_PROPERTY].id === id;
+            });
+
+        }
+
+        /**
          * @method deleteModel
          * @param model {Object}
          * @return {Object}
