@@ -79,6 +79,11 @@
             expect(catwalk.createCollection).toBeDefined();
         });
 
+        iit('Should be able to fetch a model using the `getModelById` method;', function() {
+            var id = models.first[catwalkMeta].id;
+            expect(collection.getModelById(id)).toEqual(models.first);
+        });
+
         it('Should be able to add and then remove an event;', function() {
 
             expect(catwalk.events.create).toBeUndefined();
@@ -92,36 +97,6 @@
 
             catwalk.off('create');
             expect(catwalk.events.create).toBeUndefined();
-
-        });
-
-        iit('Should be able to add multiple events in one go;', function() {
-
-            var testAllEvents = function testAllEvents(method) {
-                expect(catwalk.events.create)[method]();
-                expect(catwalk.events.delete)[method]();
-                expect(catwalk.events.update)[method]();
-                expect(catwalk.events.read)[method]();
-            };
-
-            testAllEvents('toBeUndefined');
-            catwalk.on('create delete update read', function() {});
-            testAllEvents('toBeDefined');
-
-            catwalk.off('delete');
-            expect(catwalk.events.delete).toBeUndefined();
-            expect(catwalk.events.create).toBeDefined();
-            expect(catwalk.events.update).toBeDefined();
-            expect(catwalk.events.read).toBeDefined();
-
-            catwalk.on('delete');
-            expect(catwalk.events.create).toBeDefined();
-            expect(catwalk.events.delete).toBeDefined();
-            expect(catwalk.events.update).toBeDefined();
-            expect(catwalk.events.read).toBeDefined();
-
-            catwalk.off('create delete update read');
-            testAllEvents('toBeUndefined');
 
         });
 
@@ -293,6 +268,36 @@
             });
 
             describe('CRUD Methods', function() {
+
+                it('Should be able to add multiple events in one go;', function() {
+
+                    var testAllEvents = function testAllEvents(method) {
+                        expect(catwalk.events.create)[method]();
+                        expect(catwalk.events.delete)[method]();
+                        expect(catwalk.events.update)[method]();
+                        expect(catwalk.events.read)[method]();
+                    };
+
+                    testAllEvents('toBeUndefined');
+                    catwalk.on('create delete update read', function() {});
+                    testAllEvents('toBeDefined');
+
+                    catwalk.off('delete');
+                    expect(catwalk.events.delete).toBeUndefined();
+                    expect(catwalk.events.create).toBeDefined();
+                    expect(catwalk.events.update).toBeDefined();
+                    expect(catwalk.events.read).toBeDefined();
+
+                    catwalk.on('delete');
+                    expect(catwalk.events.create).toBeDefined();
+                    expect(catwalk.events.delete).toBeDefined();
+                    expect(catwalk.events.update).toBeDefined();
+                    expect(catwalk.events.read).toBeDefined();
+
+                    catwalk.off('create delete update read');
+                    testAllEvents('toBeUndefined');
+
+                });
 
                 it('Should be able to add models without invoking any callback;', function() {
 
