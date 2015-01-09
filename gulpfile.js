@@ -10,7 +10,8 @@
         uglify     = require('gulp-uglify'),
         rename     = require('gulp-rename'),
         karma      = require('gulp-karma'),
-        jshint     = require('gulp-jshint');
+        jshint     = require('gulp-jshint'),
+        to5        = require('gulp-6to5');
 
     // Options for Traceur compilation.
     var traceurOptions = { blockBinding: true };
@@ -29,15 +30,24 @@
 
     });
 
-    gulp.task('build-es6', function gulpBuildES6() {
+    gulp.task('build-es6-traceur', function gulpBuildTraceur() {
 
         return gulp.src(files)
-            .pipe(rename('catwalk.es6.js'))
+            .pipe(rename('catwalk.es6.traceur.js'))
             .pipe(gulp.dest('dist'));
             //.pipe(gulp.dest(vendorDest))
             //.pipe(rename('catwalk.es6.min.js'))
             //.pipe(uglify())
             //.pipe(gulp.dest('dist'));
+
+    });
+
+    gulp.task('build-es6-6to5', function gulpBuild6To5() {
+
+        return gulp.src(files)
+            .pipe(to5())
+            .pipe(rename('catwalk.es6.6to5.js'))
+            .pipe(gulp.dest('dist'));
 
     });
 
@@ -88,7 +98,7 @@
     });
 
     gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
-    gulp.task('build', ['build-es5', 'build-es6', 'copy']);
+    gulp.task('build', ['build-es5', 'build-es6-traceur', 'build-es6-6to5', 'copy']);
     gulp.task('default', ['test', 'build']);
 
 })();
