@@ -11,3 +11,6 @@
 # ES5 Compilation for Karma Tests
 /tests/es5-build/catwalk.es5.tests.js
 !/tests/es5-build/.gitkeep
+
+# NPM Errors
+npm-debug.log
