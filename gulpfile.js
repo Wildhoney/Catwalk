@@ -49,7 +49,7 @@
 
         return gulp.src(files)
                    .pipe(to5())
-                   .pipe(rename('catwalk.es6.6to5.js'))
+                   .pipe(rename('catwalk.es5.6to5.js'))
                    .pipe(gulp.dest('dist/6to5'));
 
     });
@@ -90,12 +90,10 @@
 
     });
 
-    gulp.task('vendor-copy', function gulpVendorCopy() {
+    gulp.task('vendor-copy', ['build-es6-traceur'], function gulpVendorCopy() {
 
-        return gulp.src(files)
+        return gulp.src('dist/traceur/catwalk.es5.traceur.js')
                    .pipe(sourcemaps.init())
-                   .pipe(traceur(traceurOptions))
-                   .pipe(concat('catwalk.es5.js'))
                    .pipe(gulp.dest('example/vendor/catwalk'));
 
     });
@@ -121,7 +119,7 @@
         };
 
         return minifyFile('dist/traceur', 'catwalk.es5.traceur.js', 'catwalk.es5.traceur.min.js')
-              .minifyFile('dist/6to5', 'catwalk.es6.6to5.js', 'catwalk.es6.6to5.min.js');
+              .minifyFile('dist/6to5', 'catwalk.es5.6to5.js', 'catwalk.es5.6to5.min.js');
     });
 
     gulp.task('test', ['hint', 'build-es5-temp', 'karma']);
