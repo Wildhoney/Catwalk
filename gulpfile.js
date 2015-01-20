@@ -17,13 +17,22 @@
     var traceurOptions = { blockBinding: true };
 
     gulp.task('build-es5', function gulpBuildES5() {
+        return;
+    });
+
+    gulp.task('build-es6-traceur', function gulpBuildES6Traceur() {
+
+        var vendorDest = 'example/vendor/catwalk';
 
         return gulp.src(files)
                    .pipe(sourcemaps.init())
                    .pipe(traceur(traceurOptions))
-                   .pipe(concat('catwalk.es5.js'))
+                   .pipe(concat('catwalk.es5.traceur.js'))
                    .pipe(sourcemaps.write())
-                   .pipe(gulp.dest(distDir));
+                   .pipe(gulp.dest('dist/traceur'))
+                   .pipe(rename('catwalk.es5.traceur.js'))
+                   .pipe(gulp.dest('dist/traceur'))
+                   .pipe(gulp.dest(vendorDest))
 
     });
 
@@ -36,18 +45,6 @@
 
     });
 
-    gulp.task('build-es6-traceur', function gulpBuildTraceur() {
-
-        return gulp.src(files)
-                   .pipe(rename('catwalk.es6.traceur.js'))
-                   .pipe(gulp.dest('dist/traceur'));
-            //.pipe(gulp.dest(vendorDest))
-            //.pipe(rename('catwalk.es6.min.js'))
-            //.pipe(uglify())
-            //.pipe(gulp.dest('dist'));
-
-    });
-
     gulp.task('build-es6-6to5', function gulpBuild6To5() {
 
         return gulp.src(files)
@@ -57,7 +54,7 @@
 
     });
 
-    gulp.task('build-es5-temp', function gulpBuildES5() {
+    gulp.task('build-es5-temp', function gulpBuildES5Temp() {
 
         return gulp.src(files)
                    .pipe(sourcemaps.init())
@@ -103,7 +100,7 @@
 
     });
 
-    gulp.task('minify-all', function gulpMinifyAll() {
+    gulp.task('minify-all', ['build-es5', 'build-es6', 'build-es6-traceur', 'build-es6-6to5'], function gulpMinifyAll() {
 
         /**
          * @method minifyFile
@@ -123,7 +120,7 @@
 
         };
 
-        return minifyFile('dist', 'catwalk.es5.js', 'catwalk.es5.min.js')
+        return minifyFile('dist/traceur', 'catwalk.es5.traceur.js', 'catwalk.es5.traceur.min.js')
               .minifyFile('dist/6to5', 'catwalk.es6.6to5.js', 'catwalk.es6.6to5.min.js');
     });
 
