@@ -664,6 +664,9 @@ var _inherits = function (child, parent) {
   };
 
   /**
+   * Responsible for initiating the digest of any JavaScript frameworks that rely
+   * on manual intervention.
+   *
    * @method awakenFramework
    * @return {Object}
    */
