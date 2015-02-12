@@ -3,7 +3,7 @@
  * @author Adam Timberlake
  * @link https://github.com/Wildhoney/Catwalk.js
  */
-(function main($window) {
+(function main($window, $document) {
 
     "use strict";
 
@@ -660,10 +660,48 @@
 
             if (typeof catwalk.events.refresh === 'function') {
 
-                // We're all done!
+                // Voila! We're all done!
                 catwalk.events.refresh();
+                this.awakenFramework().angular();
 
             }
+
+        }
+
+        /**
+         * @method awakenFramework
+         * @return {Object}
+         */
+        awakenFramework() {
+
+            return {
+                
+                /**
+                 * @method angular
+                 * @return {void}
+                 */
+                angular: function angular() {
+
+                    if (typeof $window.angular !== 'undefined') {
+
+                        // Attempt to refresh the Angular.js scope automatically.
+                        var appElement = $window.angular.element($document.querySelector('*[ng-app]'));
+
+                        if ('scope' in appElement) {
+
+                            var scope = appElement.scope();
+
+                            if (!scope.$$phase) {
+                                scope.$apply();
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            };
 
         }
 
@@ -1307,4 +1345,4 @@
     $window.catwalk.META   = CATWALK_META_PROPERTY;
     $window.catwalk.STATES = CATWALK_STATES_PROPERTIES;
 
-})(window);
+})(window, window.document);

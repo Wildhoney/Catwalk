@@ -17,6 +17,8 @@ html {
 body {
     padding: 25px;
     background-color: rgb(171, 132, 170);
+    display: flex;
+    justify-content: center;
 }
 
 h1 {

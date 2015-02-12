@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="catwalkApp" ng-controller="BeersController">
 <head>
 
-    <title>Catwalk.js Example</title>
+    <title>Catwalk.js: {{models.length}} Beers</title>
 
     <!-- Prettication! -->
     <link rel="stylesheet" type="text/css" href="css/default.css" />
@@ -17,11 +17,9 @@
     <script type="text/javascript" src="js/Default.js"></script>
 
 </head>
-<body ng-app="catwalkApp" ng-controller="BeersController">
+<body>
 
     <section class="background"></section>
-
-    <h1>Beers ({{models.length}})</h1>
 
     <ul class="beers">
 
