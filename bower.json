@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "traceur": "~0.0.74",
+    "traceur": "0.0.74",
     "angular": "~1.3.13"
   },
   "devDependencies": {
