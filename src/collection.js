@@ -6,7 +6,7 @@ import {parse} from './collection/parse';
  * @constant WeakMap
  * @type {WeakMap}
  */
-const collections = new WeakMap();
+export const collections = new WeakMap();
 
 /**
  * @module Catwalk

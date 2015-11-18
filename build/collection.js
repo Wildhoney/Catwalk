@@ -67,6 +67,7 @@ module.exports =
 	 */
 	var collections = new WeakMap();
 
+	exports.collections = collections;
 	/**
 	 * @module Catwalk
 	 * @submodule Collection
