@@ -3,10 +3,10 @@ import {parse} from './collection/parse';
 "use strict";
 
 /**
- * @constant WeakMap
- * @type {WeakMap}
+ * @constant Map
+ * @type {Map}
  */
-export const collections = new WeakMap();
+const collections = new Map();
 
 /**
  * @module Catwalk
@@ -14,7 +14,7 @@ export const collections = new WeakMap();
  * @author Adam Timberlake
  * @link https://github.com/Wildhoney/Catwalk
  */
-export class Collection {
+class Collection {
 
     /**
      * @constructor
@@ -23,7 +23,7 @@ export class Collection {
      * @return {Collection}
      */
     constructor(name, properties) {
-        collections[this] = { name, properties: parse(properties) };
+        collections.set(this, { name, properties: parse(properties) });
     }
 
     /**
@@ -63,6 +63,14 @@ export class Collection {
 
     }
 
+}
+
+/**
+ * @method size
+ * @return {Number}
+ */
+export function size() {
+    return collections.size;
 }
 
 /**

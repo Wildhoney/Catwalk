@@ -53,6 +53,7 @@ module.exports =
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+	exports.size = size;
 	exports.create = create;
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62,12 +63,11 @@ module.exports =
 	"use strict";
 
 	/**
-	 * @constant WeakMap
-	 * @type {WeakMap}
+	 * @constant Map
+	 * @type {Map}
 	 */
-	var collections = new WeakMap();
+	var collections = new Map();
 
-	exports.collections = collections;
 	/**
 	 * @module Catwalk
 	 * @submodule Collection
@@ -87,14 +87,12 @@ module.exports =
 	  function Collection(name, properties) {
 	    _classCallCheck(this, Collection);
 
-	    collections[this] = { name: name, properties: (0, _collectionParse.parse)(properties) };
+	    collections.set(this, { name: name, properties: (0, _collectionParse.parse)(properties) });
 	  }
 
 	  /**
-	   * @method create
-	   * @param {String} name
-	   * @param {Object} properties
-	   * @return {Collection}
+	   * @method size
+	   * @return {Number}
 	   */
 
 	  /**
@@ -139,7 +137,16 @@ module.exports =
 	  return Collection;
 	})();
 
-	exports.Collection = Collection;
+	function size() {
+	  return collections.size;
+	}
+
+	/**
+	 * @method create
+	 * @param {String} name
+	 * @param {Object} properties
+	 * @return {Collection}
+	 */
 
 	function create(name, properties) {
 	  return new Collection(name, properties);

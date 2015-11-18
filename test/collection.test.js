@@ -1,12 +1,11 @@
 import test from 'ava';
-import {create, collections, Collection} from '../build/collection';
+import {create, size} from '../build/collection';
 
 test('it can create a collection', t => {
-
-    const person = create('person', { name: '', age: '' });
-
-    t.true(person instanceof Collection);
-    t.is(collections[person].name, 'person');
+    t.is(size(), 0);
+    create('humans', { name: '', age: '' });
+    t.is(size(), 1);
+    create('pets', { name: '', age: '' });
+    t.is(size(), 2);
     t.end();
-
 });
