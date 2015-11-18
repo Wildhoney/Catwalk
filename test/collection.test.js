@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, size} from '../build/collection';
+import {create, size} from '../dist/collection';
 
 test('it can create a collection', t => {
     t.is(size(), 0);
