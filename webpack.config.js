@@ -1,6 +1,21 @@
+var path = require('path');
+
 module.exports = {
-    entry: './src/core.js',
+    entry: {
+        collection: './src/collection.js'
+    },
     output: {
-        filename: 'bundle.js'
+        path: path.join(__dirname, 'build'),
+        filename: '[name].js',
+        library: 'Catwalk',
+        libraryTarget: 'commonjs2'
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel'
+            }
+        ]
     }
 };

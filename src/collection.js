@@ -1,5 +1,7 @@
 import {parse} from './collection/parse';
 
+"use strict";
+
 /**
  * @constant WeakMap
  * @type {WeakMap}
@@ -12,7 +14,7 @@ const collections = new WeakMap();
  * @author Adam Timberlake
  * @link https://github.com/Wildhoney/Catwalk
  */
-class Collection {
+export class Collection {
 
     /**
      * @constructor
