@@ -25,7 +25,7 @@ import {typecast} from 'catwalk/typecast';
 
 // ...
 
-const animals = create({
+const animals = create('animals', {
     name: typecast.string('Unknown'),
     age: typecast.number(5)
 });
