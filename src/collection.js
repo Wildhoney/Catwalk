@@ -1,3 +1,5 @@
+import {parse} from './collection/parse';
+
 /**
  * @module Catwalk
  * @submodule Collection
@@ -14,16 +16,7 @@ class Collection {
      */
     constructor(name, properties) {
         this.name = name;
-        this.properties = this.prepare(properties);
-    }
-
-    /**
-     * @method prepare
-     * @param {Object} properties
-     * @return {Object}
-     */
-    prepare(properties) {
-        return properties;
+        this.properties = parse(properties);
     }
 
 }
