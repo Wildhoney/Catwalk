@@ -19,7 +19,7 @@
     "express": "^4.13.3"
   },
   "scripts": {
-    "test": "npm run build && ava test/*.test.js",
+    "test": "ava test/*.test.js",
     "build": "webpack -p",
     "watch": "webpack watch"
   },
