@@ -1,25 +1,14 @@
 import {throwException} from './helpers/exception';
 import {hasPrimaryKey} from './collection/helpers';
+import {list, event} from './event';
 
 "use strict";
-
-/**
- * @constant FN_UPDATED
- * @type {String}
- */
-const FN_UPDATED = 'updated';
 
 /**
  * @property map
  * @type {Map}
  */
 const map = new Map();
-
-/**
- * @property events
- * @type {Map}
- */
-const events = new Map().set(FN_UPDATED, () => {});
 
 /**
  * @module Catwalk
@@ -48,7 +37,7 @@ class Collection {
     /**
      * @method create
      * @param {Object} properties
-     * @return {Promise}
+     * @return {void}
      */
     create(properties) {
 
@@ -58,7 +47,7 @@ class Collection {
      * @method update
      * @param {Object} model
      * @param {Object} properties
-     * @return {Promise}
+     * @return {void}
      */
     update(model, properties) {
 
@@ -67,7 +56,7 @@ class Collection {
     /**
      * @method read
      * @param {Object} properties
-     * @return {Promise}
+     * @return {void}
      */
     read(properties) {
 
@@ -76,7 +65,7 @@ class Collection {
     /**
      * @method delete
      * @param {Object} model
-     * @return {Promise}
+     * @return {void}
      */
     delete(model) {
 
@@ -100,11 +89,11 @@ export function size() {
 export function subscribe(fn) {
 
     if (typeof fn === 'undefined') {
-        return events.get(FN_UPDATED);
+        return list.get(event.SUBSCRIBE);
     }
 
     // Update the subscription function with the developer-supplied version.
-    events.set(FN_UPDATED, fn);
+    list.set(event.SUBSCRIBE, fn);
 
 }
 

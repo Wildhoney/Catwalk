@@ -15,42 +15,27 @@
 
 ## Getting Started
 
-### Create Collection
-
-Use the `create` function from the `catwalk/collection` module to create your collection's blueprint. At this point you can configure any typecasting rules that will apply to the models contained within in. Relationships are also created at this point, but for the sake of brevity will be covered further down the README.
-
 ```javascript
-import {create} from 'catwalk/collection';
-import {typecast} from 'catwalk/typecast';
 
-// ...
-
-const animals = create('animals', {
-    name: typecast.string('Unknown'),
-    age: typecast.number(5)
+// Define a collection specifying its fields and their data-types.
+const pets = collection('pets', {
+    id:   field(cast.integer(), option.PRIMARY_KEY),
+    name: field(cast.string()),
+    age:  field(cast.integer())
 });
-```
 
-Models are created, read, updated and deleted via the newly created `animals` collection using `create`, `read`, `update` and `delete` methods respectively.
+// Subscribe to the updating of any collections.
+on(event.SUBSCRIBE, models => {
+    console.log(`Oh my goodness... we have ${models.length} pet(s)!`);
+});
 
-### Create Model
+// Consider the request successful when we create a pet.
+on(event.CREATE, ({ model, resolve, reject }) => {
+    resolve(model);
+});
 
-Creating a model is as simple as invoking the `create` method with its associated data &mdash; the `on` event ([see below](#events)) will be fired allowing you to either `resolve` or `reject` the promise &mdash; if no `create` has been defined, then the promise will be resolved automatically.
+// Create some pets that need to be either resolved or rejected.
+pets.create({ name: 'Miss Kittens', age: 4 });
+pets.create({ name: 'Busters', age: 5 });
 
-```javascript
-animals.create({ name: 'Kipper', age: 14 });
-```
-
-Considering you've configured typecasting on your model's blueprint, the data passed in will undergo typecasting and therefore may differ from what has been supplied. Any superfluous properties will be silently removed from the model's data &ndash; contrariwise if any data is missing then the promise will be summarily rejected.
-
-### Events
-
-You can import `on`, `off` and `once` from the `catwalk/event` module for listening to the CRUD lifecycle events. An object is passed into the `on` function which you can destructure &mdash; items such as `collection`, `resolve`, `reject` are passed in, and the developer is expected to either `resolve` or `reject` the promise depending on whether the request succeeded.
-
-```javascript
-import {on, off, once} from 'catwalk/event';
-
-// ...
-
-on('create', ({resolve}) => resolve());
 ```
