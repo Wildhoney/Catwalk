@@ -1,4 +1,5 @@
-import {parse} from './collection/parse';
+import {throwException} from './helpers/exception';
+import {hasPrimaryKey} from './collection/helpers';
 
 "use strict";
 
@@ -24,9 +25,10 @@ class Collection {
      */
     constructor(name, properties) {
 
-        map.set(this, {
-            name, properties: parse(properties)
-        });
+        // Ensure we have a primary key defined in the collection somewhere.
+        !hasPrimaryKey(properties) && throwException(`Must define a PK on "${name}" collection`);
+
+        map.set(this, { name, properties });
 
     }
 
