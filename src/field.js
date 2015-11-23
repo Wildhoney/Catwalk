@@ -1,16 +1,16 @@
 /**
  * @constant PRIMARY_KEY
- * @type {Number}
+ * @field {Number}
  */
 export const PRIMARY_KEY = 1;
 
 /**
- * @method type
+ * @method field
  * @param {Function} cast
  * @param {Number} [options = 0]
  * @return {Object}
  */
-export function type(cast, options = 0) {
+export function field(cast, options = 0) {
     return { cast, options };
 }
 
