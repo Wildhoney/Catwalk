@@ -2,8 +2,7 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        collection: ['./src/collection.js'],
-        field: ['./src/field.js']
+        catwalk: ['./src/catwalk.js']
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -15,7 +14,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'babel'
+                loader: 'babel-loader?stage=1'
             }
         ]
     }
