@@ -1,8 +1,10 @@
 /**
- * @constant PRIMARY_KEY
- * @field {Number}
+ * @property option
+ * @type {Object}
  */
-export const PRIMARY_KEY = 1;
+export const option = {
+    PRIMARY_KEY: 1
+};
 
 /**
  * @method field

@@ -1,4 +1,4 @@
-import {PRIMARY_KEY} from '../field';
+import {option} from '../field';
 
 /**
  * @method hasPrimaryKey
@@ -8,7 +8,7 @@ import {PRIMARY_KEY} from '../field';
 export function hasPrimaryKey(properties) {
 
     return Object.keys(properties).some(key => {
-        return properties[key].options & PRIMARY_KEY;
+        return properties[key].options & option.PRIMARY_KEY;
     });
 
 }

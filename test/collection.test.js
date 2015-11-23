@@ -1,11 +1,11 @@
 import test from 'ava';
 import {create, size} from '../dist/collection';
-import {field, cast, PRIMARY_KEY} from '../dist/field';
+import {field, cast, option} from '../dist/field';
 
 test('it can create a collection', t => {
 
     const abstract = {
-        id:   field(cast.integer(), PRIMARY_KEY),
+        id:   field(cast.integer(), option.PRIMARY_KEY),
         name: field(cast.string()),
         age:  field(cast.integer())
     };
