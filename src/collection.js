@@ -1,7 +1,12 @@
 import {parse} from './collection/parse';
-import {map} from './collection/map';
 
 "use strict";
+
+/**
+ * @property map
+ * @type {Map}
+ */
+const map = new Map();
 
 /**
  * @module Catwalk
@@ -18,7 +23,11 @@ class Collection {
      * @return {Collection}
      */
     constructor(name, properties) {
-        map.set(this, { name, properties: parse(properties) });
+
+        map.set(this, {
+            name, properties: parse(properties)
+        });
+
     }
 
     /**
