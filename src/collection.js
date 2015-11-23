@@ -13,13 +13,13 @@ const FN_UPDATED = 'updated';
  * @property map
  * @type {Map}
  */
-const map = new Map()
+const map = new Map();
 
 /**
  * @property events
  * @type {Map}
  */
-const events = new Map().set(FN_UPDATED, () => {});;
+const events = new Map().set(FN_UPDATED, () => {});
 
 /**
  * @module Catwalk
@@ -109,11 +109,11 @@ export function subscribe(fn) {
 }
 
 /**
- * @method create
+ * @method collection
  * @param {String} name
  * @param {Object} properties
  * @return {Collection}
  */
-export function create(name, properties) {
+export function collection(name, properties) {
     return new Collection(name, properties);
 }
