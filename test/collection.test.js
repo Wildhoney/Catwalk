@@ -1,6 +1,6 @@
 import test from 'ava';
 import {create, size} from '../dist/collection';
-import {type, integer, float, string, PRIMARY_KEY} from '../dist/type';
+import {type, integer, float, string, PRIMARY_KEY} from '../dist/field';
 
 test('it can create a collection', t => {
 

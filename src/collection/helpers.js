@@ -1,4 +1,4 @@
-import {PRIMARY_KEY} from '../type';
+import {PRIMARY_KEY} from '../field';
 
 /**
  * @method hasPrimaryKey
