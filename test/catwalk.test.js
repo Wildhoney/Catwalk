@@ -1,45 +1,39 @@
+import 'babel-core/register';
 import test from 'ava';
-import {collection, size, subscribe} from '../dist/collection';
-import {field, cast, option} from '../dist/field';
+import {createStore, actionsFor} from '../src/catwalk';
+//import people from './mocks/people';
 
-test('it can')
+test('it can define a schema', t => {
 
+    function people(state = [], action) {
 
+        const event = actionsFor(people);
 
+        switch (action.type) {
 
-import { createStore } from 'redux';
-import { createSchema } from 'catwalk';
+            case event.CREATE:
+                return [...state, ...action.model];
 
-// Create your reducer with the schema attached as a decorator.
-@createSchema({
-    name: field(cast.integer(), option.PRIMARY_KEY)
-})
-function PersonReducer(state = [], action) {
+            case event.DELETE:
+                return state.filter(model => model.id !== action.model.id);
 
-    const event = actionsFor(PersonReducer);
+            default:
+                return state;
 
-    switch (action.type) {
-
-        case event.CREATE:
-            return [...state, ...action.model];
-
-        case event.DELETE:
-            return state.filter(model => model.id !== action.model.id);
-
-        default:
-            return state;
+        }
 
     }
-}
 
-// Create your store passing in the reducer functions.
-const store = createStore(counter);
+    const store = createStore(people);
+    //
+    //store.dispatch(id => {
+    //
+    //    return dispatch => {
+    //        dispatch({ type: actionsFor(PersonReducer).create });
+    //    };
+    //
+    //});
 
-// Dispatch an event.
-store.dispatch(id => {
-
-    return dispatch => {
-        dispatch({ type: actionsFor(PersonReducer).create });
-    };
+    t.end();
 
 });
