@@ -3,7 +3,6 @@ var path = require('path');
 module.exports = {
     entry: {
         collection: ['./src/collection.js'],
-        event: ['./src/event.js'],
         field: ['./src/field.js']
     },
     output: {

@@ -4,10 +4,22 @@ import {hasPrimaryKey} from './collection/helpers';
 "use strict";
 
 /**
+ * @constant FN_UPDATED
+ * @type {String}
+ */
+const FN_UPDATED = 'updated';
+
+/**
  * @property map
  * @type {Map}
  */
-const map = new Map();
+const map = new Map()
+
+/**
+ * @property events
+ * @type {Map}
+ */
+const events = new Map().set(FN_UPDATED, () => {});;
 
 /**
  * @module Catwalk
@@ -78,6 +90,22 @@ class Collection {
  */
 export function size() {
     return map.size;
+}
+
+/**
+ * @method subscribe
+ * @param {Function} fn
+ * @return {Function|void}
+ */
+export function subscribe(fn) {
+
+    if (typeof fn === 'undefined') {
+        return events.get(FN_UPDATED);
+    }
+
+    // Update the subscription function with the developer-supplied version.
+    events.set(FN_UPDATED, fn);
+
 }
 
 /**

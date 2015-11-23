@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, size} from '../dist/collection';
+import {create, size, subscribe} from '../dist/collection';
 import {field, cast, option} from '../dist/field';
 
 test('it can create a collection', t => {
@@ -28,6 +28,16 @@ test('it throws an exception when no primary key', t => {
 
     t.throws(() => create('humans', human), 'Catwalk: Must define a PK on "humans" collection.');
     t.is(size(), 2);
+    t.end();
+
+});
+
+test('it can register a subscribe function', t => {
+
+    t.is(typeof subscribe(), 'function');
+    const customSubscription = () => {};
+    subscribe(customSubscription);
+    t.is(subscribe(), customSubscription);
     t.end();
 
 });
