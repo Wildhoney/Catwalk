@@ -22,11 +22,12 @@ test('it can create a collection', t => {
 test('it throws an exception when no primary key', t => {
 
     const human = {
-        id:     field(cast.integer()),
-        rating: field(cast.float(2))
+        id:  field(cast.integer()),
+        age: field(cast.float(2))
     };
 
     t.throws(() => create('humans', human), 'Catwalk: Must define a PK on "humans" collection.');
+    t.is(size(), 2);
     t.end();
 
 });
