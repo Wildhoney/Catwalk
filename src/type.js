@@ -15,6 +15,14 @@ export function type(cast, options = 0) {
 }
 
 /**
+ * @method string
+ * @return {Function}
+ */
+export function string() {
+    return value => String(value)
+}
+
+/**
  * @method integer
  * @return {Function}
  */

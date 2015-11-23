@@ -1,20 +1,20 @@
 import test from 'ava';
 import {create, size} from '../dist/collection';
-import {type, integer, float, PRIMARY_KEY} from '../dist/type';
+import {type, integer, float, string, PRIMARY_KEY} from '../dist/type';
 
-//test('it can create a collection', t => {
-//
-//    const human = { id: type.number()(PRIMARY_KEY), name: type.string(), age: type.number() };
-//    const pet   = { id: type.number()(PRIMARY_KEY), name: type.string(), age: type.number() };
-//
-//    t.is(size(), 0);
-//    create('humans', human);
-//    t.is(size(), 1);
-//    create('pets', pet);
-//    t.is(size(), 2);
-//    t.end();
-//
-//});
+test('it can create a collection', t => {
+
+    const human = { id: type(integer(), PRIMARY_KEY), name: type(string()), age: type(integer()) };
+    const pet   = { id: type(integer(), PRIMARY_KEY), name: type(string()), age: type(integer()) };
+
+    t.is(size(), 0);
+    create('humans', human);
+    t.is(size(), 1);
+    create('pets', pet);
+    t.is(size(), 2);
+    t.end();
+
+});
 
 test('it throws an exception when no primary key', t => {
 
