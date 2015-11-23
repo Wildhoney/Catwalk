@@ -27,7 +27,7 @@ export const cast = {
      * @return {Function}
      */
     string() {
-        return value => String(value)
+        return value => String(value == null ? '' : value);
     },
 
     /**
@@ -35,7 +35,12 @@ export const cast = {
      * @return {Function}
      */
     integer() {
-        return value => Number(value)
+
+        return value => {
+            const n = parseInt(value);
+            return isNaN(n) ? 0 : n;
+        }
+
     },
 
     /**
@@ -47,7 +52,8 @@ export const cast = {
 
         return value => {
             const n = Math.pow(10, decimalPlaces);
-            return Math.round((n * value).toFixed(decimalPlaces)) / n;
+            const v = Math.round((n * value).toFixed(decimalPlaces)) / n;
+            return isNaN(v) ? 0 : v;
         }
 
     }

@@ -28,6 +28,7 @@ class Collection {
         // Ensure we have a primary key defined in the collection somewhere.
         !hasPrimaryKey(properties) && throwException(`Must define a PK on "${name}" collection`);
 
+        // Store the blueprint outside of the object to prevent polluting its public interface.
         map.set(this, { name, properties });
 
     }
