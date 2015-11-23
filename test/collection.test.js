@@ -1,16 +1,19 @@
 import test from 'ava';
 import {create, size} from '../dist/collection';
-import {field, integer, float, string, PRIMARY_KEY} from '../dist/field';
+import {field, cast, PRIMARY_KEY} from '../dist/field';
 
 test('it can create a collection', t => {
 
-    const human = { id: field(integer(), PRIMARY_KEY), name: field(string()), age: field(integer()) };
-    const pet   = { id: field(integer(), PRIMARY_KEY), name: field(string()), age: field(integer()) };
+    const abstract = {
+        id:   field(cast.integer(), PRIMARY_KEY),
+        name: field(cast.string()),
+        age:  field(cast.integer())
+    };
 
     t.is(size(), 0);
-    create('humans', human);
+    create('humans', abstract);
     t.is(size(), 1);
-    create('pets', pet);
+    create('pets', abstract);
     t.is(size(), 2);
     t.end();
 
@@ -19,8 +22,8 @@ test('it can create a collection', t => {
 test('it throws an exception when no primary key', t => {
 
     const human = {
-        id: field(integer()),
-        rating: field(float(2))
+        id:     field(cast.integer()),
+        rating: field(cast.float(2))
     };
 
     t.throws(() => create('humans', human), 'Catwalk: Must define a PK on "humans" collection.');
