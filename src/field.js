@@ -7,12 +7,12 @@ export const option = {
 };
 
 /**
- * @method field
+ * @method createField
  * @param {Function} cast
  * @param {Number} [options = 0]
  * @return {Object}
  */
-export function field(cast, options = 0) {
+export function createField(cast, options = 0) {
     return { cast, options };
 }
 
