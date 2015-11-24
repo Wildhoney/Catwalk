@@ -1,0 +1,26 @@
+language: node_js
+
+node_js:
+  - 4.0
+  - 4.1
+  - iojs
+
+sudo: false
+
+script:
+  - npm install
+  - npm run build
+
+before_deploy:
+- npm run cleanup
+
+deploy:
+  provider: heroku
+  strategy: api
+  all_branches: true
+  skip_cleanup: true
+  api_key:
+    secure: TJ3cWDkaUEiguzCEUYruyYfFy+cSa6kvzieLvyUHyBmuXZKlrda5rvdRRS4fsXuB7zOlUFiDJCUfY4YCETv50HHdPo+gzxfTz8kKDRc7QY/jkj8vFuFqMoK5QM0GBkZVCuwxRIbAyJsOCKHiKlKcPcfTE+EKuBrTvx1UaWMPrkM=
+  app: catwalk
+  on:
+    repo: Wildhoney/Catwalk

@@ -22,7 +22,7 @@ test('it can create a model', t => {
     store.dispatch(createPerson({ name: 'Adam', age: 30 }));
 
     store.subscribe(() => {
-        
+
         const {people, people: [person]} = store.getState();
 
         t.is(people.length, 1);
