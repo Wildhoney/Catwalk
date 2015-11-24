@@ -2,11 +2,12 @@ import * as redux from 'redux';
 
 /**
  * @method createStore
- * @param {Array} reducers
+ * @param {Object} reducers
  * @return {Object}
  */
 export function createStore(reducers) {
-    return redux.createStore(reducers);
+    const createStoreWithMiddleware = redux.applyMiddleware()(redux.createStore);
+    return createStoreWithMiddleware(reducers);
 }
 
 /**

@@ -2,7 +2,7 @@ import {createSchema, actionsFor} from '../../../src/catwalk';
 import {field, cast, option} from '../../../src/field';
 
 const schema = createSchema({
-    name: field(cast.integer(), options.PRIMARY_KEY)
+    name: field(cast.integer())
 });
 
 export default function(state = [], action) {

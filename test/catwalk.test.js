@@ -12,8 +12,7 @@ test('it can define a schema', t => {
         people
     });
 
-    const createStoreWithMiddleware = applyMiddleware(thunk, camelize)(createStore);
-    const store = createStoreWithMiddleware(reducers);
+    const store = createStore(reducers);
 
     t.end();
 
