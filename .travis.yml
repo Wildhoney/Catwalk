@@ -12,7 +12,7 @@ script:
   - npm run build
 
 before_deploy:
-- npm run cleanup
+  - npm run cleanup
 
 deploy:
   provider: heroku
