@@ -11,9 +11,10 @@ export function createStore(reducers) {
 
 /**
  * @method createSchema
+ * @param {Object} schema
  * @return {Function}
  */
-export function createSchema() {
+export function createSchema(schema) {
     return () => {};
 }
 
