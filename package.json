@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "redux": "^3.0.4",
+    "redux-thunk": "^1.0.0",
     "seamless-immutable": "^4.0.2"
   },
   "devDependencies": {

@@ -7,7 +7,7 @@ export function createPerson(model) {
 
     return dispatch => {
 
-        request(`/person/create`, model).then(model => {
+        Promise.resolve(model).then(model => {
             dispatch({ type: event.CREATE, model });
         });
 

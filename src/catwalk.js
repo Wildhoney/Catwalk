@@ -1,4 +1,5 @@
 import * as redux from 'redux';
+import thunk from 'redux-thunk';
 
 /**
  * @method createStore
@@ -6,7 +7,7 @@ import * as redux from 'redux';
  * @return {Object}
  */
 export function createStore(reducers) {
-    const createStoreWithMiddleware = redux.applyMiddleware()(redux.createStore);
+    const createStoreWithMiddleware = redux.applyMiddleware(thunk)(redux.createStore);
     return createStoreWithMiddleware(reducers);
 }
 
