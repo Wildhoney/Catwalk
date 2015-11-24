@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": "ava test/*.test.js",
-    "build": "webpack -p",
+    "build": "webpack",
     "cleanup": "rimraf node_modules"
   },
   "repository": {
