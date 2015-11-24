@@ -15,7 +15,7 @@ export default function people(state = [], action) {
             return [...state, ...[action.model]];
 
         case event.DELETE:
-            return state.filter(model => model.id !== action.model.id);
+            return state.filter(model => model.name !== action.model.name);
 
         default:
             return state;

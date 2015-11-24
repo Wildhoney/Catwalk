@@ -14,3 +14,17 @@ export function createPerson(model) {
     };
 
 }
+
+export function deletePerson(model) {
+
+    const event = actionsFor(people);
+
+    return dispatch => {
+
+        Promise.resolve(model).then(model => {
+            dispatch({ type: event.DELETE, model });
+        });
+
+    };
+
+}
