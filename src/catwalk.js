@@ -14,15 +14,8 @@ export function createStore(reducers, middleware = []) {
         ...[...middleware, thunk]
     )(redux.createStore);
 
-    const store = createStoreWithMiddleware(reducers);
+    return createStoreWithMiddleware(reducers);
 
-    // Additional functions for automatically dispatching before and after events.
-    store.dispatch.create = () => {};
-    store.dispatch.read = () => {};
-    store.dispatch.update = () => {};
-    store.dispatch.delete = () => {};
-
-    return store;
 }
 
 /**
