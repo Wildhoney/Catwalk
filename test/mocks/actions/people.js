@@ -22,7 +22,7 @@ export function readPerson(model) {
     return dispatch => {
 
         Promise.resolve(model).then(model => {
-            dispatch({ type: event.CREATE, model });
+            dispatch({ type: event.READ, model });
         });
 
     };
