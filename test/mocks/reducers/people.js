@@ -11,7 +11,7 @@ export default function people(state = [], action) {
 
     switch (action.type) {
 
-        case event.CREATE:
+        case event.CREATE || event.READ:
             return [...state, ...[action.model]];
 
         case event.DELETE:
