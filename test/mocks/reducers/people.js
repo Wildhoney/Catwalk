@@ -17,6 +17,13 @@ export default function people(state = [], action) {
         case event.DELETE:
             return state.filter(model => model.name !== action.model.name);
 
+        case event.UPDATE:
+            return [
+                ...state.slice(0, action.index),
+                Object.assign({}, state[action.index], action.model),
+                ...state.slice(action.index + 1)
+            ];
+
         default:
             return state;
 

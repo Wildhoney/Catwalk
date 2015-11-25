@@ -28,3 +28,17 @@ export function deletePerson(model) {
     };
 
 }
+
+export function updatePerson(index, model) {
+
+    const event = actionsFor(people);
+
+    return dispatch => {
+
+        Promise.resolve(model).then(model => {
+            dispatch({ type: event.UPDATE, model, index });
+        });
+
+    };
+
+}
