@@ -73,6 +73,8 @@ module.exports =
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
+	var _helpersException = __webpack_require__(13);
+
 	/**
 	 * @method createStore
 	 * @param {Object} reducers
@@ -82,6 +84,15 @@ module.exports =
 	function createStore(reducers) {
 	    var createStoreWithMiddleware = redux.applyMiddleware(_reduxThunk2['default'])(redux.createStore);
 	    return createStoreWithMiddleware(reducers);
+	}
+
+	/**
+	 * @method isFunction
+	 * @param {*} fn
+	 * @return {Boolean}
+	 */
+	function isFunction(fn) {
+	    return typeof fn === 'function';
 	}
 
 	/**
@@ -102,11 +113,15 @@ module.exports =
 
 	/**
 	 * @method actionsFor
-	 * @param reducer {Object}
+	 * @param {Function} reducer
 	 * @return {Object}
 	 */
 
 	function actionsFor(reducer) {
+
+	    if (!isFunction(reducer)) {
+	        (0, _helpersException.throwException)('actionsFor reference must be a reducer function');
+	    }
 
 	    if (!actionSymbols.has(reducer)) {
 
@@ -846,6 +861,27 @@ module.exports =
 	}
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	/**
+	 * @method throwException
+	 * @throws {Error}
+	 * @param {String} message
+	 * @return {void}
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.throwException = throwException;
+
+	function throwException(message) {
+	  throw new Error("Catwalk: " + message + ".");
+	}
 
 /***/ }
 /******/ ]);

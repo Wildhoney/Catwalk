@@ -38,7 +38,7 @@ const actionSymbols = new WeakMap();
 
 /**
  * @method actionsFor
- * @param reducer {Object}
+ * @param {Function} reducer
  * @return {Object}
  */
 export function actionsFor(reducer) {
