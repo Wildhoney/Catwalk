@@ -5,17 +5,17 @@ import {throwException} from './helpers/exception';
 /**
  * @method createStore
  * @param {Object} reducers
- * @param {Array} middleware
+ * @param {Array} [middleware=[]]
  * @return {Object}
  */
-export function createStore(reducers, middleware) {
+export function createStore(reducers, middleware = []) {
 
     const createStoreWithMiddleware = redux.applyMiddleware(
-        [...middleware, thunk]
+        ...[...middleware, thunk]
     )(redux.createStore);
 
     return createStoreWithMiddleware(reducers);
-    
+
 }
 
 /**
