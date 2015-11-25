@@ -1,5 +1,6 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
+import {throwException} from './helpers/exception';
 
 /**
  * @method createStore
@@ -9,6 +10,15 @@ import thunk from 'redux-thunk';
 export function createStore(reducers) {
     const createStoreWithMiddleware = redux.applyMiddleware(thunk)(redux.createStore);
     return createStoreWithMiddleware(reducers);
+}
+
+/**
+ * @method isFunction
+ * @param {*} fn
+ * @return {Boolean}
+ */
+function isFunction(fn) {
+    return typeof fn === 'function';
 }
 
 /**
@@ -32,6 +42,10 @@ const actionSymbols = new WeakMap();
  * @return {Object}
  */
 export function actionsFor(reducer) {
+
+    if (!isFunction(reducer)) {
+        throwException('actionsFor reference must be a reducer function');
+    }
 
     if (!actionSymbols.has(reducer)) {
 
