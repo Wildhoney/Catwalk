@@ -32,10 +32,10 @@ test('it throws an exception for non-function symbols', t => {
 
     const exception = 'Catwalk: actionsFor reference must be a reducer function.';
 
-    //t.doesNotThrow(() => actionsFor(people), exception);
+    t.doesNotThrow(() => actionsFor(people), exception);
     t.throws(() => actionsFor({}), exception);
-    //t.throws(() => actionsFor(''), exception);
-    //t.throws(() => actionsFor(1), exception);
+    t.throws(() => actionsFor(''), exception);
+    t.throws(() => actionsFor(1), exception);
 
     t.end();
 
