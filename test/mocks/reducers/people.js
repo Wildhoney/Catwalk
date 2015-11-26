@@ -1,5 +1,5 @@
 import {actionsFor, attachSchema} from '../../../src/catwalk';
-import {cast, option} from '../../../src/field';
+import {field, cast, option} from '../../../src/field';
 
 function reducer(state = [], action) {
 
