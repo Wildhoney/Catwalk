@@ -21,21 +21,22 @@ export function createStore(reducer, middleware = []) {
 }
 
 /**
+ * @method combineReducerSchema
+ * @param {Function} reducer
+ * @param {Object} schema
+ * @return {Function}
+ */
+export function combineReducerSchema(reducer, schema) {
+    return reducer;
+}
+
+/**
  * @method isFunction
  * @param {*} fn
  * @return {Boolean}
  */
 function isFunction(fn) {
     return typeof fn === 'function';
-}
-
-/**
- * @method createSchema
- * @param {Object} schema
- * @return {Function}
- */
-export function createSchema(schema) {
-    return () => {};
 }
 
 /**

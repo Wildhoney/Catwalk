@@ -1,22 +1,14 @@
-import {createSchema, actionsFor} from '../../../src/catwalk';
-import {field, cast, option} from '../../../src/field';
+import {actionsFor, combineReducerSchema} from '../../../src/catwalk';
 
-const schema = createSchema({
-    name: field(cast.integer())
-});
+function reducer(state = [], action) {
 
-export default function people(state = [], action) {
-
-    const event = actionsFor(people);
+    const event = actionsFor(reducer);
 
     switch (action.type) {
 
         case event.CREATE:
         case event.READ:
             return [...state, ...[action.model]];
-
-        case event.DELETE:
-            return state.filter(model => model.name !== action.model.name);
 
         case event.UPDATE:
             return [
@@ -25,9 +17,18 @@ export default function people(state = [], action) {
                 ...state.slice(action.index + 1)
             ];
 
+        case event.DELETE:
+            return state.filter(model => model.name !== action.model.name);
+
         default:
             return state;
 
     }
 
 }
+
+export default combineReducerSchema(reducer, {
+
+    //id: field(cast.integer(), PRIMARY_KEY)
+
+});
