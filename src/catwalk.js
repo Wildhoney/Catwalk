@@ -115,24 +115,14 @@ export function actionsFor(reducer) {
 
     if (!actionSymbols.has(reducer)) {
 
-        const symbols = {
-            create: Symbol('create'),
-            read:   Symbol('read'),
-            update: Symbol('update'),
-            delete: Symbol('delete')
-        };
+        const CREATE = Symbol('create');
+        const READ   = Symbol('read');
+        const UPDATE = Symbol('update');
+        const DELETE = Symbol('delete');
 
-        reducerActions.set(symbols.create, reducer);
-        reducerActions.set(symbols.read, reducer);
-        reducerActions.set(symbols.update, reducer);
-        reducerActions.set(symbols.delete, reducer);
-
-        actionSymbols.set(reducer, {
-            CREATE: symbols.create,
-            READ:   symbols.read,
-            UPDATE: symbols.update,
-            DELETE: symbols.delete
-        });
+        reducerActions.set(CREATE, reducer).set(READ, reducer)
+                      .set(UPDATE, reducer).set(DELETE, reducer);
+        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE });
 
     }
 
