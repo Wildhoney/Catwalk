@@ -21,12 +21,12 @@ export function createStore(reducer, middleware = []) {
 }
 
 /**
- * @method combineReducerSchema
+ * @method attachSchema
  * @param {Function} reducer
  * @param {Object} schema
  * @return {Function}
  */
-export function combineReducerSchema(reducer, schema) {
+export function attachSchema(reducer, schema) {
     return reducer;
 }
 

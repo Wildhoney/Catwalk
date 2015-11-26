@@ -1,13 +1,4 @@
 /**
- * @method createSchema
- * @param {Object} schema
- * @return {Function}
- */
-export function createSchema(schema) {
-    return () => {};
-}
-
-/**
  * @property option
  * @type {Object}
  */

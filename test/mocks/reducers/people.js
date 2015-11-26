@@ -1,4 +1,5 @@
-import {actionsFor, combineReducerSchema} from '../../../src/catwalk';
+import {actionsFor, attachSchema} from '../../../src/catwalk';
+import {cast, option} from '../../../src/field';
 
 function reducer(state = [], action) {
 
@@ -27,8 +28,9 @@ function reducer(state = [], action) {
 
 }
 
-export default combineReducerSchema(reducer, {
+export default attachSchema(reducer, {
 
-    //id: field(cast.integer(), PRIMARY_KEY)
+    id:   field(cast.integer(), option.PRIMARY_KEY),
+    name: field(cast.string())
 
 });
