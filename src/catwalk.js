@@ -3,6 +3,12 @@ import thunk from 'redux-thunk';
 import {throwException} from './helpers/exception';
 
 /**
+ * @property
+ * @type {Symbol}
+ */
+export const SCHEMA = Symbol('schema');
+
+/**
  * @method createStore
  * @param {Function} reducer
  * @param {Array} [middleware=[]]
@@ -27,6 +33,7 @@ export function createStore(reducer, middleware = []) {
  * @return {Function}
  */
 export function attachSchema(reducer, schema) {
+    reducer[SCHEMA] = schema;
     return reducer;
 }
 
