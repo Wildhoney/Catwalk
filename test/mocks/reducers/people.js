@@ -3,22 +3,21 @@ import {field, cast, option} from '../../../src/field';
 
 function reducer(state = [], action) {
 
-    const event = actionsFor(reducer);
+    const {CREATE, READ, UPDATE, DELETE} = actionsFor(reducer);
 
     switch (action.type) {
 
-        case event.CREATE:
-        case event.READ:
+        case CREATE: case READ:
             return [...state, ...[action.model]];
 
-        case event.UPDATE:
+        case UPDATE:
             return [
                 ...state.slice(0, action.index),
                 Object.assign({}, state[action.index], action.model),
                 ...state.slice(action.index + 1)
             ];
 
-        case event.DELETE:
+        case DELETE:
             return state.filter(model => model.name !== action.model.name);
 
         default:

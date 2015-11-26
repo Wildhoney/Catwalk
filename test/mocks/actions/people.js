@@ -1,14 +1,14 @@
 import {actionsFor} from '../../../src/catwalk';
 import people from '../reducers/people';
 
-export function createPerson(model) {
+const {CREATE, READ, UPDATE, DELETE} = actionsFor(people);
 
-    const event = actionsFor(people);
+export function createPerson(model) {
 
     return dispatch => {
 
         Promise.resolve(model).then(model => {
-            dispatch({ type: event.CREATE, model });
+            dispatch({ type: CREATE, model });
         });
 
     };
@@ -17,12 +17,10 @@ export function createPerson(model) {
 
 export function readPerson(model) {
 
-    const event = actionsFor(people);
-
     return dispatch => {
 
         Promise.resolve(model).then(model => {
-            dispatch({ type: event.READ, model });
+            dispatch({ type: READ, model });
         });
 
     };
@@ -31,12 +29,10 @@ export function readPerson(model) {
 
 export function updatePerson(index, model) {
 
-    const event = actionsFor(people);
-
     return dispatch => {
 
         Promise.resolve(model).then(model => {
-            dispatch({ type: event.UPDATE, model, index });
+            dispatch({ type: UPDATE, model, index });
         });
 
     };
@@ -45,12 +41,10 @@ export function updatePerson(index, model) {
 
 export function deletePerson(model) {
 
-    const event = actionsFor(people);
-
     return dispatch => {
 
         Promise.resolve(model).then(model => {
-            dispatch({ type: event.DELETE, model });
+            dispatch({ type: DELETE, model });
         });
 
     };
