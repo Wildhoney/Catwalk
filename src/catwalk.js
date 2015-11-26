@@ -9,6 +9,43 @@ import {throwException} from './helpers/exception';
 export const SCHEMA = Symbol('schema');
 
 /**
+ * @method serialize
+ * @return {Function}
+ */
+function serialize() {
+
+    return next => action => {
+
+        const {type, model} = action;
+
+        if (type && model) {
+
+            const schema = findSchemaByActionType(type);
+
+            if (schema) {
+
+                // Typecast the model according to its schema.
+                const modifiedModel = Object.keys(model).reduce((accumulator, key) => {
+                    const {cast} = schema[key];
+                    accumulator[key] = cast(model[key]);
+                    return accumulator;
+                }, {});
+
+                next(Object.assign({}, action, { model: modifiedModel }));
+                return;
+
+            }
+
+        }
+
+        next(action);
+
+    };
+
+}
+
+
+/**
  * @method createStore
  * @param {Function} reducer
  * @param {Array} [middleware=[]]
@@ -17,12 +54,10 @@ export const SCHEMA = Symbol('schema');
 export function createStore(reducer, middleware = []) {
 
     const createStoreWithMiddleware = redux.applyMiddleware(
-        ...[...middleware, thunk]
+        ...[...middleware, serialize, thunk]
     )(redux.createStore);
 
-    return createStoreWithMiddleware((...args) => {
-        return reducer(...args);
-    });
+    return createStoreWithMiddleware(reducer);
 
 }
 
@@ -53,6 +88,21 @@ function isFunction(fn) {
 const actionSymbols = new WeakMap();
 
 /**
+ * @constant reducerActions
+ * @type {Map}
+ */
+const reducerActions = new Map();
+
+/**
+ * @method findSchemaByActionType
+ * @param {Symbol} actionType
+ * @return {Object}
+ */
+function findSchemaByActionType(actionType) {
+    return reducerActions.get(actionType)[SCHEMA];
+}
+
+/**
  * @method actionsFor
  * @param {Function} reducer
  * @return {Object}
@@ -65,11 +115,23 @@ export function actionsFor(reducer) {
 
     if (!actionSymbols.has(reducer)) {
 
+        const symbols = {
+            create: Symbol('create'),
+            read:   Symbol('read'),
+            update: Symbol('update'),
+            delete: Symbol('delete')
+        };
+
+        reducerActions.set(symbols.create, reducer);
+        reducerActions.set(symbols.read, reducer);
+        reducerActions.set(symbols.update, reducer);
+        reducerActions.set(symbols.delete, reducer);
+
         actionSymbols.set(reducer, {
-            CREATE: Symbol('create'),
-            READ:   Symbol('read'),
-            UPDATE: Symbol('update'),
-            DELETE: Symbol('delete')
+            CREATE: symbols.create,
+            READ:   symbols.read,
+            UPDATE: symbols.update,
+            DELETE: symbols.delete
         });
 
     }

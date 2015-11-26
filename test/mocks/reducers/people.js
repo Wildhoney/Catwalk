@@ -29,7 +29,7 @@ function reducer(state = [], action) {
 
 export default attachSchema(reducer, {
 
-    id:   field(cast.integer(), option.PRIMARY_KEY),
-    name: field(cast.string())
+    name: field(cast.string()),
+    age:  field(cast.integer())
 
 });

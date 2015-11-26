@@ -1,6 +1,21 @@
 import 'babel-core/register';
 import test from 'ava';
+import {createStore} from '../src/catwalk';
+import {combineReducers} from 'redux';
 import {field, cast, option} from '../src/field';
+import {createPerson} from './mocks/actions/people';
+import people from './mocks/reducers/people';
+
+test.beforeEach(t => {
+
+    const reducers = combineReducers({
+        people
+    });
+
+    t.context.store = createStore(reducers);
+    t.end();
+
+});
 
 test('it can typecast string values', t => {
     t.is(cast.string()(2), '2');
@@ -30,5 +45,22 @@ test('it can typecast float values', t => {
     t.is(cast.float(2)(5.555), 5.56);
 
     t.end();
+
+});
+
+test('it typecasts dispatched models', t => {
+
+    const {store} = t.context;
+
+    store.dispatch(createPerson({ name: 42, age: '19' }));
+
+    store.subscribe(() => {
+
+        const {people: [person]} = store.getState();
+        t.is(person.name, '42');
+        t.is(person.age, 19);
+        t.end();
+
+    });
 
 });
