@@ -82,6 +82,15 @@ function isFunction(fn) {
 }
 
 /**
+ * @method hasSchema
+ * @param {*} fn
+ * @return {Boolean}
+ */
+function hasSchema(fn) {
+    return fn[SCHEMA] !== 'undefined';
+}
+
+/**
  * @constant actionSymbols
  * @type {WeakMap}
  */
@@ -109,7 +118,7 @@ function findSchemaByActionType(actionType) {
  */
 export function actionsFor(reducer) {
 
-    if (!isFunction(reducer)) {
+    if (!isFunction(reducer) || !hasSchema(reducer)) {
         throwException('actionsFor reference must be a reducer function');
     }
 
