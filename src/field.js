@@ -1,73 +1,44 @@
 /**
- * @property option
- * @type {Object}
+ * @method string
+ * @return {Function}
  */
-export const option = {
-    PRIMARY_KEY: 1
-};
+export function string() {
+    return value => String(value == null ? '' : value);
+}
+
 
 /**
- * @method field
- * @param {Function} cast
- * @param {Number} [options = 0]
- * @return {Object}
+ * @method integer
+ * @return {Function}
  */
-export function field(cast, options = 0) {
-    return { cast, options };
+export function integer() {
+
+    return value => {
+        const n = parseInt(value);
+        return isNaN(n) ? 0 : n;
+    }
+
 }
 
 /**
- * @property cast
- * @type {Object}
+ * @method float
+ * @param {Number} [decimalPlaces = 0]
+ * @return {Function}
  */
-export const cast = {
+export function float(decimalPlaces = 0) {
 
-    /**
-     * @method string
-     * @return {Function}
-     */
-    string() {
-        return value => String(value == null ? '' : value);
-    },
-
-    /**
-     * @method integer
-     * @return {Function}
-     */
-    integer() {
-
-        return value => {
-            const n = parseInt(value);
-            return isNaN(n) ? 0 : n;
-        }
-
-    },
-
-    /**
-     * @method float
-     * @param {Number} [decimalPlaces = 0]
-     * @return {Function}
-     */
-    float(decimalPlaces = 0) {
-
-        return value => {
-            const n = Math.pow(10, decimalPlaces);
-            const v = Math.round((n * value).toFixed(decimalPlaces)) / n;
-            return isNaN(v) ? 0 : v;
-        }
-
-    },
-
-    /**
-     * @method array
-     * @return {Function}
-     */
-    array() {
-
-        return value => {
-            return Array.isArray(value) ? value : [value];
-        };
-
+    return value => {
+        const n = Math.pow(10, decimalPlaces);
+        const v = Math.round((n * value).toFixed(decimalPlaces)) / n;
+        return isNaN(v) ? 0 : v;
     }
 
-};
+}
+
+/**
+ * @method array
+ * @return {Function}
+ */
+export function array() {
+    return value => Array.isArray(value) ? value : [value];
+}

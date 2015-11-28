@@ -2,7 +2,7 @@ import 'babel-core/register';
 import test from 'ava';
 import {createStore} from '../src/index';
 import {combineReducers} from 'redux';
-import {field, cast, option} from '../src/field';
+import {integer, string, array, float} from '../src/field';
 import {createPerson} from './mocks/actions/people';
 import people from './mocks/reducers/people';
 
@@ -18,44 +18,44 @@ test.beforeEach(t => {
 });
 
 test('it can typecast string values', t => {
-    t.is(cast.string()(2), '2');
-    t.is(cast.string()(false), 'false');
-    t.is(cast.string()('x'), 'x');
-    t.is(cast.string()(null), '');
+    t.is(string()(2), '2');
+    t.is(string()(false), 'false');
+    t.is(string()('x'), 'x');
+    t.is(string()(null), '');
     t.end();
 });
 
 test('it can typecast integer values', t => {
-    t.is(cast.integer()('2'), 2);
-    t.is(cast.integer()(false), 0);
-    t.is(cast.integer()('x'), 0);
-    t.is(cast.integer()(null), 0);
+    t.is(integer()('2'), 2);
+    t.is(integer()(false), 0);
+    t.is(integer()('x'), 0);
+    t.is(integer()(null), 0);
     t.end();
 });
 
 test('it can typecast float values', t => {
 
-    t.is(cast.float(1)(2), 2);
-    t.is(cast.float(1)(false), 0);
-    t.is(cast.float(1)('x'), 0);
-    t.is(cast.float(1)(null), 0);
+    t.is(float(1)(2), 2);
+    t.is(float(1)(false), 0);
+    t.is(float(1)('x'), 0);
+    t.is(float(1)(null), 0);
 
-    t.is(cast.float(2)(5.5), 5.5);
-    t.is(cast.float(2)(5.5345), 5.53);
-    t.is(cast.float(2)(5.555), 5.56);
+    t.is(float(2)(5.5), 5.5);
+    t.is(float(2)(5.5345), 5.53);
+    t.is(float(2)(5.555), 5.56);
 
     t.end();
 
 });
 
 test('it can typecast array values', t => {
-    t.same(cast.array()('Adam'), ['Adam']);
-    t.same(cast.array()('Adam Maria'), ['Adam Maria']);
-    t.same(cast.array()(1), [1]);
-    t.same(cast.array()(false), [false]);
-    t.same(cast.array()(['Adam']), ['Adam']);
-    t.same(cast.array()([2]), [2]);
-    t.same(cast.array()([true]), [true]);
+    t.same(array()('Adam'), ['Adam']);
+    t.same(array()('Adam Maria'), ['Adam Maria']);
+    t.same(array()(1), [1]);
+    t.same(array()(false), [false]);
+    t.same(array()(['Adam']), ['Adam']);
+    t.same(array()([2]), [2]);
+    t.same(array()([true]), [true]);
     t.end();
 });
 

@@ -1,5 +1,5 @@
 import {actionsFor, attachSchema} from '../../../src/index';
-import {field, cast, option} from '../../../src/field';
+import {string, integer, array} from '../../../src/field';
 
 function reducer(state = [], action) {
 
@@ -28,9 +28,7 @@ function reducer(state = [], action) {
 }
 
 export default attachSchema(reducer, {
-
-    name: field(cast.string()),
-    age:  field(cast.integer()),
-    pets: field(cast.array())
-
+    name: string(),
+    age:  integer(),
+    pets: array()
 });

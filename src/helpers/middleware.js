@@ -18,9 +18,9 @@ export function typecaster() {
 
                 const modifiedModel = Object.keys(model).reduce((accumulator, key) => {
 
-                    const {cast} = schema[key] || { cast: false };
+                    const castFn = schema[key];
 
-                    if (!cast) {
+                    if (!castFn) {
 
                         // Property doesn't belong in the model, because it hasn't been
                         // described in the associated schema.
@@ -29,7 +29,7 @@ export function typecaster() {
                     }
 
                     // Cast the property based on the defined schema.
-                    accumulator[key] = cast(model[key]);
+                    accumulator[key] = castFn(model[key]);
 
                     return accumulator;
 
