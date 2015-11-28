@@ -1,49 +1,15 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import {throwException} from './helpers/exception';
+import {actionSymbols, reducerActions, findSchemaByActionType} from './helpers/registry';
+import {serialize} from './helpers/middleware';
+import {isFunction, hasSchema} from './helpers/sundries';
 
 /**
  * @property
  * @type {Symbol}
  */
 export const SCHEMA = Symbol('schema');
-
-/**
- * @method serialize
- * @return {Function}
- */
-function serialize() {
-
-    return next => action => {
-
-        const {type, model} = action;
-
-        if (type && model) {
-
-            const schema = findSchemaByActionType(type);
-
-            if (schema) {
-
-                // Typecast the model according to its schema.
-                const modifiedModel = Object.keys(model).reduce((accumulator, key) => {
-                    const {cast} = schema[key];
-                    accumulator[key] = cast(model[key]);
-                    return accumulator;
-                }, {});
-
-                next(Object.assign({}, action, { model: modifiedModel }));
-                return;
-
-            }
-
-        }
-
-        next(action);
-
-    };
-
-}
-
 
 /**
  * @method createStore
@@ -70,45 +36,6 @@ export function createStore(reducer, middleware = []) {
 export function attachSchema(reducer, schema) {
     reducer[SCHEMA] = schema;
     return reducer;
-}
-
-/**
- * @method isFunction
- * @param {*} fn
- * @return {Boolean}
- */
-function isFunction(fn) {
-    return typeof fn === 'function';
-}
-
-/**
- * @method hasSchema
- * @param {*} fn
- * @return {Boolean}
- */
-function hasSchema(fn) {
-    return fn[SCHEMA] !== 'undefined';
-}
-
-/**
- * @constant actionSymbols
- * @type {WeakMap}
- */
-const actionSymbols = new WeakMap();
-
-/**
- * @constant reducerActions
- * @type {Map}
- */
-const reducerActions = new Map();
-
-/**
- * @method findSchemaByActionType
- * @param {Symbol} actionType
- * @return {Object}
- */
-function findSchemaByActionType(actionType) {
-    return reducerActions.get(actionType)[SCHEMA];
 }
 
 /**

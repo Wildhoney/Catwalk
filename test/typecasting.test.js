@@ -1,6 +1,6 @@
 import 'babel-core/register';
 import test from 'ava';
-import {createStore} from '../src/catwalk';
+import {createStore} from '../src/index';
 import {combineReducers} from 'redux';
 import {field, cast, option} from '../src/field';
 import {createPerson} from './mocks/actions/people';

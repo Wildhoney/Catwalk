@@ -1,4 +1,4 @@
-import {actionsFor} from '../../../src/catwalk';
+import {actionsFor} from '../../../src/index';
 import people from '../reducers/people';
 
 const {CREATE, READ, UPDATE, DELETE} = actionsFor(people);
