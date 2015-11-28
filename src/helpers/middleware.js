@@ -1,4 +1,3 @@
-import Immutable from 'seamless-immutable';
 import {findSchemaByActionType} from './registry';
 
 /**
@@ -37,7 +36,7 @@ export function typecaster() {
                 }, {});
 
                 // Move the immutable model along the middleware chain.
-                return void next(Immutable(Object.assign({}, action, { model: modifiedModel })));
+                return void next(Object.assign({}, action, { model: modifiedModel }));
 
             }
 

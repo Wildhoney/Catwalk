@@ -89,17 +89,3 @@ test('it removes non-described schema properties', t => {
     });
 
 });
-
-//test('x', t => {
-//
-//    const {store} = t.context;
-//
-//    store.dispatch(createPerson({ name: 'Adam', age: 30, pets: [1, 2] }));
-//
-//    store.subscribe(() => {
-//        const {people: [person]} = store.getState();
-//        t.is(typeof person.associates, 'undefined');
-//        t.end();
-//    });
-//
-//});

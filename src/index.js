@@ -1,5 +1,6 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
+import Immutable from 'seamless-immutable';
 import {throwException} from './helpers/exception';
 import {actionSymbols, reducerActions, findSchemaByActionType} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
@@ -23,7 +24,34 @@ export function createStore(reducer, middleware = []) {
         ...[...middleware, typecaster, thunk]
     )(redux.createStore);
 
-    return createStoreWithMiddleware(reducer);
+    const store = createStoreWithMiddleware(reducer);
+
+    return Object.assign({}, store, {
+
+        /**
+         * @method getState
+         * @return {*}
+         */
+        getState: () => {
+
+            const state = store.getState();
+
+            return Object.keys(state).reduce((accumulator, key) => {
+
+                accumulator[key] = state[key].map(model => {
+
+                    return Immutable(Object.assign({}, model, {
+                        pets: ['Kipper', 'Miss Kittens', 'Busters']
+                    }));
+
+                });
+
+                return accumulator;
+
+            }, {});
+
+        }
+    });
 
 }
 
