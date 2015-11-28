@@ -40,6 +40,7 @@ export function createStore(reducer, middleware = []) {
 
                 accumulator[key] = state[key].map(model => {
 
+                    // todo: Use section to define relationships.
                     return Immutable(Object.assign({}, model, {
                         pets: ['Kipper', 'Miss Kittens', 'Busters']
                     }));
