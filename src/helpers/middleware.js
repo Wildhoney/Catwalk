@@ -2,10 +2,10 @@ import Immutable from 'seamless-immutable';
 import {findSchemaByActionType} from './registry';
 
 /**
- * @method serialize
+ * @method typecaster
  * @return {Function}
  */
-export function serialize() {
+export function typecaster() {
 
     return next => action => {
 

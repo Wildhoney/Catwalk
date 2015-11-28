@@ -2,7 +2,7 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import {throwException} from './helpers/exception';
 import {actionSymbols, reducerActions, findSchemaByActionType} from './helpers/registry';
-import {serialize} from './helpers/middleware';
+import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
 
 /**
@@ -20,7 +20,7 @@ export const SCHEMA = Symbol('schema');
 export function createStore(reducer, middleware = []) {
 
     const createStoreWithMiddleware = redux.applyMiddleware(
-        ...[...middleware, serialize, thunk]
+        ...[...middleware, typecaster, thunk]
     )(redux.createStore);
 
     return createStoreWithMiddleware(reducer);
