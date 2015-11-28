@@ -48,6 +48,17 @@ test('it can typecast float values', t => {
 
 });
 
+test('it can typecast array values', t => {
+    t.same(cast.array()('Adam'), ['Adam']);
+    t.same(cast.array()('Adam Maria'), ['Adam Maria']);
+    t.same(cast.array()(1), [1]);
+    t.same(cast.array()(false), [false]);
+    t.same(cast.array()(['Adam']), ['Adam']);
+    t.same(cast.array()([2]), [2]);
+    t.same(cast.array()([true]), [true]);
+    t.end();
+});
+
 test('it typecasts dispatched models', t => {
 
     const {store} = t.context;
@@ -78,3 +89,17 @@ test('it removes non-described schema properties', t => {
     });
 
 });
+
+//test('x', t => {
+//
+//    const {store} = t.context;
+//
+//    store.dispatch(createPerson({ name: 'Adam', age: 30, pets: [1, 2] }));
+//
+//    store.subscribe(() => {
+//        const {people: [person]} = store.getState();
+//        t.is(typeof person.associates, 'undefined');
+//        t.end();
+//    });
+//
+//});

@@ -30,6 +30,7 @@ function reducer(state = [], action) {
 export default attachSchema(reducer, {
 
     name: field(cast.string()),
-    age:  field(cast.integer())
+    age:  field(cast.integer()),
+    pets: field(cast.array())
 
 });

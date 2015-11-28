@@ -56,6 +56,18 @@ export const cast = {
             return isNaN(v) ? 0 : v;
         }
 
+    },
+
+    /**
+     * @method array
+     * @return {Function}
+     */
+    array() {
+
+        return value => {
+            return Array.isArray(value) ? value : [value];
+        };
+
     }
 
 };
