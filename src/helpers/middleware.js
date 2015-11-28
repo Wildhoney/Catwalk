@@ -17,15 +17,27 @@ export function serialize() {
 
             if (schema) {
 
-                // Typecast the model according to its schema.
                 const modifiedModel = Object.keys(model).reduce((accumulator, key) => {
-                    const {cast} = schema[key];
+
+                    const {cast} = schema[key] || { cast: false };
+
+                    if (!cast) {
+
+                        // Property doesn't belong in the model, because it hasn't been
+                        // described in the associated schema.
+                        return accumulator;
+
+                    }
+
+                    // Cast the property based on the defined schema.
                     accumulator[key] = cast(model[key]);
+
                     return accumulator;
+
                 }, {});
 
-                next(Immutable(Object.assign({}, action, { model: modifiedModel })));
-                return;
+                // Move the immutable model along the middleware chain.
+                return void next(Immutable(Object.assign({}, action, { model: modifiedModel })));
 
             }
 

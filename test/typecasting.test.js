@@ -52,13 +52,14 @@ test('it typecasts dispatched models', t => {
 
     const {store} = t.context;
 
-    store.dispatch(createPerson({ name: 42, age: '19' }));
+    store.dispatch(createPerson({ name: 42, age: '19', associates: [1, 2, 3] }));
 
     store.subscribe(() => {
 
         const {people: [person]} = store.getState();
         t.is(person.name, '42');
         t.is(person.age, 19);
+        t.is(typeof person.associates, 'undefined');
         t.end();
 
     });
