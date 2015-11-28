@@ -1,4 +1,16 @@
 /**
+ * @constant HAS_ONE
+ * @type {String}
+ */
+export const HAS_ONE = 'one';
+
+/**
+ * @constant HAS_MANY
+ * @type {String}
+ */
+export const HAS_MANY = 'many';
+
+/**
  * @method string
  * @return {Function}
  */
@@ -41,4 +53,15 @@ export function float(decimalPlaces = 0) {
  */
 export function array() {
     return value => Array.isArray(value) ? value : [value];
+}
+
+/**
+ * @method relationship
+ * @param {String} type
+ * @param {Function} store
+ * @param {String} [property = 'id']
+ * @return {Function}
+ */
+export function relationship(type, store, property = 'id') {
+    return value => value;
 }
