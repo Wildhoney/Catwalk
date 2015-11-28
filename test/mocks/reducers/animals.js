@@ -3,11 +3,11 @@ import {string} from '../../../src/field';
 
 function reducer(state = [], action) {
 
-    const {READ} = actionsFor(reducer);
+    const {CREATE, READ} = actionsFor(reducer);
 
     switch (action.type) {
 
-        case READ:
+        case CREATE: case READ:
             return [...state, ...[action.model]];
 
         default:

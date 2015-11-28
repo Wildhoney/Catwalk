@@ -5,6 +5,7 @@ import {throwException} from './helpers/exception';
 import {actionSymbols, reducerActions, findSchemaByActionType} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
+import {applyRelationships} from './helpers/relationships';
 
 /**
  * @property
@@ -24,35 +25,38 @@ export function createStore(reducer, middleware = []) {
         ...[...middleware, typecaster, thunk]
     )(redux.createStore);
 
-    const store = createStoreWithMiddleware(reducer);
+    return extend(createStoreWithMiddleware(reducer));
 
-    return Object.assign({}, store, {
+}
 
-        /**
-         * @method getState
-         * @return {*}
-         */
-        getState: () => {
+/**
+ * @method extend
+ * @param {Object} store
+ * @return {Object}
+ */
+function extend(store) {
 
-            const state = store.getState();
+    /**
+     * @method getState
+     * @return {Object}
+     */
+    function getState() {
 
-            return Object.keys(state).reduce((accumulator, key) => {
+        const state = store.getState();
 
-                accumulator[key] = state[key].map(model => {
+        return Object.keys(state).reduce((accumulator, key) => {
 
-                    // todo: Use section to define relationships.
-                    return Immutable(Object.assign({}, model, {
-                        pets: ['Kipper', 'Miss Kittens', 'Busters']
-                    }));
+            accumulator[key] = state[key].map(model => {
+                return Immutable({ ...model, ...applyRelationships() });
+            });
 
-                });
+            return accumulator;
 
-                return accumulator;
+        }, {});
 
-            }, {});
+    }
 
-        }
-    });
+    return { ...store, ...{getState} };
 
 }
 

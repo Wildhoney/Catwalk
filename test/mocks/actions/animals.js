@@ -1,9 +1,21 @@
 import {actionsFor} from '../../../src/index';
 import animals from '../reducers/animals';
 
-const {READ} = actionsFor(animals);
+const {CREATE, READ} = actionsFor(animals);
 
-export function readPerson(model) {
+export function createAnimal(model) {
+
+    return dispatch => {
+
+        Promise.resolve(model).then(model => {
+            dispatch({ type: CREATE, model });
+        });
+
+    };
+
+}
+
+export function readAnimal(model) {
 
     return dispatch => {
 
