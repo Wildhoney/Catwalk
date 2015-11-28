@@ -57,6 +57,9 @@ module.exports =
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.createStore = createStore;
 	exports.attachSchema = attachSchema;
 	exports.actionsFor = actionsFor;
@@ -87,6 +90,8 @@ module.exports =
 
 	var _helpersSundries = __webpack_require__(17);
 
+	var _helpersRelationships = __webpack_require__(18);
+
 	/**
 	 * @property
 	 * @type {Symbol}
@@ -97,7 +102,7 @@ module.exports =
 	/**
 	 * @method createStore
 	 * @param {Function} reducer
-	 * @param {Array} [middleware=[]]
+	 * @param {Array} [middleware = []]
 	 * @return {Object}
 	 */
 
@@ -106,32 +111,35 @@ module.exports =
 
 	    var createStoreWithMiddleware = redux.applyMiddleware.apply(redux, [].concat(_toConsumableArray(middleware), [_helpersMiddleware.typecaster, _reduxThunk2['default']]))(redux.createStore);
 
-	    var store = createStoreWithMiddleware(reducer);
+	    return extend(createStoreWithMiddleware(reducer));
+	}
 
-	    return Object.assign({}, store, {
+	/**
+	 * @method extend
+	 * @param {Object} store
+	 * @return {Object}
+	 */
+	function extend(store) {
 
-	        /**
-	         * @method getState
-	         * @return {*}
-	         */
-	        getState: function getState() {
+	    /**
+	     * @method getState
+	     * @return {Object}
+	     */
+	    function getState() {
 
-	            var state = store.getState();
+	        var state = store.getState();
 
-	            return Object.keys(state).reduce(function (accumulator, key) {
+	        return Object.keys(state).reduce(function (accumulator, key) {
 
-	                accumulator[key] = state[key].map(function (model) {
+	            accumulator[key] = state[key].map(function (model) {
+	                return (0, _seamlessImmutable2['default'])(_extends({}, model, (0, _helpersRelationships.applyRelationships)()));
+	            });
 
-	                    // todo: Use section to define relationships.
-	                    return (0, _seamlessImmutable2['default'])(Object.assign({}, model, {
-	                        pets: ['Kipper', 'Miss Kittens', 'Busters']
-	                    }));
-	                });
+	            return accumulator;
+	        }, {});
+	    }
 
-	                return accumulator;
-	            }, {});
-	        }
-	    });
+	    return _extends({}, store, { getState: getState });
 	}
 
 	/**
@@ -1392,11 +1400,10 @@ module.exports =
 	                    if (schema) {
 
 	                        var modifiedModel = Object.keys(model).reduce(function (accumulator, key) {
-	                            var _ref = schema[key] || { cast: false };
 
-	                            var cast = _ref.cast;
+	                            var castFn = schema[key];
 
-	                            if (!cast) {
+	                            if (!castFn) {
 
 	                                // Property doesn't belong in the model, because it hasn't been
 	                                // described in the associated schema.
@@ -1404,7 +1411,7 @@ module.exports =
 	                            }
 
 	                            // Cast the property based on the defined schema.
-	                            accumulator[key] = cast(model[key]);
+	                            accumulator[key] = castFn(model[key]);
 
 	                            return accumulator;
 	                        }, {});
@@ -1470,6 +1477,25 @@ module.exports =
 	//    });
 	//
 	//}
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	/**
+	 * @method applyRelationships
+	 * @return {Object}
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.applyRelationships = applyRelationships;
+
+	function applyRelationships() {
+	  return {};
+	}
 
 /***/ }
 /******/ ]);

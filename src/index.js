@@ -16,7 +16,7 @@ export const SCHEMA = Symbol('schema');
 /**
  * @method createStore
  * @param {Function} reducer
- * @param {Array} [middleware=[]]
+ * @param {Array} [middleware = []]
  * @return {Object}
  */
 export function createStore(reducer, middleware = []) {
