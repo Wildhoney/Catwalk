@@ -1,3 +1,4 @@
+import Immutable from 'seamless-immutable';
 import {findSchemaByActionType} from './registry';
 
 /**
@@ -23,7 +24,7 @@ export function serialize() {
                     return accumulator;
                 }, {});
 
-                next(Object.assign({}, action, { model: modifiedModel }));
+                next(Immutable(Object.assign({}, action, { model: modifiedModel })));
                 return;
 
             }
