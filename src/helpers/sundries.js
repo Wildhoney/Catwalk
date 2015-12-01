@@ -1,4 +1,4 @@
-import {SCHEMA} from './registry';
+import {SCHEMA} from '../catwalk/schema';
 
 /**
  * @method isFunction

@@ -1,4 +1,4 @@
-import {SCHEMA} from '../core';
+import {SCHEMA} from '../catwalk/schema';
 
 /**
  * @constant actionTypes
