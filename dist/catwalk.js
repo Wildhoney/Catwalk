@@ -166,7 +166,7 @@ module.exports =
 	        (0, _helpersException.throwException)('actionsFor reference must be a reducer function');
 	    }
 
-	    if (!_helpersRegistry.actionSymbols.has(reducer)) {
+	    if (!_helpersRegistry.actionTypes.has(reducer)) {
 
 	        var CREATE = Symbol('create');
 	        var READ = Symbol('read');
@@ -174,10 +174,10 @@ module.exports =
 	        var DELETE = Symbol('delete');
 
 	        _helpersRegistry.reducerActions.set(CREATE, reducer).set(READ, reducer).set(UPDATE, reducer).set(DELETE, reducer);
-	        _helpersRegistry.actionSymbols.set(reducer, { CREATE: CREATE, READ: READ, UPDATE: UPDATE, DELETE: DELETE });
+	        _helpersRegistry.actionTypes.set(reducer, { CREATE: CREATE, READ: READ, UPDATE: UPDATE, DELETE: DELETE });
 	    }
 
-	    return _helpersRegistry.actionSymbols.get(reducer);
+	    return _helpersRegistry.actionTypes.get(reducer);
 	}
 
 /***/ },
@@ -1344,12 +1344,12 @@ module.exports =
 	var _index = __webpack_require__(1);
 
 	/**
-	 * @constant actionSymbols
+	 * @constant actionTypes
 	 * @type {WeakMap}
 	 */
-	var actionSymbols = new WeakMap();
+	var actionTypes = new WeakMap();
 
-	exports.actionSymbols = actionSymbols;
+	exports.actionTypes = actionTypes;
 	/**
 	 * @constant reducerActions
 	 * @type {Map}

@@ -1,10 +1,10 @@
 import {SCHEMA} from '../index';
 
 /**
- * @constant actionSymbols
+ * @constant actionTypes
  * @type {Map}
  */
-export const actionSymbols = new Map();
+export const actionTypes = new Map();
 
 /**
  * @method findSchemaByActionType
@@ -19,7 +19,7 @@ export function findSchemaByActionType(actionType) {
      * @return {Boolean}
      */
     const map = key => {
-        const symbols = Object.values(actionSymbols.get(key));
+        const symbols = Object.values(actionTypes.get(key));
         return symbols.includes(actionType) ? key[SCHEMA] : false;
     };
 
@@ -30,7 +30,7 @@ export function findSchemaByActionType(actionType) {
      */
     const filter = schema => schema !== false;
 
-    return Array.from(actionSymbols.keys())
+    return Array.from(actionTypes.keys())
                 .map(map)
                 .filter(filter)[0] || false;
 

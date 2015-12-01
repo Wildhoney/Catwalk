@@ -2,7 +2,7 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
 import {throwException} from './helpers/exception';
-import {actionSymbols} from './helpers/registry';
+import {actionTypes} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
 import {applyRelationships} from './helpers/relationships';
@@ -82,17 +82,17 @@ export function actionsFor(reducer) {
         throwException('actionsFor reference must be a reducer function');
     }
 
-    if (!actionSymbols.has(reducer)) {
+    if (!actionTypes.has(reducer)) {
 
         const CREATE = Symbol('create');
         const READ = Symbol('read');
         const UPDATE = Symbol('update');
         const DELETE = Symbol('delete');
 
-        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE });
+        actionTypes.set(reducer, { CREATE, READ, UPDATE, DELETE });
 
     }
 
-    return actionSymbols.get(reducer);
+    return actionTypes.get(reducer);
 
 }
