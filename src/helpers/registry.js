@@ -1,4 +1,4 @@
-import {SCHEMA} from '../index';
+import {SCHEMA} from '../core';
 
 /**
  * @constant actionTypes

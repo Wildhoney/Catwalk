@@ -1,4 +1,4 @@
-import {actionsFor, attachSchema} from '../../../src/index';
+import {actionsFor, attachSchema} from '../../../src/core';
 import {string, integer, array, relationship, HAS_MANY} from '../../../src/field';
 import animals from './animals';
 

@@ -1,4 +1,4 @@
-import {actionsFor} from '../../../src/index';
+import {actionsFor} from '../../../src/core';
 import people from '../reducers/people';
 
 const {CREATE, READ, UPDATE, DELETE} = actionsFor(people);

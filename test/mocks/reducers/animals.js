@@ -1,4 +1,4 @@
-import {actionsFor, attachSchema} from '../../../src/index';
+import {actionsFor, attachSchema} from '../../../src/core';
 import {string} from '../../../src/field';
 
 function reducer(state = [], action) {

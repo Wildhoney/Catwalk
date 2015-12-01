@@ -1,6 +1,6 @@
 import 'babel-core/register';
 import test from 'ava';
-import {createStore, actionsFor} from '../src/index';
+import {createStore, actionsFor} from '../src/core';
 import {combineReducers} from 'redux';
 import people from './mocks/reducers/people';
 

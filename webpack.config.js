@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        catwalk: ['./src/index.js']
+        catwalk: ['./src/core.js']
     },
     output: {
         path: path.join(__dirname, 'dist'),

@@ -54,9 +54,7 @@ module.exports =
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -67,8 +65,6 @@ module.exports =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 	var _redux = __webpack_require__(2);
 
@@ -100,21 +96,6 @@ module.exports =
 
 	exports.SCHEMA = SCHEMA;
 	/**
-	 * @method createStore
-	 * @param {Function} reducer
-	 * @param {Array} [middleware = []]
-	 * @return {Object}
-	 */
-
-	function createStore(reducer) {
-	    var middleware = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
-
-	    var createStoreWithMiddleware = redux.applyMiddleware.apply(redux, [].concat(_toConsumableArray(middleware), [_helpersMiddleware.typecaster, _reduxThunk2['default']]))(redux.createStore);
-
-	    return extend(createStoreWithMiddleware(reducer));
-	}
-
-	/**
 	 * @method extend
 	 * @param {Object} store
 	 * @return {Object}
@@ -132,7 +113,7 @@ module.exports =
 	        return Object.keys(state).reduce(function (accumulator, key) {
 
 	            accumulator[key] = state[key].map(function (model) {
-	                return (0, _seamlessImmutable2['default'])(_extends({}, model, (0, _helpersRelationships.applyRelationships)()));
+	                return new _seamlessImmutable2['default'](_extends({}, model, _helpersRelationships.applyRelationships()));
 	            });
 
 	            return accumulator;
@@ -140,6 +121,21 @@ module.exports =
 	    }
 
 	    return _extends({}, store, { getState: getState });
+	}
+
+	/**
+	 * @method createStore
+	 * @param {Function} reducer
+	 * @param {Array} [middleware = []]
+	 * @return {Object}
+	 */
+
+	function createStore(reducer) {
+	    var middleware = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+	    var createStoreWithMiddleware = redux.applyMiddleware.apply(redux, [].concat(middleware, [_helpersMiddleware.typecaster, _reduxThunk2['default']]))(redux.createStore);
+
+	    return extend(createStoreWithMiddleware(reducer));
 	}
 
 	/**
@@ -162,8 +158,8 @@ module.exports =
 
 	function actionsFor(reducer) {
 
-	    if (!(0, _helpersSundries.isFunction)(reducer) || !(0, _helpersSundries.hasSchema)(reducer)) {
-	        (0, _helpersException.throwException)('actionsFor reference must be a reducer function');
+	    if (!_helpersSundries.isFunction(reducer) || !_helpersSundries.hasSchema(reducer)) {
+	        _helpersException.throwException('actionsFor reference must be a reducer function');
 	    }
 
 	    if (!_helpersRegistry.actionTypes.has(reducer)) {
@@ -173,7 +169,6 @@ module.exports =
 	        var UPDATE = Symbol('update');
 	        var DELETE = Symbol('delete');
 
-	        _helpersRegistry.reducerActions.set(CREATE, reducer).set(READ, reducer).set(UPDATE, reducer).set(DELETE, reducer);
 	        _helpersRegistry.actionTypes.set(reducer, { CREATE: CREATE, READ: READ, UPDATE: UPDATE, DELETE: DELETE });
 	    }
 
@@ -1321,9 +1316,7 @@ module.exports =
 	 */
 	"use strict";
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.throwException = throwException;
 
 	function throwException(message) {
@@ -1336,35 +1329,46 @@ module.exports =
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.findSchemaByActionType = findSchemaByActionType;
 
-	var _index = __webpack_require__(1);
+	var _core = __webpack_require__(1);
 
 	/**
 	 * @constant actionTypes
-	 * @type {WeakMap}
+	 * @type {Map}
 	 */
-	var actionTypes = new WeakMap();
+	var actionTypes = new Map();
 
 	exports.actionTypes = actionTypes;
 	/**
-	 * @constant reducerActions
-	 * @type {Map}
-	 */
-	var reducerActions = new Map();
-
-	exports.reducerActions = reducerActions;
-	/**
 	 * @method findSchemaByActionType
 	 * @param {Symbol} actionType
-	 * @return {Object}
+	 * @return {Object|Boolean}
 	 */
 
 	function findSchemaByActionType(actionType) {
-	  return reducerActions.get(actionType)[_index.SCHEMA];
+
+	  /**
+	   * @method map
+	   * @param {Function} key
+	   * @return {Boolean}
+	   */
+	  var map = function map(key) {
+	    var symbols = Object.values(actionTypes.get(key));
+	    return symbols.includes(actionType) ? key[_core.SCHEMA] : false;
+	  };
+
+	  /**
+	   * @property filter
+	   * @param {Function|Boolean} schema
+	   * @return {Boolean}
+	   */
+	  var filter = function filter(schema) {
+	    return schema !== false;
+	  };
+
+	  return Array.from(actionTypes.keys()).map(map).filter(filter)[0] || false;
 	}
 
 /***/ },
@@ -1373,9 +1377,7 @@ module.exports =
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
+	exports.__esModule = true;
 	exports.typecaster = typecaster;
 
 	var _registry = __webpack_require__(15);
@@ -1395,7 +1397,7 @@ module.exports =
 	            if (type && model) {
 	                var _ret = (function () {
 
-	                    var schema = (0, _registry.findSchemaByActionType)(type);
+	                    var schema = _registry.findSchemaByActionType(type);
 
 	                    if (schema) {
 
@@ -1437,9 +1439,7 @@ module.exports =
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.isFunction = isFunction;
 	exports.hasSchema = hasSchema;
 
@@ -1465,19 +1465,6 @@ module.exports =
 	  return fn[_registry.SCHEMA] !== 'undefined';
 	}
 
-	/**
-	 * @method hasPrimaryKey
-	 * @param {Object} properties
-	 * @return {Boolean}
-	 */
-	//export function hasPrimaryKey(properties) {
-	//
-	//    return Object.keys(properties).some(key => {
-	//        return properties[key].options & option.PRIMARY_KEY;
-	//    });
-	//
-	//}
-
 /***/ },
 /* 18 */
 /***/ function(module, exports) {
@@ -1488,9 +1475,7 @@ module.exports =
 	 */
 	"use strict";
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.applyRelationships = applyRelationships;
 
 	function applyRelationships() {
