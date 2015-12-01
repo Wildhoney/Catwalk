@@ -3,5 +3,11 @@
  * @return {Object}
  */
 export function applyRelationships() {
-    return {};
+
+    return { pets: [
+        { name: 'Kipper' },
+        { name: 'Miss Kittens' },
+        { name: 'Busters' }]
+    };
+
 }

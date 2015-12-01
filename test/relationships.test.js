@@ -43,10 +43,10 @@ test('it can handle basic relationships', t => {
             t.is(person.name, 'Adam');
             t.is(person.age, 30);
 
-            //const {pets} = person;
-            //t.is(pets[0].name, 'Kipper');
-            //t.is(pets[1].name, 'Miss Kittens');
-            //t.is(pets[2].name, 'Busters');
+            const {pets} = person;
+            t.is(pets[0].name, 'Kipper');
+            t.is(pets[1].name, 'Miss Kittens');
+            t.is(pets[2].name, 'Busters');
 
             t.end();
 
