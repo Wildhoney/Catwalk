@@ -7,6 +7,12 @@ import {SCHEMA} from '../core';
 export const actionTypes = new Map();
 
 /**
+ * @constant reducerStore
+ * @type {Map}
+ */
+export const reducerStore = new Map();
+
+/**
  * @method findSchemaByActionType
  * @param {Symbol} actionType
  * @return {Object|Boolean}

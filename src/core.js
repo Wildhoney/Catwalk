@@ -2,10 +2,12 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
 import {throwException} from './helpers/exception';
-import {actionTypes} from './helpers/registry';
+import {actionTypes, reducerStore} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
 import {applyRelationships} from './helpers/relationships';
+
+export {combineReducers} from './components/Reducers';
 
 /**
  * @property
@@ -59,6 +61,16 @@ export function createStore(reducers) {
     )(redux.createStore);
 
     return extend(createStoreWithMiddleware(reducer));
+
+}
+
+/**
+ * @method createStoreWithMiddleware
+ * @param {Object} reducers
+ * @param {Array} middleware
+ * @return {Object}
+ */
+export function createStoreWithMiddleware(reducers, ...middleware) {
 
 }
 
