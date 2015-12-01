@@ -2,7 +2,7 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
 import {throwException} from './helpers/exception';
-import {actionSymbols, reducerActions, findSchemaByActionType} from './helpers/registry';
+import {actionSymbols, findSchemaByActionType} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
 import {applyRelationships} from './helpers/relationships';
@@ -89,9 +89,7 @@ export function actionsFor(reducer) {
         const UPDATE = Symbol('update');
         const DELETE = Symbol('delete');
 
-        reducerActions.set(CREATE, reducer).set(READ, reducer)
-                      .set(UPDATE, reducer).set(DELETE, reducer);
-        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE });
+        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE, schema: reducer[SCHEMA] });
 
     }
 
