@@ -24,7 +24,7 @@
     "rimraf": "^2.4.4"
   },
   "scripts": {
-    "test": "npm run lint; ava test/*.test.js",
+    "test": "ava test/*.test.js",
     "lint": "eslint src/*.js src/**/*.js",
     "build": "webpack",
     "cleanup": "rimraf node_modules"
