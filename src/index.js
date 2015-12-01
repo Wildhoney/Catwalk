@@ -89,7 +89,7 @@ export function actionsFor(reducer) {
         const UPDATE = Symbol('update');
         const DELETE = Symbol('delete');
 
-        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE, schema: reducer[SCHEMA] });
+        actionSymbols.set(reducer, { CREATE, READ, UPDATE, DELETE });
 
     }
 

@@ -13,11 +13,25 @@ export const actionSymbols = new Map();
  */
 export function findSchemaByActionType(actionType) {
 
-    const records = Array.from(actionSymbols.keys()).filter(key => {
+    /**
+     * @method map
+     * @param {Function} key
+     * @return {Boolean}
+     */
+    const map = key => {
         const symbols = Object.values(actionSymbols.get(key));
-        return symbols.includes(actionType);
-    });
+        return symbols.includes(actionType) ? key[SCHEMA] : false;
+    };
 
-    return records.length ? records[0][SCHEMA] : false;
+    /**
+     * @property filter
+     * @param {Function|Boolean} schema
+     * @return {Boolean}
+     */
+    const filter = schema => schema !== false;
+
+    return Array.from(actionSymbols.keys())
+                .map(map)
+                .filter(filter)[0] || false;
 
 }
