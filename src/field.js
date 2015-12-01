@@ -11,11 +11,20 @@ export const HAS_ONE = 'one';
 export const HAS_MANY = 'many';
 
 /**
+ * @method isUndefined
+ * @param {*} value
+ * @return {Boolean}
+ */
+function isUndefined(value) {
+    return value === null || typeof value === 'undefined';
+}
+
+/**
  * @method string
  * @return {Function}
  */
 export function string() {
-    return value => String(value == null ? '' : value);
+    return value => String(isUndefined(value) ? '' : value);
 }
 
 
@@ -26,9 +35,9 @@ export function string() {
 export function integer() {
 
     return value => {
-        const n = parseInt(value);
+        const n = parseInt(value, 10);
         return isNaN(n) ? 0 : n;
-    }
+    };
 
 }
 
@@ -43,7 +52,7 @@ export function float(decimalPlaces = 0) {
         const n = Math.pow(10, decimalPlaces);
         const v = Math.round((n * value).toFixed(decimalPlaces)) / n;
         return isNaN(v) ? 0 : v;
-    }
+    };
 
 }
 
@@ -63,5 +72,5 @@ export function array() {
  * @return {Function}
  */
 export function relationship(type, store, property = 'id') {
-    return value => value;
+    return () => void [type, store, property];
 }

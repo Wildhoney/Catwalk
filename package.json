@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "npm run lint; ava test/*.test.js",
-    "lint": "eslint /Users/atimberlake/Webroot/Catwalk/src/index.js",
+    "lint": "eslint /Users/atimberlake/Webroot/Catwalk/src/field.js",
     "build": "webpack",
     "cleanup": "rimraf node_modules"
   },
