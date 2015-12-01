@@ -2,7 +2,7 @@ import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
 import {throwException} from './helpers/exception';
-import {actionSymbols, findSchemaByActionType} from './helpers/registry';
+import {actionSymbols} from './helpers/registry';
 import {typecaster} from './helpers/middleware';
 import {isFunction, hasSchema} from './helpers/sundries';
 import {applyRelationships} from './helpers/relationships';
@@ -12,22 +12,6 @@ import {applyRelationships} from './helpers/relationships';
  * @type {Symbol}
  */
 export const SCHEMA = Symbol('schema');
-
-/**
- * @method createStore
- * @param {Function} reducer
- * @param {Array} [middleware = []]
- * @return {Object}
- */
-export function createStore(reducer, middleware = []) {
-
-    const createStoreWithMiddleware = redux.applyMiddleware(
-        ...[...middleware, typecaster, thunk]
-    )(redux.createStore);
-
-    return extend(createStoreWithMiddleware(reducer));
-
-}
 
 /**
  * @method extend
@@ -47,7 +31,7 @@ function extend(store) {
         return Object.keys(state).reduce((accumulator, key) => {
 
             accumulator[key] = state[key].map(model => {
-                return Immutable({ ...model, ...applyRelationships() });
+                return new Immutable({ ...model, ...applyRelationships() });
             });
 
             return accumulator;
@@ -57,6 +41,22 @@ function extend(store) {
     }
 
     return { ...store, ...{getState} };
+
+}
+
+/**
+ * @method createStore
+ * @param {Function} reducer
+ * @param {Array} [middleware = []]
+ * @return {Object}
+ */
+export function createStore(reducer, middleware = []) {
+
+    const createStoreWithMiddleware = redux.applyMiddleware(
+        ...[...middleware, typecaster, thunk]
+    )(redux.createStore);
+
+    return extend(createStoreWithMiddleware(reducer));
 
 }
 
@@ -85,7 +85,7 @@ export function actionsFor(reducer) {
     if (!actionSymbols.has(reducer)) {
 
         const CREATE = Symbol('create');
-        const READ   = Symbol('read');
+        const READ = Symbol('read');
         const UPDATE = Symbol('update');
         const DELETE = Symbol('delete');
 
