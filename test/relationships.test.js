@@ -1,21 +1,14 @@
 import 'babel-core/register';
 import test from 'ava';
 import {createStore} from '../src/core';
-import {combineReducers} from 'redux';
 import {createPerson} from './mocks/actions/people';
 import {createAnimal} from './mocks/actions/animals';
 import people from './mocks/reducers/people';
 import animals from './mocks/reducers/animals';
 
 test.beforeEach(t => {
-
-    const reducers = combineReducers({
-        people, animals
-    });
-
-    t.context.store = createStore(reducers);
+    t.context.store = createStore({ people, animals });
     t.end();
-
 });
 
 test('it can handle basic relationships', t => {

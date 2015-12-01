@@ -46,11 +46,13 @@ function extend(store) {
 
 /**
  * @method createStore
- * @param {Function} reducer
- * @param {Array} [middleware = []]
+ * @param {Object} reducers
  * @return {Object}
  */
-export function createStore(reducer, middleware = []) {
+export function createStore(reducers) {
+
+    const middleware = [];
+    const reducer = redux.combineReducers(reducers);
 
     const createStoreWithMiddleware = redux.applyMiddleware(
         ...[...middleware, typecaster, thunk]

@@ -7,14 +7,8 @@ import people from './mocks/reducers/people';
 import Immutable from 'seamless-immutable';
 
 test.beforeEach(t => {
-
-    const reducers = combineReducers({
-        people
-    });
-
-    t.context.store = createStore(reducers);
+    t.context.store = createStore({ people });
     t.end();
-
 });
 
 test('it creates immutable models', t => {

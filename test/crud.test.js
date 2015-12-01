@@ -6,14 +6,8 @@ import {createPerson, readPerson, updatePerson, deletePerson} from './mocks/acti
 import people from './mocks/reducers/people';
 
 test.beforeEach(t => {
-
-    const reducers = combineReducers({
-        people
-    });
-
-    t.context.store = createStore(reducers);
+    t.context.store = createStore({ people });
     t.end();
-
 });
 
 test('it can create a model', t => {
