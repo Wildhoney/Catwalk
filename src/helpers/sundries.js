@@ -17,16 +17,3 @@ export function isFunction(fn) {
 export function hasSchema(fn) {
     return fn[SCHEMA] !== 'undefined';
 }
-
-/**
- * @method hasPrimaryKey
- * @param {Object} properties
- * @return {Boolean}
- */
-//export function hasPrimaryKey(properties) {
-//
-//    return Object.keys(properties).some(key => {
-//        return properties[key].options & option.PRIMARY_KEY;
-//    });
-//
-//}
