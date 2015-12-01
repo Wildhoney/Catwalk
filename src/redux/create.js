@@ -1,7 +1,7 @@
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
-import {typecaster} from '../helpers/middleware';
+import {typecast} from '../helpers/middleware';
 import {applyRelationships} from '../helpers/relationships';
 
 /**
@@ -46,7 +46,7 @@ export function createStore(reducers) {
     const reducer = redux.combineReducers(reducers);
 
     const createStoreWithMiddleware = redux.applyMiddleware(
-        ...[...middleware, typecaster, thunk]
+        ...[...middleware, typecast, thunk]
     )(redux.createStore);
 
     return extend(createStoreWithMiddleware(reducer));

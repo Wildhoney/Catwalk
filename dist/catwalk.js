@@ -133,7 +133,7 @@ module.exports =
 	function createStore(reducer) {
 	    var middleware = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-	    var createStoreWithMiddleware = redux.applyMiddleware.apply(redux, [].concat(middleware, [_helpersMiddleware.typecaster, _reduxThunk2['default']]))(redux.createStore);
+	    var createStoreWithMiddleware = redux.applyMiddleware.apply(redux, [].concat(middleware, [_helpersMiddleware.typecast, _reduxThunk2['default']]))(redux.createStore);
 
 	    return extend(createStoreWithMiddleware(reducer));
 	}
@@ -1378,16 +1378,16 @@ module.exports =
 	'use strict';
 
 	exports.__esModule = true;
-	exports.typecaster = typecaster;
+	exports.typecast = typecast;
 
 	var _registry = __webpack_require__(15);
 
 	/**
-	 * @method typecaster
+	 * @method typecast
 	 * @return {Function}
 	 */
 
-	function typecaster() {
+	function typecast() {
 
 	    return function (next) {
 	        return function (action) {

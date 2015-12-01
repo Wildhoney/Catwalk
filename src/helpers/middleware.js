@@ -1,10 +1,10 @@
 import {findSchemaByActionType} from './registry';
 
 /**
- * @method typecaster
+ * @method typecast
  * @return {Function}
  */
-export function typecaster() {
+export function typecast() {
 
     return next => action => {
 
