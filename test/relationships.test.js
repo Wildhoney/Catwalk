@@ -1,13 +1,13 @@
 import 'babel-core/register';
 import test from 'ava';
-import {createStore} from '../src/core';
+import {createStore, combineReducers} from '../src/core';
 import {createPerson} from './mocks/actions/people';
 import {createAnimal} from './mocks/actions/animals';
 import people from './mocks/reducers/people';
 import animals from './mocks/reducers/animals';
 
 test.beforeEach(t => {
-    t.context.store = createStore({ people, animals });
+    t.context.store = createStore(combineReducers({ people, animals }));
     t.end();
 });
 

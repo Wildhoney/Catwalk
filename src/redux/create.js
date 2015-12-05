@@ -37,13 +37,12 @@ function extend(store) {
 
 /**
  * @method createStore
- * @param {Object} reducers
+ * @param {Function} reducer
  * @return {Object}
  */
-export function createStore(reducers) {
+export function createStore(reducer) {
 
     const middleware = [];
-    const reducer = redux.combineReducers(reducers);
     const withMiddleware = redux.applyMiddleware(
         ...[...middleware, typecast, thunk]
     )(redux.createStore);
@@ -52,12 +51,3 @@ export function createStore(reducers) {
 
 }
 
-/**
- * @method createStoreWithMiddleware
- * @param {Object} reducers
- * @param {Array} middleware
- * @return {Object}
- */
-export function createStoreWithMiddleware(reducers, ...middleware) {
-    return void [reducers, middleware];
-}
