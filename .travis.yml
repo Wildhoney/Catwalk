@@ -1,18 +1,18 @@
 language: node_js
 
 node_js:
-  - '0.10'
-  - '0.11'
+  - 4.0
+  - 4.1
+  - iojs
 
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+sudo: false
 
 script:
   - npm install
-  - bower install
-  - gulp test
-  - gulp build
+  - npm run build
+
+before_deploy:
+  - npm run cleanup
 
 deploy:
   provider: heroku
@@ -20,7 +20,7 @@ deploy:
   all_branches: true
   skip_cleanup: true
   api_key:
-    secure: Ke+/a8HgRH0meV9QRCeIoTeXZgW0MKbZ/ZuiHSimSwdNsAeppV9lzDCL+SgcdR7RrQ2d2yo7ogvzdQvWBtfNqUtRNiNDsra3uu+gmuRoAgFccv1hg8MMOLMbQAPQ5167FJHDkU5qRQ2AejCqsHml834fW8JWYRVyx5QAbdYYvrM=
+    secure: TJ3cWDkaUEiguzCEUYruyYfFy+cSa6kvzieLvyUHyBmuXZKlrda5rvdRRS4fsXuB7zOlUFiDJCUfY4YCETv50HHdPo+gzxfTz8kKDRc7QY/jkj8vFuFqMoK5QM0GBkZVCuwxRIbAyJsOCKHiKlKcPcfTE+EKuBrTvx1UaWMPrkM=
   app: catwalk
   on:
-    repo: Wildhoney/Catwalk.js
+    repo: Wildhoney/Catwalk
