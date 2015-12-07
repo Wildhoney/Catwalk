@@ -4,7 +4,7 @@ import * as redux from 'redux';
  * @constant reducerMap
  * @type {Map}
  */
-const reducerMap = new Map();
+export const reducerMap = new Map();
 
 /**
  * @method combineReducers

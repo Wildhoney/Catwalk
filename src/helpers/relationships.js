@@ -2,7 +2,7 @@
  * @method applyRelationships
  * @return {Object}
  */
-export function applyRelationships() {
+export function applyRelationships(model, schema) {
 
     return { pets: [
         { name: 'Kipper' },

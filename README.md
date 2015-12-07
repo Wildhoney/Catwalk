@@ -16,26 +16,46 @@
 ## Getting Started
 
 ```javascript
+import {collection} from 'catwalk/collection';
+import {field, cast} from 'catwalk/field';
+import {on, type} from 'catwalk/event';
 
 // Define a collection specifying its fields and their data-types.
 const pets = collection('pets', {
-    id:   field(cast.integer(), option.PRIMARY_KEY),
     name: field(cast.string()),
     age:  field(cast.integer())
 });
 
 // Subscribe to the updating of any collections.
-on(event.SUBSCRIBE, models => {
-    console.log(`Oh my goodness... we have ${models.length} pet(s)!`);
+on(type.SUBSCRIBE, models => {
+    console.log(`We have ${models.length} pet(s)!`);
 });
 
 // Consider the request successful when we create a pet.
-on(event.CREATE, ({ model, resolve, reject }) => {
+on(type.CREATE, ({ model, resolve, reject }) => {
     resolve(model);
+});
+
+// Listen for delete events only on the pets collection.
+on(type.CREATE.PETS, ({ model, resolve }) {
+    resolve();
 });
 
 // Create some pets that need to be either resolved or rejected.
 pets.create({ name: 'Miss Kittens', age: 4 });
 pets.create({ name: 'Busters', age: 5 });
+```
 
+### Transactions (Future)
+
+**Note:** Transactions are not yet supported, and the example below is how it *may* look once implemented.
+
+```javascript
+import {atomic} from 'catwalk/transaction';
+
+atomic(function *({ commit, rollback }) {
+    pets.create({ name: 'Miss Kittens', age: 4 });
+    pets.create({ name: 'Busters', age: 5 });
+    rollback();
+);
 ```
