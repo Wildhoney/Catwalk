@@ -57,6 +57,12 @@ on(type.CREATE.for(pets), () => // ...);
 
 **Note:** When a specialised event type has been registered, then its abstract counterpart **will not** be invoked for that collection. In the above case, the `type.CREATE.for(pets)` event will be invoked, but `type.CREATE` for the `pets` collection will not.
 
+Events can also be unregistered with the `off` function &mdash; passing in the symbol that was initially used to register it.
+
+```javascript
+off(type.CREATE.for(pets);
+```
+
 ### Transactions (Future)
 
 **Note:** Transactions are not yet supported, and the example below is how it *may* look once implemented.

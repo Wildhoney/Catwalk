@@ -1,25 +1,22 @@
-/**
- * @constant SUBSCRIBE
- * @type {Symbol}
- */
-const SUBSCRIBE = Symbol('subscribe');
-
-/**
- * @constant events
- * @type {Map}
- */
-const events = new Map().set(SUBSCRIBE, () => {})
-                        .set('custom', new WeakMap());
+import {events, SUBSCRIBE, CUSTOM} from './stores/events';
 
 /**
  * @method event
- * @param {Symbol} event
+ * @param {Symbol} type
  * @param {Function} fn
- * @return {void}
+ * @return {Map}
  */
-export function on(event, fn) {
-    void event;
-    void fn;
+export function on(type, fn) {
+    return events.set(type, fn);
+}
+
+/**
+ * @method off
+ * @param {Symbol} type
+ * @return {Boolean}
+ */
+export function off(type) {
+    return events.delete(type);
 }
 
 /**
@@ -49,7 +46,7 @@ export const type = {
  */
 Object.getPrototypeOf(type).for = function(collection) {
 
-    const customEvents = events.get('custom');
+    const customEvents = events.get(CUSTOM);
     const eventType = this.toString().match(/Symbol\((.+?)\)/)[1];
 
     if (!customEvents.has(collection)) {
