@@ -1,3 +1,5 @@
+import {symbols} from './components/store';
+
 /**
  * @method event
  * @param {Symbol} event
