@@ -13,7 +13,10 @@ const collections = new Map();
  * @return {Object}
  */
 export function collection(name, schema) {
+
     collections.set(name, schema);
     registerCustomEvents(name);
-    return {};
+
+    return { create: () => {} };
+
 }

@@ -1,10 +1,10 @@
 /**
  * @method field
  * @param {Function} cast
- * @param {Object} options
+ * @param {Object} [options = {}]
  * @return {Function}
  */
-export function field(cast, options) {
+export function field(cast, options = {}) {
     void cast;
     void options;
     return () => {};
