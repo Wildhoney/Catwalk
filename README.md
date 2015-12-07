@@ -60,7 +60,7 @@ on(type.CREATE.for(pets), () => // ...);
 Events can also be unregistered with the `off` function &mdash; passing in the symbol that was initially used to register it.
 
 ```javascript
-off(type.CREATE.for(pets);
+off(type.CREATE.for(pets));
 ```
 
 ### Transactions (Future)

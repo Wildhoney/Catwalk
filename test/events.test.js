@@ -1,7 +1,8 @@
 import 'babel-core/register';
 import test from 'ava';
-import { collection } from '../src/collection';
-import { type } from '../src/event';
+import {collection} from '../src/collection';
+import {on, off, type} from '../src/event';
+import {events} from '../src/stores/events';
 
 test('it registers default event types', t => {
 
@@ -9,6 +10,26 @@ test('it registers default event types', t => {
     t.is(typeof type.READ, 'symbol');
     t.is(typeof type.UPDATE, 'symbol');
     t.is(typeof type.DELETE, 'symbol');
+
+    t.end();
+
+});
+
+test('it unregisters events', t => {
+
+    on(type.CREATE, () => {});
+    on(type.UPDATE, () => {});
+
+    t.true(events.has(type.CREATE));
+    t.true(events.has(type.UPDATE));
+
+    off(type.CREATE);
+    t.false(events.has(type.CREATE));
+    t.true(events.has(type.UPDATE));
+
+    off(type.UPDATE);
+    t.false(events.has(type.CREATE));
+    t.false(events.has(type.UPDATE));
 
     t.end();
 
