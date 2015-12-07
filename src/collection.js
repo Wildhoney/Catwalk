@@ -1,22 +1,42 @@
 import {events, SUBSCRIBE} from './stores/events';
 
 /**
- * @constant collections
+ * @method data
  * @type {Map}
  */
-const collections = new Map();
+const data = new Map();
 
 /**
- * @method create
- * @param {Object} properties
- * @return {void}
+ * @class Collection
  */
-function create(properties) {
+class Collection {
 
-    Promise.resolve(properties).then(model => {
-        const fn = events.get(SUBSCRIBE);
-        fn({ pets: [model] });
-    });
+    /**
+     * @method create
+     * @param {Object} properties
+     * @return {void}
+     */
+    create(properties) {
+
+        Promise.resolve(properties).then(model => {
+            data.get(this).push(model);
+            const fn = events.get(SUBSCRIBE);
+            fn(getState());
+        });
+
+    }
+
+}
+
+/**
+ * @method getState
+ * @return {Object}
+ */
+function getState() {
+
+    return Array.from(data.keys()).reduce((accumulator, key) => {
+        return { [key.name]: data.get(key) };
+    }, []);
 
 }
 
@@ -27,6 +47,11 @@ function create(properties) {
  * @return {Object}
  */
 export function collection(name, schema) {
-    collections.set(name, schema);
-    return { name, create };
+
+    const store = new Collection(schema);
+    store.name = name;
+
+    data.set(store, []);
+    return store;
+
 }
