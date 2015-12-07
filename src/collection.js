@@ -1,3 +1,5 @@
+import {isFunction} from 'lodash';
+import {type} from './event';
 import {events, SUBSCRIBE} from './stores/events';
 
 /**
@@ -5,6 +7,17 @@ import {events, SUBSCRIBE} from './stores/events';
  * @type {Map}
  */
 const data = new Map();
+
+/**
+ * @method eventFor
+ * @param {Object} collection
+ * @param {String} event
+ * @return {Function}
+ */
+function eventFor(collection, event) {
+    const eventType = type[event.toUpperCase()];
+    return events.get(eventType.for(collection)) || events.get(eventType) || (() => {});
+}
 
 /**
  * @class Collection
@@ -18,10 +31,15 @@ class Collection {
      */
     create(properties) {
 
+        eventFor(this, 'create')();
+
         Promise.resolve(properties).then(model => {
+
             data.get(this).push(model);
-            const fn = events.get(SUBSCRIBE);
-            fn(getState());
+
+            const subscribeFn = events.get(SUBSCRIBE);
+            subscribeFn(getState());
+
         });
 
     }

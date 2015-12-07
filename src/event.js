@@ -2,11 +2,11 @@ import {events, SUBSCRIBE, CUSTOM} from './stores/events';
 
 /**
  * @method setupEvent
- * @param {String} type
+ * @param {String} action
  * @return {{action: *, for: eventFor, toString: toString}}
  */
-function setupEvent(type) {
-    return { action: type, for: eventFor, toString: function() {
+function setupEvent(action) {
+    return { action, for: eventFor, toString: function() {
         return this.action;
     }};
 }

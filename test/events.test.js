@@ -1,5 +1,6 @@
 import 'babel-core/register';
 import test from 'ava';
+import {spy} from 'sinon';
 import {collection} from '../src/collection';
 import {on, off, type} from '../src/event';
 import {events} from '../src/stores/events';
@@ -50,8 +51,29 @@ test('it registers custom events for collections', t => {
     t.is(type.UPDATE.for(countries).toString(), 'update/countries');
     t.is(type.DELETE.for(countries).toString(), 'delete/countries');
 
-    // Unknown objects should receive the "unknown" string for its symbols.
+    // Unknown objects should receive the "unknown" string for its type.
     t.is(type.READ.for({}).toString(), 'read/unknown');
+
+    t.end();
+
+});
+
+test('it can invoke abstracted and specialised events', t => {
+
+    const pets = collection('pets', {});
+
+    const abstract = spy(() => {});
+    const specialised = spy(() => {});
+
+    on(type.CREATE, abstract);
+    pets.create({ name: 'Kipper', age: 24 });
+    t.true(abstract.calledOnce);
+    t.false(specialised.called);
+
+    on(type.CREATE.for(pets), specialised);
+    pets.create({ name: 'Splodge', age: 15 });
+    t.true(abstract.calledOnce);
+    t.true(specialised.calledOnce);
 
     t.end();
 
