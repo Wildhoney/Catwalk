@@ -1,14 +1,12 @@
 /**
- * @constant HAS_ONE
- * @type {String}
+ * @method field
+ * @param {Function} cast
+ * @param {Object} options
+ * @return {Function}
  */
-export const HAS_ONE = 'one';
+export function field(cast, options) {
 
-/**
- * @constant HAS_MANY
- * @type {String}
- */
-export const HAS_MANY = 'many';
+}
 
 /**
  * @method isUndefined
@@ -65,12 +63,7 @@ export function array() {
 }
 
 /**
- * @method relationship
- * @param {String} type
- * @param {Function} store
- * @param {String} [property = 'id']
- * @return {Function}
+ * @constant cast
+ * @type {Object}
  */
-export function relationship(type, store, property = 'id') {
-    return () => void [type, store, property];
-}
+export const cast = { string, integer, float, array };
