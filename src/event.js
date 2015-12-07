@@ -1,4 +1,16 @@
 /**
+ * @constant SUBSCRIBE
+ * @type {Symbol}
+ */
+const SUBSCRIBE = Symbol('subscribe');
+
+/**
+ * @constant events
+ * @type {Map}
+ */
+const events = new Map().set(SUBSCRIBE, () => {});
+
+/**
  * @method event
  * @param {Symbol} event
  * @param {Function} fn
@@ -7,6 +19,15 @@
 export function on(event, fn) {
     void event;
     void fn;
+}
+
+/**
+ * @method subscribe
+ * @param {Function} fn
+ * @return {void}
+ */
+export function subscribe(fn) {
+    events.set(SUBSCRIBE, fn);
 }
 
 /**
