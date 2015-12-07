@@ -9,6 +9,15 @@ export function field(cast, options) {
 }
 
 /**
+ * @method compose
+ * @param {Array} casts
+ * @return {Function}
+ */
+export function compose(...casts) {
+
+}
+
+/**
  * @method isUndefined
  * @param {*} value
  * @return {Boolean}
