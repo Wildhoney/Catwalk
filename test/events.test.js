@@ -6,10 +6,10 @@ import {events} from '../src/stores/events';
 
 test('it registers default event types', t => {
 
-    t.is(typeof type.CREATE, 'symbol');
-    t.is(typeof type.READ, 'symbol');
-    t.is(typeof type.UPDATE, 'symbol');
-    t.is(typeof type.DELETE, 'symbol');
+    t.is(typeof type.CREATE, 'object');
+    t.is(typeof type.READ, 'object');
+    t.is(typeof type.UPDATE, 'object');
+    t.is(typeof type.DELETE, 'object');
 
     t.end();
 
@@ -39,19 +39,19 @@ test('it registers custom events for collections', t => {
 
     const countries = collection('countries', {});
 
-    t.is(typeof type.CREATE.for(countries), 'symbol');
-    t.is(typeof type.READ.for(countries), 'symbol');
-    t.is(typeof type.UPDATE.for(countries), 'symbol');
-    t.is(typeof type.DELETE.for(countries), 'symbol');
+    t.is(typeof type.CREATE.for(countries), 'object');
+    t.is(typeof type.READ.for(countries), 'object');
+    t.is(typeof type.UPDATE.for(countries), 'object');
+    t.is(typeof type.DELETE.for(countries), 'object');
 
     // All symbols should be readable when cast to a string.
-    t.is(type.CREATE.for(countries).toString(), 'Symbol(create/countries)');
-    t.is(type.READ.for(countries).toString(), 'Symbol(read/countries)');
-    t.is(type.UPDATE.for(countries).toString(), 'Symbol(update/countries)');
-    t.is(type.DELETE.for(countries).toString(), 'Symbol(delete/countries)');
+    t.is(type.CREATE.for(countries).toString(), 'create/countries');
+    t.is(type.READ.for(countries).toString(), 'read/countries');
+    t.is(type.UPDATE.for(countries).toString(), 'update/countries');
+    t.is(type.DELETE.for(countries).toString(), 'delete/countries');
 
     // Unknown objects should receive the "unknown" string for its symbols.
-    t.is(type.READ.for({}).toString(), 'Symbol(read/unknown)');
+    t.is(type.READ.for({}).toString(), 'read/unknown');
 
     t.end();
 
