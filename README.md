@@ -53,9 +53,9 @@ pets.create({ name: 'Busters', age: 5 });
 ```javascript
 import {atomic} from 'catwalk/transaction';
 
-atomic(function *({ commit, rollback }) {
-    pets.create({ name: 'Miss Kittens', age: 4 });
-    pets.create({ name: 'Busters', age: 5 });
+atomic(async function({ commit, rollback }) {
+    await pets.create({ name: 'Miss Kittens', age: 4 });
+    await pets.create({ name: 'Busters', age: 5 });
     rollback();
 );
 ```
