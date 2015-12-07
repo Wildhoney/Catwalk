@@ -12,5 +12,5 @@ const collections = new Map();
  */
 export function collection(name, schema) {
     collections.set(name, schema);
-    return { create: () => {} };
+    return { name, create: () => {} };
 }

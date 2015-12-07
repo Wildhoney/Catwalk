@@ -37,7 +37,7 @@ export function subscribe(fn) {
  */
 export const type = {
     CREATE: Symbol('create'),
-    READ:   Symbol('read'),
+    READ: Symbol('read'),
     UPDATE: Symbol('update'),
     DELETE: Symbol('delete')
 };
@@ -54,11 +54,11 @@ Object.getPrototypeOf(type).for = function(collection) {
 
     if (!customEvents.has(collection)) {
 
-        const name = 'unknown';
+        const name = collection.name || 'unknown';
 
         customEvents.set(collection, {
             CREATE: Symbol(`create/${name}`),
-            READ:   Symbol(`read/${name}`),
+            READ: Symbol(`read/${name}`),
             UPDATE: Symbol(`update/${name}`),
             DELETE: Symbol(`delete/${name}`)
         });

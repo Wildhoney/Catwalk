@@ -23,6 +23,15 @@ test('it registers custom events for collections', t => {
     t.is(typeof type.UPDATE.for(countries), 'symbol');
     t.is(typeof type.DELETE.for(countries), 'symbol');
 
+    // All symbols should be readable when cast to a string.
+    t.is(type.CREATE.for(countries).toString(), 'Symbol(create/countries)');
+    t.is(type.READ.for(countries).toString(), 'Symbol(read/countries)');
+    t.is(type.UPDATE.for(countries).toString(), 'Symbol(update/countries)');
+    t.is(type.DELETE.for(countries).toString(), 'Symbol(delete/countries)');
+
+    // Unknown objects should receive the "unknown" string for its symbols.
+    t.is(type.READ.for({}).toString(), 'Symbol(read/unknown)');
+
     t.end();
 
 });

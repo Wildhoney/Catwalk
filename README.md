@@ -27,8 +27,8 @@ const pets = collection('pets', {
 });
 
 // Subscribe to the updating of any collections.
-on(type.SUBSCRIBE, models => {
-    console.log(`We have ${models.length} pet(s)!`);
+on(type.SUBSCRIBE, store => {
+    console.log(`We have ${store.pets.length} pet(s)!`);
 });
 
 // Consider the request successful when we create a pet.
@@ -37,7 +37,7 @@ on(type.CREATE, ({ model, resolve, reject }) => {
 });
 
 // Listen for delete events only on the pets collection.
-on(type.CREATE.PETS, ({ model, resolve }) {
+on(type.CREATE.for(pets), ({ model, resolve }) {
     resolve();
 });
 
@@ -45,6 +45,22 @@ on(type.CREATE.PETS, ({ model, resolve }) {
 pets.create({ name: 'Miss Kittens', age: 4 });
 pets.create({ name: 'Busters', age: 5 });
 ```
+
+### Event Types
+
+Each operation has a corresponding event &mdash; `type.CREATE`, `type.READ`, `type.UPDATE`, `type.DELETE` &mdash; and can be registering using the `on` function from `catwalk/event`.
+
+```javascript
+on(type.CREATE, () => // ...);
+```
+
+However there are instances where you'd rather listen for these events on a specific collection, in cases where you wish to specialise rather than abstract. In these instances you can use the `for` method on each event type.
+
+```javascript
+on(type.CREATE.for(pets), () => // ...);
+```
+
+**Note:** When a specialised event type has been registered, then its abstract counterpart **will not** be invoked for that collection. In the above case, the `type.CREATE.for(pets)` event will be invoked, but `type.CREATE` for the `pets` collection will not.
 
 ### Transactions (Future)
 
