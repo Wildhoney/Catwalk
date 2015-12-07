@@ -1,5 +1,3 @@
-import {symbols} from './components/store';
-
 /**
  * @method event
  * @param {Symbol} event
@@ -7,7 +5,8 @@ import {symbols} from './components/store';
  * @return {void}
  */
 export function on(event, fn) {
-
+    void event;
+    void fn;
 }
 
 /**

@@ -1,6 +1,10 @@
-import {collections} from './components/store';
-import {type} from './event';
 import {registerCustomEvents} from './symbols/register-custom-events';
+
+/**
+ * @constant collections
+ * @type {Map}
+ */
+const collections = new Map();
 
 /**
  * @method collection
@@ -9,7 +13,7 @@ import {registerCustomEvents} from './symbols/register-custom-events';
  * @return {Object}
  */
 export function collection(name, schema) {
-
+    collections.set(name, schema);
     registerCustomEvents(name);
-
+    return {};
 }

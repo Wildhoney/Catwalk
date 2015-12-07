@@ -5,7 +5,9 @@
  * @return {Function}
  */
 export function field(cast, options) {
-
+    void cast;
+    void options;
+    return () => {};
 }
 
 /**
@@ -14,7 +16,8 @@ export function field(cast, options) {
  * @return {Function}
  */
 export function compose(...casts) {
-
+    void casts;
+    return () => {};
 }
 
 /**

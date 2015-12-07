@@ -1,4 +1,3 @@
-import {symbols} from '../components/store';
 import {type} from '../event';
 
 /**
@@ -18,7 +17,7 @@ export function registerCustomEvents(name) {
         // Register each symbol on the prototype of the corresponding event. This will yield
         // custom events such as CREATE.PETS, DELETE.PETS, etc... which extend their more
         // generic counterparts: CREATE, DELETE...
-        Object.getPrototypeOf(symbol)[key] = Symbol(`${eventName}/${collectionName}`)
+        Object.getPrototypeOf(symbol)[key] = Symbol(`${eventName}/${collectionName}`);
 
     });
 
