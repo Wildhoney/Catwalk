@@ -36,11 +36,6 @@ on(type.CREATE, ({ model, resolve, reject }) => {
     resolve(model);
 });
 
-// Listen for delete events only on the pets collection.
-on(type.CREATE.for(pets), ({ model, resolve }) {
-    resolve();
-});
-
 // Create some pets that need to be either resolved or rejected.
 pets.create({ name: 'Miss Kittens', age: 4 });
 pets.create({ name: 'Busters', age: 5 });
