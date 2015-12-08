@@ -1,12 +1,7 @@
 import {isFunction} from 'lodash';
 import {type} from './event';
 import {events, SUBSCRIBE} from './stores/events';
-
-/**
- * @method data
- * @type {Map}
- */
-const data = new Map();
+import {tree, create, append, getState} from './stores/data-tree';
 
 /**
  * @method eventFor
@@ -34,27 +29,13 @@ class Collection {
         eventFor(this, 'create')();
 
         Promise.resolve(properties).then(model => {
-
-            data.get(this).push(model);
-
+            append(this, model);
             const subscribeFn = events.get(SUBSCRIBE);
             subscribeFn(getState());
 
         });
 
     }
-
-}
-
-/**
- * @method getState
- * @return {Object}
- */
-function getState() {
-
-    return Array.from(data.keys()).reduce((accumulator, key) => {
-        return { [key.name]: data.get(key) };
-    }, []);
 
 }
 
@@ -68,8 +49,7 @@ export function collection(name, schema) {
 
     const store = new Collection(schema);
     store.name = name;
-
-    data.set(store, []);
+    create(store);
     return store;
 
 }
